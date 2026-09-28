@@ -1,0 +1,18 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s). Every cut lands on a beat. `out` is the transition into the next scene, centred on the cut; frames must be even. scripts/make-temp-track.mjs reads this file too, so the music follows any retiming.",
+  "scenes": [
+    { "id": "hook", "beats": 8, "out": { "type": "cut", "frames": 0 } },
+    { "id": "chaos", "beats": 8, "out": { "type": "cut", "frames": 0 } },
+    { "id": "logo", "beats": 8, "out": { "type": "pushCut", "frames": 12 } },
+    { "id": "home", "beats": 12, "out": { "type": "slideUp", "frames": 12 } },
+    { "id": "finance", "beats": 12, "out": { "type": "pushCut", "frames": 10 } },
+    { "id": "payment", "beats": 12, "out": { "type": "slideForward", "frames": 12 } },
+    { "id": "attendance", "beats": 10, "out": { "type": "flip", "frames": 16 } },
+    { "id": "grades", "beats": 8, "out": { "type": "fade", "frames": 10 } },
+    { "id": "languages", "beats": 10, "out": { "type": "iris", "frames": 16 } },
+    { "id": "roles", "beats": 8, "out": { "type": "wipe", "frames": 14 } },
+    { "id": "cta", "beats": 10, "out": { "type": "cut", "frames": 0 } }
+  ]
+}

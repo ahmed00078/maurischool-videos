@@ -49,30 +49,67 @@ const Pad: React.FC<{ children: React.ReactNode; bottom?: number }> = ({ childre
 );
 
 /** app/(app)/(admin)/index.tsx: the director's home. */
-export const HomeScreen: React.FC<ScreenProps & { unread?: number }> = ({
-  theme = 'light',
-  enterFrom,
-  scroll = 0,
-  unread = 3,
-}) => {
+export const HomeScreen: React.FC<
+  ScreenProps & {
+    unread?: number;
+    /**
+     * Draw only the two priority alerts, on a clear background, in their exact
+     * place. Laid over the phone, this copy is what lifts out of the screen.
+     */
+    isolate?: boolean;
+    /**
+     * How far each alert has lifted out (0 to 1). Pass the same value to the
+     * phone and to the isolated copy: the copy appears as the original goes.
+     */
+    lift?: [number, number];
+  }
+> = ({ theme = 'light', enterFrom, scroll = 0, unread = 3, isolate = false, lift = [0, 0] }) => {
   const bi = useBi();
   const tabs = useTabs();
+  const hidden: React.CSSProperties | undefined = isolate ? { visibility: 'hidden' } : undefined;
+  // The copy grows a little and casts a deep shadow; the original underneath
+  // disappears, so there is never a ghost of the same card behind it.
+  const lifted = (l: number): React.CSSProperties => ({
+    scale: String(1 + l * 0.14),
+    translate: `0px ${-l * pt(6)}px`,
+    filter: l > 0 ? `drop-shadow(0 ${pt(16) * l}px ${pt(22) * l}px rgba(15, 23, 60, ${0.4 * l}))` : undefined,
+    opacity: isolate ? Math.min(1, l * 4) : 1 - Math.min(1, l * 4),
+  });
   return (
-    <AppScreen theme={theme} enterFrom={enterFrom}>
+    <AppScreen theme={theme} enterFrom={enterFrom} style={isolate ? { background: 'transparent' } : undefined}>
       <Scroll y={scroll}>
-        <Enter order={0}>
+        <Enter order={0} style={hidden}>
           <DashboardHeader unread={unread} />
         </Enter>
-        <Enter order={1}>
+        <Enter order={1} style={hidden}>
           <SchoolTitle />
         </Enter>
         <Enter order={2}>
           <Pad>
-            <SectionHeader title={bi(HOME.priorityAlerts)} />
-            <AlertRow severity="warning">{fill(bi(HOME.alerts.overdue_payments), { amount: money(FINANCE.overdue) })}</AlertRow>
-            <AlertRow severity="warning">{fill(bi(HOME.alerts.payroll_drafts_pending), { count: PAYROLL_DRAFTS })}</AlertRow>
+            <div style={hidden}>
+              <SectionHeader title={bi(HOME.priorityAlerts)} />
+            </div>
+            <div style={lifted(lift[0])}>
+              <AlertRow severity="warning">{fill(bi(HOME.alerts.overdue_payments), { amount: money(FINANCE.overdue) })}</AlertRow>
+            </div>
+            <div style={lifted(lift[1])}>
+              <AlertRow severity="warning">{fill(bi(HOME.alerts.payroll_drafts_pending), { count: PAYROLL_DRAFTS })}</AlertRow>
+            </div>
           </Pad>
         </Enter>
+        {isolate ? null : (
+          <HomeLower />
+        )}
+      </Scroll>
+      {isolate ? null : <TabBar active="home" labels={tabs} />}
+    </AppScreen>
+  );
+};
+
+const HomeLower: React.FC = () => {
+  const bi = useBi();
+  return (
+    <>
         <Enter order={3}>
           <Pad>
             <SectionHeader title={bi(HOME.nextActions)} />
@@ -102,9 +139,7 @@ export const HomeScreen: React.FC<ScreenProps & { unread?: number }> = ({
           </div>
           <ActivityFeed />
         </Enter>
-      </Scroll>
-      <TabBar active="home" labels={tabs} />
-    </AppScreen>
+    </>
   );
 };
 
@@ -144,7 +179,13 @@ const ActivityFeed: React.FC = () => {
 };
 
 /** app/(app)/(admin)/finance/index.tsx: the finance dashboard. */
-export const FinanceScreen: React.FC<ScreenProps> = ({ theme = 'light', enterFrom, scroll = 0, progress = 1 }) => {
+export const FinanceScreen: React.FC<ScreenProps & { chart?: number }> = ({
+  theme = 'light',
+  enterFrom,
+  scroll = 0,
+  progress = 1,
+  chart = progress,
+}) => {
   const bi = useBi();
   const tabs = useTabs();
   const c = themeColors(theme);
@@ -188,7 +229,7 @@ export const FinanceScreen: React.FC<ScreenProps> = ({ theme = 'light', enterFro
           <Pad bottom={20}>
             <SectionHeader title={bi(FINANCE_COPY.sixMonthTrend)} />
             <Card>
-              <MonthlyTrend progress={progress} />
+              <MonthlyTrend progress={chart} />
             </Card>
           </Pad>
         </Enter>

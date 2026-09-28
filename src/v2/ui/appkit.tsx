@@ -22,6 +22,11 @@ export const useApp = () => {
   return { ...ctx, c: themeColors(ctx.theme), dark: ctx.theme === 'dark' };
 };
 
+/** Theme for app components drawn outside a phone (a card lifted out of the screen). */
+export const AppScope: React.FC<{ theme: Theme; children: React.ReactNode }> = ({ theme, children }) => (
+  <Ctx.Provider value={{ theme }}>{children}</Ctx.Provider>
+);
+
 /** ThemeContext.fonts: Tajawal has no 600, so semiBold is 700 in Arabic. */
 export const useWeights = () => {
   const { rtl } = useLang();
