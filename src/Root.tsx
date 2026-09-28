@@ -2,6 +2,15 @@ import React from 'react';
 import { Composition, Folder } from 'remotion';
 import { Promo, SCENES, TOTAL } from './Promo';
 import { FPS } from './theme';
+import { Kit, KitProps } from './v2/Kit';
+
+// Checkpoint 1: the rebuilt app screens, one still per language and theme.
+const KITS: { id: string; props: KitProps }[] = [
+  { id: 'Kit-Home-FR-Light', props: { lang: 'fr', theme: 'light', screen: 'home', mood: 'paper', safeZones: false } },
+  { id: 'Kit-Home-AR-Dark', props: { lang: 'ar', theme: 'dark', screen: 'home', mood: 'night', safeZones: false } },
+  { id: 'Kit-Finance-FR-Light', props: { lang: 'fr', theme: 'light', screen: 'finance', mood: 'brand', safeZones: false } },
+  { id: 'Kit-Finance-AR-Light', props: { lang: 'ar', theme: 'light', screen: 'finance', mood: 'brand', safeZones: false } },
+];
 
 const W = 1080;
 const H = 1920;
@@ -20,6 +29,20 @@ export const RemotionRoot: React.FC = () => (
           height={H}
           fps={FPS}
           durationInFrames={s.frames}
+        />
+      ))}
+    </Folder>
+    <Folder name="V2-Checkpoint-1">
+      {KITS.map((k) => (
+        <Composition
+          key={k.id}
+          id={k.id}
+          component={Kit}
+          width={W}
+          height={H}
+          fps={FPS}
+          durationInFrames={90}
+          defaultProps={k.props}
         />
       ))}
     </Folder>
