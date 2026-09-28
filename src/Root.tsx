@@ -5,25 +5,33 @@ import { FPS } from './theme';
 import { Kit, KitProps } from './v2/Kit';
 import { LangProvider, Lang } from './v2/lang';
 import { PromoV2, PromoV2Props, SCENE_COMPONENTS } from './v2/PromoV2';
-import { LeadContext, SceneId, TIMELINE, TOTAL_FRAMES } from './v2/timeline';
+import { LeadContext, MarksContext, SceneId, TIMELINE, timelineFor, totalFrames } from './v2/timeline';
 
-/** One v2 scene on its own, with the lead it has in the full video. */
+/** One v2 scene on its own, with the lead and voice marks it has in the full video. */
 const SceneAlone: React.FC<{ id: SceneId; lang: Lang }> = ({ id, lang }) => {
   const Scene = SCENE_COMPONENTS[id];
-  const lead = TIMELINE.find((s) => s.id === id)?.lead ?? 0;
+  const scene = timelineFor(lang).find((s) => s.id === id);
   return (
     <LangProvider lang={lang}>
-      <LeadContext.Provider value={lead}>
-        <Scene />
+      <LeadContext.Provider value={scene?.lead ?? 0}>
+        <MarksContext.Provider value={scene?.marks ?? {}}>
+          <Scene />
+        </MarksContext.Provider>
       </LeadContext.Provider>
     </LangProvider>
   );
 };
 
 const PROMO_V2: { id: string; props: PromoV2Props }[] = [
-  { id: 'PromoV2-FR', props: { lang: 'fr', safeZones: false, music: 0.8 } },
-  { id: 'PromoV2-AR', props: { lang: 'ar', safeZones: false, music: 0.8 } },
+  { id: 'PromoV2-FR', props: { lang: 'fr', safeZones: false, music: 0.8, voice: true } },
+  { id: 'PromoV2-FR-NoVoice', props: { lang: 'fr', safeZones: false, music: 0.8, voice: false } },
+  { id: 'PromoV2-AR', props: { lang: 'ar', safeZones: false, music: 0.8, voice: true } },
 ];
+
+/** The length follows the timeline of the language and whether its voice plays. */
+const promoLength = ({ props }: { props: PromoV2Props }) => ({
+  durationInFrames: totalFrames(timelineFor(props.voice ? props.lang : 'base')),
+});
 
 // Checkpoint 1: the rebuilt app screens, one still per language and theme.
 const KITS: { id: string; props: KitProps }[] = [
@@ -61,12 +69,13 @@ export const RemotionRoot: React.FC = () => (
         width={W}
         height={H}
         fps={FPS}
-        durationInFrames={TOTAL_FRAMES}
+        durationInFrames={totalFrames(TIMELINE)}
+        calculateMetadata={promoLength}
         defaultProps={p.props}
       />
     ))}
     <Folder name="V2-Scenes">
-      {TIMELINE.map((s) => (
+      {timelineFor('fr').map((s) => (
         <Composition
           key={s.id}
           id={`V2-${s.id}`}

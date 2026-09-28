@@ -1,4 +1,7 @@
-// Synthesizes the v2 temp track (public/v2/temp-track.wav): node scripts/make-temp-track.mjs
+// Synthesizes the v2 temp track: node scripts/make-temp-track.mjs [lang]
+//   no lang  → public/v2/temp-track.wav, on the base timing
+//   fr, ...  → public/v2/temp-track-<lang>.wav, on the timing stretched to that
+//              language's voice (src/v2/voice.<lang>.json, see fit-voice.mjs)
 //
 // A stand-in so the animatic can be judged on rhythm; the final music replaces it.
 // It reads src/v2/timeline.json, so its sections follow the edit:
@@ -7,9 +10,18 @@
 //   logo      the drop, and the groove (D A Bm G) through the features
 //   languages a breakdown: drums out, a riser back in
 //   roles/cta the groove again, then a held D chord to close
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const timeline = JSON.parse(readFileSync(new URL('../src/v2/timeline.json', import.meta.url), 'utf8'));
+const lang = process.argv[2];
+const voiceUrl = lang ? new URL(`../src/v2/voice.${lang}.json`, import.meta.url) : null;
+const voice = voiceUrl && existsSync(voiceUrl) ? JSON.parse(readFileSync(voiceUrl, 'utf8')) : null;
+if (lang && !voice) {
+  console.error(`no src/v2/voice.${lang}.json: run scripts/fit-voice.mjs first`);
+  process.exit(1);
+}
+// A voiced scene only ever grows, by whole beats, exactly as src/v2/timeline.ts does.
+for (const s of timeline.scenes) s.beats = Math.max(s.beats, voice?.scenes[s.id]?.beats ?? 0);
 const BPM = timeline.bpm;
 const BEAT = 60 / BPM;
 const starts = {};
@@ -147,7 +159,7 @@ const groove = (fromBeat, toBeat, { drums = true } = {}) => {
 
 // Hook: a tense pulse that speeds up, then silence under the question.
 const hookEnd = starts.chaos;
-const freeze = starts.hook + 4;
+const freeze = starts.hook + (voice?.scenes.hook?.marks?.question ?? 4);
 for (let b = 0; b < freeze; b += 0.5) {
   hat(beatTime(b), 0.03 + (b / freeze) * 0.06);
   if (b % 1 === 0) tone(beatTime(b), 35, 0.3, 0.25, { harmonics: 2, decay: 0.15 });
@@ -213,5 +225,6 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * gain)) * 32767), 46 + i * 4);
 }
 mkdirSync('public/v2', { recursive: true });
-writeFileSync('public/v2/temp-track.wav', buf);
-console.log(`public/v2/temp-track.wav: ${TOTAL_BEATS} beats at ${BPM} BPM (${DUR.toFixed(1)} s), gain ${gain.toFixed(2)}`);
+const out = lang ? `public/v2/temp-track-${lang}.wav` : 'public/v2/temp-track.wav';
+writeFileSync(out, buf);
+console.log(`${out}: ${TOTAL_BEATS} beats at ${BPM} BPM (${DUR.toFixed(1)} s), gain ${gain.toFixed(2)}`);

@@ -1,0 +1,218 @@
+{
+  "lang": "fr",
+  "bpm": 120,
+  "scenes": {
+    "hook": {
+      "src": "v2/voice/fr/hook.mp3",
+      "file": "1.mp3",
+      "offsetSeconds": -0.06,
+      "speech": [
+        0,
+        4.92
+      ],
+      "pauses": [
+        [
+          1.08,
+          1.42
+        ],
+        [
+          2.82,
+          3.22
+        ],
+        [
+          4.2,
+          4.56
+        ]
+      ],
+      "beats": 13,
+      "marks": {
+        "question": 6.5
+      }
+    },
+    "chaos": {
+      "src": "v2/voice/fr/chaos.mp3",
+      "file": "2.mp3",
+      "offsetSeconds": 0.14,
+      "speech": [
+        0.2,
+        3.96
+      ],
+      "pauses": [
+        [
+          2.72,
+          3.12
+        ]
+      ],
+      "beats": 9,
+      "marks": {
+        "cahier": 0.25,
+        "excel": 2.5,
+        "whatsapp": 4,
+        "partout": 4.75,
+        "lost": 6.25
+      }
+    },
+    "logo": {
+      "src": "v2/voice/fr/logo.mp3",
+      "file": "3.mp3",
+      "offsetSeconds": 1.2,
+      "speech": [
+        1.28,
+        4.06
+      ],
+      "pauses": [
+        [
+          2.18,
+          2.5
+        ]
+      ],
+      "beats": 10,
+      "marks": {}
+    },
+    "home": {
+      "src": "v2/voice/fr/home.mp3",
+      "file": "4.mp3",
+      "offsetSeconds": 0.18,
+      "speech": [
+        0.2,
+        3.06
+      ],
+      "pauses": [
+        [
+          2.26,
+          2.58
+        ]
+      ],
+      "beats": 12,
+      "marks": {}
+    },
+    "finance": {
+      "src": "v2/voice/fr/finance.mp3",
+      "file": "5.mp3",
+      "offsetSeconds": 0.12,
+      "speech": [
+        0.2,
+        3.26
+      ],
+      "pauses": [
+        [
+          1.88,
+          2.22
+        ]
+      ],
+      "beats": 12,
+      "marks": {}
+    },
+    "payment": {
+      "src": "v2/voice/fr/payment.mp3",
+      "file": "6.mp3",
+      "offsetSeconds": 0.18,
+      "speech": [
+        0.2,
+        4
+      ],
+      "pauses": [
+        [
+          1.86,
+          2.18
+        ]
+      ],
+      "beats": 12,
+      "marks": {}
+    },
+    "attendance": {
+      "src": "v2/voice/fr/attendance.mp3",
+      "file": "7.mp3",
+      "offsetSeconds": 2.02,
+      "speech": [
+        2.14,
+        4.64
+      ],
+      "pauses": [
+        [
+          2.82,
+          3.1
+        ]
+      ],
+      "beats": 11,
+      "marks": {}
+    },
+    "grades": {
+      "src": "v2/voice/fr/grades.mp3",
+      "file": "8.mp3",
+      "offsetSeconds": 0.14,
+      "speech": [
+        0.2,
+        2.82
+      ],
+      "pauses": [
+        [
+          0.84,
+          1.16
+        ]
+      ],
+      "beats": 8,
+      "marks": {}
+    },
+    "languages": {
+      "src": "v2/voice/fr/languages.mp3",
+      "file": "9.mp3",
+      "offsetSeconds": 0.96,
+      "speech": [
+        1.06,
+        4.52
+      ],
+      "pauses": [
+        [
+          2.2,
+          2.5
+        ],
+        [
+          3.46,
+          3.84
+        ]
+      ],
+      "beats": 10,
+      "marks": {
+        "dark": 5
+      }
+    },
+    "roles": {
+      "src": "v2/voice/fr/roles.mp3",
+      "file": "10.mp3",
+      "offsetSeconds": 0.18,
+      "speech": [
+        0.2,
+        5.82
+      ],
+      "pauses": [
+        [
+          3.66,
+          4
+        ]
+      ],
+      "beats": 13,
+      "marks": {
+        "role0": 0.5,
+        "role1": 1.75,
+        "role2": 3,
+        "role3": 4.25,
+        "role4": 5.5,
+        "role5": 6.25,
+        "devices": 8
+      }
+    },
+    "cta": {
+      "src": "v2/voice/fr/cta.mp3",
+      "file": "11.mp3",
+      "offsetSeconds": 0.58,
+      "speech": [
+        0.6,
+        2.74
+      ],
+      "pauses": [],
+      "beats": 10,
+      "marks": {}
+    }
+  }
+}

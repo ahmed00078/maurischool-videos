@@ -3,7 +3,7 @@ import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion'
 import { COPY, WHATSAPP } from '../copy';
 import { Camera } from '../fx';
 import { LangProvider, useBi, useLang } from '../lang';
-import { useBeat } from '../timeline';
+import { useBeat, useMarks } from '../timeline';
 import { APP, EASE_IN_OUT, OUTFIT, SCREEN_W, tween } from '../tokens';
 import { Device } from '../ui/Device';
 import { Headline } from '../ui/Headline';
@@ -21,12 +21,15 @@ import { LAYOUT, PhoneRig, Scene, Sfx, Top } from './rig';
 export const LanguagesScene: React.FC = () => {
   const frame = useCurrentFrame();
   const b = useBeat();
+  const mark = useMarks();
   const bi = useBi();
   const { lang } = useLang();
   const other = lang === 'fr' ? 'ar' : 'fr';
+  // Dark mode arrives on "de jour comme de nuit" when there is a voice.
+  const d = mark('dark', 5.2);
   const turn = tween(frame, [b(2), b(3.2)], [0, 1], EASE_IN_OUT);
   const bump = Math.sin(turn * Math.PI);
-  const dark = tween(frame, [b(5.2), b(6.8)], [0, 1], EASE_IN_OUT);
+  const dark = tween(frame, [b(d), b(d + 1.6)], [0, 1], EASE_IN_OUT);
   // Dark mode spreads from the bell, which sits at the reading end of the header.
   const bellX = other === 'ar' ? 60 : SCREEN_W - 60;
   const sway = Math.sin(frame / 40) * 4;
@@ -67,18 +70,19 @@ export const LanguagesScene: React.FC = () => {
         </PhoneRig>
       </Camera>
       <Top>
-        <Headline text={bi(COPY.languages.headline1)} at={b(0.3)} out={b(4.6)} size={92} accent={APP.brand[300]} />
+        <Headline text={bi(COPY.languages.headline1)} at={b(0.3)} out={b(d - 0.6)} size={92} accent={APP.brand[300]} />
       </Top>
       <Top>
-        <Headline text={bi(COPY.languages.headline2)} at={b(5.2)} size={92} accent={APP.brand[300]} />
+        <Headline text={bi(COPY.languages.headline2)} at={b(d)} size={92} accent={APP.brand[300]} />
       </Top>
       <Sfx at={b(2)} name="whip" volume={0.6} />
-      <Sfx at={b(5.2)} name="switch" volume={0.9} />
+      <Sfx at={b(d)} name="switch" volume={0.8} />
     </Scene>
   );
 };
 
-const ROLE_ICONS: IconName[] = ['business-outline', 'calculator-outline', 'eye-outline', 'easel-outline', 'heart-outline', 'school-outline'];
+/** In the order the voice names them: director, accountant, teacher, supervisor, parent, pupil. */
+const ROLE_ICONS: IconName[] = ['business-outline', 'calculator-outline', 'easel-outline', 'eye-outline', 'heart-outline', 'school-outline'];
 
 /**
  * 10 · Everyone. The six roles of a school orbit the mark; then the orbit
@@ -88,11 +92,15 @@ export const RolesScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const b = useBeat();
+  const mark = useMarks();
   const bi = useBi();
   const { font } = useLang();
-  const up = tween(frame, [b(3.6), b(4.8)], [0, 1], EASE_IN_OUT);
-  const laptop = spring({ frame: frame - b(4), fps, config: { damping: 18, stiffness: 80 } });
-  const phone = spring({ frame: frame - b(4.6), fps, config: { damping: 16, stiffness: 90 } });
+  // Each role appears as it is named; the devices come in on "sur téléphone".
+  const roleAt = COPY.roles.names.map((_, i) => b(mark(`role${i}`, i * 0.5)));
+  const dev = mark('devices', 4);
+  const up = tween(frame, [b(dev - 0.4), b(dev + 0.8)], [0, 1], EASE_IN_OUT);
+  const laptop = spring({ frame: frame - b(dev), fps, config: { damping: 18, stiffness: 80 } });
+  const phone = spring({ frame: frame - b(dev + 0.6), fps, config: { damping: 16, stiffness: 90 } });
   const cx = 540;
   // The orbit rises into the gap between the headline and the laptop.
   const cy = 900 - up * 220;
@@ -117,7 +125,7 @@ export const RolesScene: React.FC = () => {
           </div>
         </div>
         {COPY.roles.names.map((name, i) => {
-          const p = spring({ frame: frame - b(i * 0.5), fps, config: { damping: 13, stiffness: 150 } });
+          const p = spring({ frame: frame - roleAt[i], fps, config: { damping: 13, stiffness: 150 } });
           const a = (i / 6) * Math.PI * 2 - Math.PI / 2 + frame * 0.006;
           const x = cx + Math.cos(a) * 360 * orbitScale * (0.6 + 0.4 * p);
           const y = cy + Math.sin(a) * 330 * orbitScale * (0.6 + 0.4 * p);
@@ -160,7 +168,7 @@ export const RolesScene: React.FC = () => {
             opacity: Math.min(1, laptop * 2),
           }}
         >
-          <Laptop width={880} grow={tween(frame, [b(5), b(7)])} />
+          <Laptop width={880} grow={tween(frame, [b(dev + 1), b(dev + 3)])} />
         </div>
         <PhoneRig pose={{ x: 900, y: 1290 + (1 - phone) * 900, scale: 0.34, rz: 6 - phone * 6 }}>
           <Device>
@@ -169,7 +177,7 @@ export const RolesScene: React.FC = () => {
         </PhoneRig>
       </Camera>
       <Top gap={18}>
-        <Headline text={bi(COPY.roles.headline)} at={b(4.2)} size={80} color={APP.light.text} accent={APP.brand[600]} highlight={APP.brand[100]} />
+        <Headline text={bi(COPY.roles.headline)} at={b(dev + 0.2)} size={80} color={APP.light.text} accent={APP.brand[600]} highlight={APP.brand[100]} />
         <div
           style={{
             fontFamily: OUTFIT,
@@ -177,16 +185,16 @@ export const RolesScene: React.FC = () => {
             fontSize: 42,
             color: APP.light.textSecondary,
             letterSpacing: 1,
-            opacity: tween(frame, [b(6), b(6.6)]),
+            opacity: tween(frame, [b(dev + 2), b(dev + 2.6)]),
           }}
         >
           {bi(COPY.roles.platforms)}
         </div>
       </Top>
-      {COPY.roles.names.map((_, i) => (
-        <Sfx key={i} at={b(i * 0.5)} name="mouse-click" volume={0.4} rate={1.2 + i * 0.08} />
+      {roleAt.map((a, i) => (
+        <Sfx key={i} at={a} name="mouse-click" volume={0.35} rate={1.2 + i * 0.08} />
       ))}
-      <Sfx at={b(4)} name="soft-whoosh" volume={0.8} />
+      <Sfx at={b(dev)} name="soft-whoosh" volume={0.7} />
     </Scene>
   );
 };

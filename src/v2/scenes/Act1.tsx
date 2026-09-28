@@ -4,7 +4,7 @@ import { ChatBubbles, Notebook, RingingPhone, Spreadsheet } from '../../componen
 import { COPY } from '../copy';
 import { Camera } from '../fx';
 import { useBi, useLang } from '../lang';
-import { useBeat } from '../timeline';
+import { useBeat, useMarks } from '../timeline';
 import { APP, EASE_IN, EASE_IN_OUT, OUTFIT, tween } from '../tokens';
 import { Headline } from '../ui/Headline';
 import { ChatBubble, LogoAssemble } from '../ui/props';
@@ -21,22 +21,29 @@ const SENDERS = [
   null,
 ];
 
-/** When each bubble pops: two already there on frame 0, then faster and faster. */
-const POPS = [-12, -5, 5, 12, 18, 23, 27, 31];
+/**
+ * When each bubble pops, as a share of the time before the question: two are
+ * already there on frame 0, then they come faster and faster.
+ */
+const POPS = [-12, -5, 0.13, 0.31, 0.46, 0.59, 0.7, 0.8];
 const Y = [360, 560, 760, 930, 1110, 1270, 1440, 1610];
 
 /**
  * 1 · Hook. A director's phone explodes with questions: bubbles pile up
  * faster and faster, the frame shakes, then everything freezes and one
- * question lands. Frame 0 is already busy, so the thumbnail is too.
+ * question lands, on the word when there is a voice. Frame 0 is already
+ * busy, so the thumbnail is too.
  */
 export const HookScene: React.FC = () => {
   const frame = useCurrentFrame();
   const b = useBeat();
+  const mark = useMarks();
   const bi = useBi();
   const { rtl } = useLang();
-  const freeze = tween(frame, [b(4) - 2, b(4) + 4]);
-  const shake = tween(frame, [0, b(4)], [1, 6], EASE_IN) * (1 - freeze);
+  const q = b(mark('question', 4));
+  const pops = POPS.map((p) => (p < 0 ? p : Math.round(p * q)));
+  const freeze = tween(frame, [q - 2, q + 4]);
+  const shake = tween(frame, [0, q], [1, 6], EASE_IN) * (1 - freeze);
   return (
     <Scene mood="night" grid={false}>
       <Camera shake={shake} drift={0.06}>
@@ -50,7 +57,7 @@ export const HookScene: React.FC = () => {
                 key={i}
                 text={bi(text)}
                 sender={sender ? bi(sender) : undefined}
-                at={POPS[i]}
+                at={pops[i]}
                 side={start ? 'start' : 'end'}
                 tone={start ? 'white' : 'green'}
                 style={{ top: Y[i], [physicalLeft ? 'left' : 'right']: 70 + (i % 3) * 18, rotate: `${(i % 2 ? 1 : -1) * (1 + (i % 3))}deg` }}
@@ -60,49 +67,54 @@ export const HookScene: React.FC = () => {
         </AbsoluteFill>
       </Camera>
       <AbsoluteFill style={{ justifyContent: 'center', padding: '0 90px' }}>
-        <Headline text={bi(COPY.hook.question)} at={b(4)} size={104} accent="#fbbf24" />
+        <Headline text={bi(COPY.hook.question)} at={q} size={104} accent="#fbbf24" />
       </AbsoluteFill>
-      {POPS.filter((p) => p >= 0).map((p, i) => (
-        <Sfx key={p} at={p} name="mouse-click" rate={1 + i * 0.12} volume={0.7} />
+      {pops.filter((p) => p >= 0).map((p, i) => (
+        <Sfx key={p} at={p} name="mouse-click" rate={1 + i * 0.12} volume={0.6} />
       ))}
-      <Sfx at={b(4) - 1} name="whip" volume={0.9} rate={0.8} />
+      <Sfx at={q - 1} name="whip" volume={0.8} rate={0.8} />
     </Scene>
   );
 };
 
-type Item = { el: React.ReactNode; x: number; y: number; rot: number; beat: number; fly: [number, number] };
+/** `mark` names the word the item lands on; `beat` is where it lands without a voice. */
+type Item = { el: React.ReactNode; x: number; y: number; rot: number; mark: string; beat: number; fly: [number, number] };
 
 const ITEMS: Item[] = [
-  { el: <Notebook size={340} />, x: 300, y: 930, rot: -10, beat: 0, fly: [-520, -260] },
-  { el: <Spreadsheet size={380} />, x: 770, y: 870, rot: 8, beat: 1, fly: [560, -320] },
-  { el: <ChatBubbles size={350} />, x: 320, y: 1330, rot: 6, beat: 2, fly: [-560, 380] },
-  { el: <RingingPhone size={290} />, x: 770, y: 1360, rot: -8, beat: 3, fly: [540, 420] },
+  { el: <Notebook size={340} />, x: 300, y: 930, rot: -10, mark: 'cahier', beat: 0, fly: [-520, -260] },
+  { el: <Spreadsheet size={380} />, x: 770, y: 870, rot: 8, mark: 'excel', beat: 1, fly: [560, -320] },
+  { el: <ChatBubbles size={350} />, x: 320, y: 1330, rot: 6, mark: 'whatsapp', beat: 2, fly: [-560, 380] },
+  { el: <RingingPhone size={290} />, x: 770, y: 1360, rot: -8, mark: 'partout', beat: 3, fly: [540, 420] },
 ];
 
 /**
- * 2 · Chaos. The tools of today slam down, one per beat, each with its name;
- * then "the information gets lost" and they drift apart and blur.
+ * 2 · Chaos. The tools of today slam down, each on its word in the voice (or
+ * one per beat without it); then "the information gets lost" and they drift
+ * apart and blur.
  */
 export const ChaosScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const b = useBeat();
+  const mark = useMarks();
   const bi = useBi();
   const { dir, font, rtl } = useLang();
-  const scatter = tween(frame, [b(4.5), b(8)], [0, 1], EASE_IN_OUT);
+  const at = ITEMS.map((it) => b(mark(it.mark, it.beat)));
+  const lost = mark('lost', 4.25);
+  const scatter = tween(frame, [b(lost + 0.25), b(lost + 3.75)], [0, 1], EASE_IN_OUT);
   // A short jolt of the frame on every slam.
-  const jolt = ITEMS.reduce((sum, it) => {
-    const t = frame - b(it.beat);
+  const jolt = at.reduce((sum, a) => {
+    const t = frame - a;
     return sum + (t >= 0 && t < 8 ? Math.sin(t * 2.4) * (8 - t) * 1.2 : 0);
   }, 0);
-  const wordsOut = tween(frame, [b(4), b(4) + 8], [0, 1], EASE_IN);
+  const wordsOut = tween(frame, [b(lost) - 4, b(lost) + 4], [0, 1], EASE_IN);
   return (
     <Scene mood="paper">
       <Camera drift={0.05}>
         <AbsoluteFill style={{ translate: `0px ${jolt}px` }}>
           {ITEMS.map((it, i) => {
-            const land = spring({ frame: frame - b(it.beat) + 4, fps, config: { damping: 14, stiffness: 180 } });
-            const ring = i === 3 && frame > b(3) ? Math.sin(frame * 2.6) * 7 * (1 - scatter) : 0;
+            const land = spring({ frame: frame - at[i] + 4, fps, config: { damping: 14, stiffness: 180 } });
+            const ring = i === 3 && frame > at[3] ? Math.sin(frame * 2.6) * 7 * (1 - scatter) : 0;
             return (
               <div
                 key={i}
@@ -141,7 +153,7 @@ export const ChaosScene: React.FC = () => {
           }}
         >
           {COPY.chaos.words.map((w, i) => {
-            const p = spring({ frame: frame - b(i), fps, config: { damping: 12, stiffness: 220 } });
+            const p = spring({ frame: frame - at[i], fps, config: { damping: 12, stiffness: 220 } });
             return (
               <span key={i} style={{ display: 'inline-block', scale: String(0.4 + p * 0.6), opacity: Math.min(1, p * 2) }}>
                 {bi(w)}
@@ -151,12 +163,12 @@ export const ChaosScene: React.FC = () => {
         </div>
       </Top>
       <Top style={{ top: 260 }}>
-        <Headline text={bi(COPY.chaos.lost)} at={b(4.25)} size={100} color={APP.light.text} accent={APP.error} />
+        <Headline text={bi(COPY.chaos.lost)} at={b(lost)} size={100} color={APP.light.text} accent={APP.error} />
       </Top>
-      {ITEMS.map((it) => (
-        <Sfx key={it.beat} at={b(it.beat) - 1} name="switch" volume={0.9} rate={0.7} />
+      {at.map((a) => (
+        <Sfx key={a} at={a - 1} name="switch" volume={0.75} rate={0.7} />
       ))}
-      <Sfx at={b(4.5)} name="whoosh" volume={0.5} rate={0.7} />
+      <Sfx at={b(lost + 0.25)} name="whoosh" volume={0.45} rate={0.7} />
     </Scene>
   );
 };

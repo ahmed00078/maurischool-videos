@@ -64,8 +64,8 @@ export const COPY = {
     names: [
       { fr: 'Administrateur', ar: 'مدير المدرسة' },
       { fr: 'Comptable', ar: 'المحاسب' },
-      { fr: 'Superviseur', ar: 'المشرف' },
       { fr: 'Enseignant', ar: 'المعلم' },
+      { fr: 'Superviseur', ar: 'المشرف' },
       { fr: 'Parent', ar: 'ولي الأمر' },
       { fr: 'Élève', ar: 'التلميذ' },
     ] as Bi[],
