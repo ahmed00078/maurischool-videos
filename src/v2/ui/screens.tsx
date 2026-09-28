@@ -69,10 +69,11 @@ export const HomeScreen: React.FC<
   const hidden: React.CSSProperties | undefined = isolate ? { visibility: 'hidden' } : undefined;
   // The copy grows a little and casts a deep shadow; the original underneath
   // disappears, so there is never a ghost of the same card behind it.
-  const lifted = (l: number): React.CSSProperties => ({
-    scale: String(1 + l * 0.14),
-    translate: `0px ${-l * pt(6)}px`,
-    filter: l > 0 ? `drop-shadow(0 ${pt(16) * l}px ${pt(22) * l}px rgba(15, 23, 60, ${0.4 * l}))` : undefined,
+  const lifted = (l: number, i: number): React.CSSProperties => ({
+    scale: String(1 + l * 0.24),
+    translate: `0px ${-l * pt(4)}px`,
+    rotate: `${l * (i === 0 ? -2.5 : 2)}deg`,
+    filter: l > 0 ? `drop-shadow(0 ${pt(20) * l}px ${pt(26) * l}px rgba(15, 23, 60, ${0.45 * l}))` : undefined,
     opacity: isolate ? Math.min(1, l * 4) : 1 - Math.min(1, l * 4),
   });
   return (
@@ -89,10 +90,10 @@ export const HomeScreen: React.FC<
             <div style={hidden}>
               <SectionHeader title={bi(HOME.priorityAlerts)} />
             </div>
-            <div style={lifted(lift[0])}>
+            <div style={lifted(lift[0], 0)}>
               <AlertRow severity="warning">{fill(bi(HOME.alerts.overdue_payments), { amount: money(FINANCE.overdue) })}</AlertRow>
             </div>
-            <div style={lifted(lift[1])}>
+            <div style={lifted(lift[1], 1)}>
               <AlertRow severity="warning">{fill(bi(HOME.alerts.payroll_drafts_pending), { count: PAYROLL_DRAFTS })}</AlertRow>
             </div>
           </Pad>

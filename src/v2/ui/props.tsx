@@ -162,14 +162,14 @@ export const ReportCardDoc: React.FC<{ width: number; style?: React.CSSPropertie
         <span style={{ fontSize: u * 4.2, fontWeight: 700 }}>{bi(SCREEN_COPY.overallAverage)}</span>
         <span style={{ fontSize: u * 7, fontWeight: 800, color: APP.brand[600], direction: 'ltr' }}>{OVERALL_AVERAGE.toFixed(2)}/20</span>
       </div>
-      {/* The school's stamp */}
+      {/* The school's stamp, in the empty foot of the page, clear of the average in both directions */}
       <div
         style={{
           position: 'absolute',
           insetInlineEnd: u * 8,
-          bottom: u * 9,
-          width: u * 22,
-          height: u * 22,
+          bottom: u * 3,
+          width: u * 20,
+          height: u * 20,
           borderRadius: '50%',
           border: `${u * 0.8}px solid ${APP.brand[500]}aa`,
           color: `${APP.brand[500]}cc`,

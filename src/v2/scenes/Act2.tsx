@@ -196,7 +196,7 @@ export const PaymentScene: React.FC = () => {
   const params = { student_name: bi(PUPIL), amount: amount(3000), receipt_number: RECEIPT };
   return (
     <Scene mood="night">
-      <Camera drift={0.02} push={[b(7), b(8.6), 1.4]} focus={[NOTIFICATION_FOCUS[0], NOTIFICATION_FOCUS[1]]}>
+      <Camera drift={0.02} push={[b(7), b(8.6), 1.28]} focus={[NOTIFICATION_FOCUS[0], NOTIFICATION_FOCUS[1]]} shift={[0, 230]}>
       <AbsoluteFill style={{ translate: `${worldX}px 0px` }}>
         <PhoneRig pose={poseA}>
           <Device>
@@ -287,7 +287,7 @@ export const AttendanceScene: React.FC = () => {
   const savePress = tween(frame, [b(5) - 3, b(5)]) * (1 - tween(frame, [b(5) + 2, b(5) + 7]));
   return (
     <Scene mood="paper">
-      <Camera drift={0.03} push={[b(7), b(8.6), 1.4]} focus={[NOTIFICATION_FOCUS[0], NOTIFICATION_FOCUS[1]]}>
+      <Camera drift={0.03} push={[b(7), b(8.6), 1.28]} focus={[NOTIFICATION_FOCUS[0], NOTIFICATION_FOCUS[1]]} shift={[0, 230]}>
         <PhoneRig pose={poseA}>
           <Device>
             <AttendanceScreen
@@ -349,7 +349,7 @@ export const GradesScene: React.FC = () => {
   const n = NOTIFS.report_card_available_parent;
   const params = { student_name: bi(PUPIL), period: bi(PERIOD), overall_average: OVERALL_AVERAGE.toFixed(2) };
   const row = screenToCanvas({}, SCREEN_W / 2, 775);
-  const docW = 760;
+  const docW = 690;
   return (
     <Scene mood="brand">
       <Camera drift={0.03}>
@@ -366,7 +366,7 @@ export const GradesScene: React.FC = () => {
             style={{
               position: 'absolute',
               left: row[0] + (540 - row[0]) * out,
-              top: row[1] + (1080 - row[1]) * out,
+              top: row[1] + (1160 - row[1]) * out,
               translate: '-50% -50%',
               scale: String(0.12 + 0.88 * out),
               rotate: `${(rtl ? 1 : -1) * 3 * out}deg`,

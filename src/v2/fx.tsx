@@ -99,12 +99,15 @@ export const Camera: React.FC<{
   drift?: number;
   push?: [number, number, number];
   focus?: [number, number];
+  /** Moves the focus point by this much over the push, e.g. to bring it down clear of the headline. */
+  shift?: [number, number];
   shake?: number;
-}> = ({ children, drift = 0.03, push, focus, shake = 0 }) => {
+}> = ({ children, drift = 0.03, push, focus, shift = [0, 0], shake = 0 }) => {
   const frame = useCurrentFrame();
   const { durationInFrames, width, height } = useVideoConfig();
   const driftScale = 1 + drift * (frame / durationInFrames);
-  const pushScale = push ? interpolate(frame, [push[0], push[1]], [1, push[2]], { ...clamp, easing: EASE_IN_OUT }) : 1;
+  const pushT = push ? interpolate(frame, [push[0], push[1]], [0, 1], { ...clamp, easing: EASE_IN_OUT }) : 0;
+  const pushScale = push ? 1 + (push[2] - 1) * pushT : 1;
   const [fx, fy] = focus ?? [width / 2, height / 2];
   const jitter = shake ? [Math.sin(frame * 2.1) * shake, Math.cos(frame * 1.7) * shake] : [0, 0];
   return (
@@ -112,7 +115,7 @@ export const Camera: React.FC<{
       style={{
         transformOrigin: `${fx}px ${fy}px`,
         scale: String(driftScale * pushScale),
-        translate: `${jitter[0]}px ${jitter[1]}px`,
+        translate: `${jitter[0] + shift[0] * pushT}px ${jitter[1] + shift[1] * pushT}px`,
       }}
     >
       {children}
