@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import type { Lang } from './lang';
 import data from './timeline.json';
 import { BEAT, FPS } from './tokens';
+import voiceAr from './voice.ar.json';
 import voiceFr from './voice.fr.json';
 
 export type SceneId =
@@ -32,9 +33,10 @@ type VoiceFile = {
   scenes: Record<string, VoiceLine & { beats: number; marks: Record<string, number> }>;
 };
 
-/** Recorded voice-overs, per language. Arabic has none yet and keeps the base timing. */
+/** Recorded voice-overs, per language (Standard Arabic for now; a Hassaniya take will replace it). */
 const VOICES: Partial<Record<Lang, VoiceFile>> = {
   fr: voiceFr as unknown as VoiceFile,
+  ar: voiceAr as unknown as VoiceFile,
 };
 
 export type TimedScene = {
@@ -82,7 +84,7 @@ export const timelineFor = (lang: Lang | 'base'): TimedScene[] => {
   });
 };
 
-/** The unvoiced timing (and the Arabic cut until its voice is recorded). */
+/** The unvoiced timing: the no-voice cuts, and the reference every voice stretches from. */
 export const TIMELINE = timelineFor('base');
 
 export const totalFrames = (timeline: TimedScene[]) => timeline.reduce((sum, s) => sum + s.beats, 0) * BEAT;

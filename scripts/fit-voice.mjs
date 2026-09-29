@@ -78,12 +78,20 @@ const analyse = (file) => {
   return { start: first * WINDOW, end: (last + 1) * WINDOW, pauses, duration: env.length * WINDOW };
 };
 
-const files = readdirSync(sourceDir)
-  .filter((f) => /^\d+\.(mp3|wav|m4a)$/i.test(f))
-  .sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+// Files are taken in scene order: by number when they are named 1..11, otherwise
+// by name (ElevenLabs names carry a timestamp, so that is recording order).
+const audio = readdirSync(sourceDir).filter((f) => /\.(mp3|wav|m4a)$/i.test(f));
+const numbered = audio.every((f) => /^\d+\./.test(f));
+const files = numbered
+  ? audio.sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+  : audio.sort((a, b) => a.localeCompare(b));
 if (files.length !== timeline.scenes.length) {
-  console.error(`expected ${timeline.scenes.length} files named 1..${timeline.scenes.length}, found ${files.length}`);
+  console.error(`expected ${timeline.scenes.length} audio files (one per scene), found ${files.length}`);
   process.exit(1);
+}
+if (!numbered) {
+  console.log('files are not numbered: taking them in name order, check this mapping:');
+  files.forEach((f, i) => console.log(`  ${timeline.scenes[i].id.padEnd(10)} ← ${f}`));
 }
 
 /** By default a line starts this far into its scene, so the picture leads the voice by a hair. */

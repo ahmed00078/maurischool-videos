@@ -1,0 +1,12 @@
+{
+  "comment": "How the Arabic recording (out/audios/arabic, ElevenLabs \"Eric\", 2026-09-29) sits on the pictures. Times are seconds inside each source file, read from the pauses fit-voice.mjs reports (MIN_PAUSE=0.1), assuming each line follows the French script's structure. Same keys as voice-cues.fr.json.",
+  "hook": { "lead": 0, "marks": { "question": "longestPause" } },
+  "chaos": { "marks": { "cahier": 0.1, "excel": 1.38, "whatsapp": 2.68, "partout": 3.5, "lost": 5.0 } },
+  "logo": { "anchor": { "at": 1.52, "beat": 5 } },
+  "attendance": { "anchor": { "at": 1.9, "beat": 6.2 } },
+  "languages": { "anchor": { "at": 2.48, "beat": 5 }, "marks": { "dark": 2.48 } },
+  "roles": {
+    "marks": { "role0": 0.04, "role1": 1.2, "role2": 2.54, "role3": 3.74, "role4": 5.08, "role5": 6.3, "devices": 7.7 }
+  },
+  "cta": { "lead": 0.6 }
+}
