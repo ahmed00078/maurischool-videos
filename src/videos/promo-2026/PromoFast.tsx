@@ -1,13 +1,14 @@
 import React from 'react';
 import { Audio } from '@remotion/media';
 import { AbsoluteFill, Freeze, Sequence, staticFile, useCurrentFrame } from 'remotion';
-import { SafeZones } from './fx';
-import { Lang, LangProvider } from './lang';
+import { SafeZones } from '../../shared/fx';
+import { Lang, LangProvider } from '../../shared/lang';
 import { PromoV2 } from './PromoV2';
 import { HomeScene } from './scenes/Act2';
-import { SoundContext } from './sound';
-import { LeadContext, MarksContext, timelineFor, totalFrames } from './timeline';
-import { BEAT } from './tokens';
+import { SoundContext } from '../../shared/sound';
+import { LeadContext, MarksContext, totalFrames } from '../../shared/beat';
+import { timelineFor } from './timeline';
+import { BEAT } from '../../shared/tokens';
 
 /**
  * The social cuts: the whole voiced promo played faster (French ×1.3,
@@ -39,7 +40,7 @@ export const SPEEDS: Record<Lang, number> = { fr: 1.3, ar: 1.4 };
 /** Frames the fast cut really lasts: render with --frames=0-(this - 1). */
 export const fastFrames = (lang: Lang, speed: number) => Math.ceil(totalFrames(timelineFor(lang)) / speed);
 
-export const fastMixFile = (lang: Lang, speed: number) => `v2/mix/${lang}-x${speed}.wav`;
+export const fastMixFile = (lang: Lang, speed: number) => `promo-2026/mix/${lang}-x${speed}.wav`;
 
 /**
  * Frames the cover holds at the start. Platforms take the first frame as the

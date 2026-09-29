@@ -1,4 +1,4 @@
-// Synthesizes a soft transition whoosh (public/sfx/soft-whoosh.wav): node scripts/make-sfx.mjs
+// Synthesizes a soft transition whoosh (public/shared/sfx/soft-whoosh.wav): node scripts/make-sfx.mjs
 // Band-passed noise whose centre frequency sweeps up then down, panned across, ~0.6 s.
 import { writeFileSync } from 'node:fs';
 
@@ -49,5 +49,5 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(L[i] * gain * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(R[i] * gain * 32767), 46 + i * 4);
 }
-writeFileSync('public/sfx/soft-whoosh.wav', buf);
-console.log('public/sfx/soft-whoosh.wav written');
+writeFileSync('public/shared/sfx/soft-whoosh.wav', buf);
+console.log('public/shared/sfx/soft-whoosh.wav written');

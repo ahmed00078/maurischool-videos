@@ -37,7 +37,7 @@ export const S8Cta: React.FC = () => {
             justifyContent: 'center',
           }}
         >
-          <Img src={staticFile('logo-icon.png')} style={{ width: 96, height: 96 }} />
+          <Img src={staticFile('promo-v1/logo-icon.png')} style={{ width: 96, height: 96 }} />
         </div>
         <div style={{ fontFamily: FR, fontWeight: 800, fontSize: 92, color: C.white, letterSpacing: -2 }}>
           MauriSchool

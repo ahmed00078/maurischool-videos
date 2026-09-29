@@ -1,20 +1,20 @@
 import React from 'react';
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import { fill, FINANCE_COPY, NOTIFS } from '../appCopy';
+import { fill, FINANCE_COPY, NOTIFS } from '../../../shared/appCopy';
 import { COPY } from '../copy';
-import { Camera } from '../fx';
-import { FINANCE, PUPIL, PUPIL_CLASS, TODAY } from '../demo';
-import { amount, useBi, useLang } from '../lang';
-import { useBeat } from '../timeline';
-import { APP, EASE_IN, EASE_IN_OUT, pt, SCREEN_H, SCREEN_W, tween } from '../tokens';
-import { BEZEL, Device } from '../ui/Device';
-import { Headline, RoleChip } from '../ui/Headline';
-import { Ionicon } from '../ui/Ionicon';
-import { LockScreen, Notification } from '../ui/LockScreen';
-import { ReportCardDoc } from '../ui/props';
-import { FinanceScreen, HomeScreen } from '../ui/screens';
-import { AttendanceScreen, GradesScreen, OVERALL_AVERAGE, PaymentScreen, PERIOD } from '../ui/screens2';
-import { LAYOUT, mix, PhoneRig, Pose, Scene, screenToCanvas, Sfx, Tap, Top } from './rig';
+import { Camera } from '../../../shared/fx';
+import { FINANCE, PUPIL, PUPIL_CLASS, TODAY } from '../../../shared/demo';
+import { amount, useBi, useLang } from '../../../shared/lang';
+import { useBeat } from '../../../shared/beat';
+import { APP, EASE_IN, EASE_IN_OUT, pt, SCREEN_H, SCREEN_W, tween } from '../../../shared/tokens';
+import { BEZEL, Device } from '../../../shared/ui/Device';
+import { Headline, RoleChip } from '../../../shared/ui/Headline';
+import { Ionicon } from '../../../shared/ui/Ionicon';
+import { LockScreen, Notification } from '../../../shared/ui/LockScreen';
+import { ReportCardDoc } from '../../../shared/ui/props';
+import { FinanceScreen, HomeScreen } from '../../../shared/ui/screens';
+import { AttendanceScreen, GradesScreen, OVERALL_AVERAGE, PaymentScreen, PERIOD } from '../../../shared/ui/screens2';
+import { LAYOUT, mix, PhoneRig, Pose, Scene, screenToCanvas, Sfx, Tap, Top } from '../../../shared/rig';
 
 const RECEIPT = 'NEI-RCP-2026-000418';
 

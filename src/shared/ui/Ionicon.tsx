@@ -3,7 +3,7 @@ import { continueRender, delayRender, staticFile } from 'remotion';
 
 /**
  * The app's icons, drawn from the same Ionicons font the app ships
- * (public/fonts/Ionicons.ttf is copied from @expo/vector-icons), so a glyph
+ * (public/shared/fonts/Ionicons.ttf is copied from @expo/vector-icons), so a glyph
  * here is pixel-identical to the one on the phone.
  *
  * Code points come from @expo/vector-icons' Ionicons.json; add a name below
@@ -103,7 +103,7 @@ const FAMILY = 'Ionicons';
 // never heard of, which silently skipped the load.
 if (typeof document !== 'undefined') {
   const handle = delayRender('Loading the Ionicons font');
-  const face = new FontFace(FAMILY, `url(${staticFile('fonts/Ionicons.ttf')}) format('truetype')`);
+  const face = new FontFace(FAMILY, `url(${staticFile('shared/fonts/Ionicons.ttf')}) format('truetype')`);
   face
     .load()
     .then((loaded) => {

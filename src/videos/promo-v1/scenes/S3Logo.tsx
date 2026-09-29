@@ -76,7 +76,7 @@ export const S3Logo: React.FC = () => {
           scale: String(pop),
         }}
       >
-        <Img src={staticFile('logo-icon.png')} style={{ width: 220, height: 220 }} />
+        <Img src={staticFile('promo-v1/logo-icon.png')} style={{ width: 220, height: 220 }} />
       </div>
       <div
         style={{

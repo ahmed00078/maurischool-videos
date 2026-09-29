@@ -1,21 +1,17 @@
 import React from 'react';
 import { Audio } from '@remotion/media';
-import { linearTiming, TransitionPresentation, TransitionSeries } from '@remotion/transitions';
-import { fade } from '@remotion/transitions/fade';
-import { flip } from '@remotion/transitions/flip';
-import { iris } from '@remotion/transitions/iris';
-import { pushCut } from '@remotion/transitions/push-cut';
-import { slide } from '@remotion/transitions/slide';
-import { wipe } from '@remotion/transitions/wipe';
+import { linearTiming, TransitionSeries } from '@remotion/transitions';
 import { AbsoluteFill, interpolate, Sequence, staticFile, useVideoConfig } from 'remotion';
-import { SafeZones } from './fx';
-import { useSilent } from './sound';
-import { Lang, LangProvider } from './lang';
+import { SafeZones } from '../../shared/fx';
+import { useSilent } from '../../shared/sound';
+import { Lang, LangProvider } from '../../shared/lang';
 import { ChaosScene, HookScene, LogoScene } from './scenes/Act1';
 import { AttendanceScene, FinanceScene, GradesScene, HomeScene, PaymentScene } from './scenes/Act2';
 import { CtaScene, LanguagesScene, RolesScene } from './scenes/Act3';
-import { LeadContext, MarksContext, SceneId, speechWindows, timelineFor, totalFrames, TransitionType } from './timeline';
-import { EASE_IN_OUT, FPS } from './tokens';
+import { LeadContext, MarksContext, speechWindows, totalFrames } from '../../shared/beat';
+import { presentation } from '../../shared/transitions';
+import { SceneId, timelineFor } from './timeline';
+import { EASE_IN_OUT, FPS } from '../../shared/tokens';
 
 export const SCENE_COMPONENTS: Record<SceneId, React.FC> = {
   hook: HookScene,
@@ -56,31 +52,7 @@ const duckAt = (f: number, windows: readonly (readonly [number, number])[]) =>
   );
 
 /** The music bed: the temp track made for this language's timing (see scripts/make-temp-track.mjs). */
-export const musicTrackFor = (voiced: boolean, lang: Lang) => (voiced ? `v2/temp-track-${lang}.wav` : 'v2/temp-track.wav');
-
-/** "Forward" is right in French and left in Arabic, so movement follows reading. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const presentation = (type: TransitionType, lang: Lang, width: number, height: number): TransitionPresentation<any> => {
-  const forward = lang === 'ar' ? 'from-left' : 'from-right';
-  switch (type) {
-    case 'pushCut':
-      return pushCut({ flashColor: '#ffffff', flashOpacity: 0.55 });
-    case 'slideUp':
-      return slide({ direction: 'from-bottom' });
-    case 'slideForward':
-      return slide({ direction: forward });
-    case 'flip':
-      return flip({ direction: forward });
-    case 'iris':
-      return iris({ width, height });
-    case 'wipe':
-      return wipe({ direction: forward });
-    case 'fade':
-    case 'cut':
-    default:
-      return fade();
-  }
-};
+export const musicTrackFor = (voiced: boolean, lang: Lang) => (voiced ? `promo-2026/temp-track-${lang}.wav` : 'promo-2026/temp-track.wav');
 
 /** The whole v2 promo: eleven scenes on the beat grid, one language per render. */
 export const PromoV2: React.FC<PromoV2Props> = ({ lang, safeZones, music, voice }) => {

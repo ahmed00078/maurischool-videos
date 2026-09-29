@@ -1,13 +1,15 @@
 {
-  "name": "mauri-school-promo-video",
+  "name": "maurischool-videos",
   "version": "1.0.0",
   "private": true,
-  "description": "MauriSchool 30-second vertical sales video (WhatsApp), built with Remotion",
+  "description": "MauriSchool marketing videos, built with Remotion on a shared kit of the app's own screens",
   "scripts": {
     "studio": "remotion studio",
-    "render": "remotion render Promo out/mauri-school-promo.mp4 --codec=h264 --crf=23",
-    "render:wide": "remotion render PromoWide out/mauri-school-promo-wide.mp4 --codec=h264 --crf=23",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "render:promo-2026:fr": "remotion render Promo2026-FR-Fast out/promo-2026/fast-FR.mp4 --frames=0-1384 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "render:promo-2026:ar": "remotion render Promo2026-AR-Fast out/promo-2026/fast-AR.mp4 --frames=0-1532 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "cover:promo-2026:fr": "remotion still Promo2026-Cover-FR out/promo-2026/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "cover:promo-2026:ar": "remotion still Promo2026-Cover-AR out/promo-2026/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92"
   },
   "dependencies": {
     "@remotion/cli": "4.0.529",

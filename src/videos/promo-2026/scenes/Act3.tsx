@@ -1,17 +1,17 @@
 import React from 'react';
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { COPY, WHATSAPP } from '../copy';
-import { Camera } from '../fx';
-import { LangProvider, useBi, useLang } from '../lang';
-import { useBeat, useMarks } from '../timeline';
-import { APP, EASE_IN_OUT, OUTFIT, SCREEN_W, tween } from '../tokens';
-import { Device } from '../ui/Device';
-import { Headline } from '../ui/Headline';
-import { IconName, Ionicon } from '../ui/Ionicon';
-import { LogoMark } from '../ui/LogoMark';
-import { Laptop, LogoAssemble } from '../ui/props';
-import { HomeScreen } from '../ui/screens';
-import { LAYOUT, PhoneRig, Scene, Sfx, Top } from './rig';
+import { Camera } from '../../../shared/fx';
+import { LangProvider, useBi, useLang } from '../../../shared/lang';
+import { useBeat, useMarks } from '../../../shared/beat';
+import { APP, EASE_IN_OUT, OUTFIT, SCREEN_W, tween } from '../../../shared/tokens';
+import { Device } from '../../../shared/ui/Device';
+import { Headline } from '../../../shared/ui/Headline';
+import { IconName, Ionicon } from '../../../shared/ui/Ionicon';
+import { LogoMark } from '../../../shared/ui/LogoMark';
+import { Laptop, LogoAssemble } from '../../../shared/ui/props';
+import { HomeScreen } from '../../../shared/ui/screens';
+import { LAYOUT, PhoneRig, Scene, Sfx, Top } from '../../../shared/rig';
 
 /**
  * 9 · Languages and themes. The same home screen turns over like a card and

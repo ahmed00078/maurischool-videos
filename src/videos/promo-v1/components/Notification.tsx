@@ -29,7 +29,7 @@ export const Notification: React.FC<{ title: string; message: string; at: number
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
-        <Img src={staticFile('logo-icon.png')} style={{ width: 46, height: 46, borderRadius: 12 }} />
+        <Img src={staticFile('promo-v1/logo-icon.png')} style={{ width: 46, height: 46, borderRadius: 12 }} />
         <span style={{ fontSize: 26, fontWeight: 700, color: C.inkSoft, flex: 1 }}>MauriSchool</span>
         <span style={{ fontSize: 24, color: C.inkSoft }}>الآن</span>
       </div>

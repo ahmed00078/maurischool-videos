@@ -3,7 +3,7 @@
   "bpm": 120,
   "scenes": {
     "hook": {
-      "src": "v2/voice/fr/hook.mp3",
+      "src": "promo-2026/voice/fr/hook.mp3",
       "file": "1.mp3",
       "offsetSeconds": -0.06,
       "speech": [
@@ -30,7 +30,7 @@
       }
     },
     "chaos": {
-      "src": "v2/voice/fr/chaos.mp3",
+      "src": "promo-2026/voice/fr/chaos.mp3",
       "file": "2.mp3",
       "offsetSeconds": 0.14,
       "speech": [
@@ -53,7 +53,7 @@
       }
     },
     "logo": {
-      "src": "v2/voice/fr/logo.mp3",
+      "src": "promo-2026/voice/fr/logo.mp3",
       "file": "3.mp3",
       "offsetSeconds": 1.2,
       "speech": [
@@ -70,7 +70,7 @@
       "marks": {}
     },
     "home": {
-      "src": "v2/voice/fr/home.mp3",
+      "src": "promo-2026/voice/fr/home.mp3",
       "file": "4.mp3",
       "offsetSeconds": 0.18,
       "speech": [
@@ -87,7 +87,7 @@
       "marks": {}
     },
     "finance": {
-      "src": "v2/voice/fr/finance.mp3",
+      "src": "promo-2026/voice/fr/finance.mp3",
       "file": "5.mp3",
       "offsetSeconds": 0.12,
       "speech": [
@@ -104,7 +104,7 @@
       "marks": {}
     },
     "payment": {
-      "src": "v2/voice/fr/payment.mp3",
+      "src": "promo-2026/voice/fr/payment.mp3",
       "file": "6.mp3",
       "offsetSeconds": 0.18,
       "speech": [
@@ -121,7 +121,7 @@
       "marks": {}
     },
     "attendance": {
-      "src": "v2/voice/fr/attendance.mp3",
+      "src": "promo-2026/voice/fr/attendance.mp3",
       "file": "7.mp3",
       "offsetSeconds": 2.02,
       "speech": [
@@ -138,7 +138,7 @@
       "marks": {}
     },
     "grades": {
-      "src": "v2/voice/fr/grades.mp3",
+      "src": "promo-2026/voice/fr/grades.mp3",
       "file": "8.mp3",
       "offsetSeconds": 0.14,
       "speech": [
@@ -155,7 +155,7 @@
       "marks": {}
     },
     "languages": {
-      "src": "v2/voice/fr/languages.mp3",
+      "src": "promo-2026/voice/fr/languages.mp3",
       "file": "9.mp3",
       "offsetSeconds": 0.96,
       "speech": [
@@ -178,7 +178,7 @@
       }
     },
     "roles": {
-      "src": "v2/voice/fr/roles.mp3",
+      "src": "promo-2026/voice/fr/roles.mp3",
       "file": "10.mp3",
       "offsetSeconds": 0.18,
       "speech": [
@@ -203,7 +203,7 @@
       }
     },
     "cta": {
-      "src": "v2/voice/fr/cta.mp3",
+      "src": "promo-2026/voice/fr/cta.mp3",
       "file": "11.mp3",
       "offsetSeconds": 0.58,
       "speech": [

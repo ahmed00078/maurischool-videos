@@ -1,4 +1,4 @@
-// Composes the 30 s background track and writes public/music.wav.
+// Composes the 30 s background track and writes public/promo-v1/music.wav.
 // Fully synthesized here, so there is no licence to clear: node scripts/make-music.mjs
 //
 // Shape follows the story: a soft minor pad under the problem (0–7.9 s),
@@ -162,5 +162,5 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * gain)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * gain)) * 32767), 46 + i * 4);
 }
-writeFileSync('public/music.wav', buf);
-console.log(`public/music.wav written, peak gain ${gain.toFixed(2)}`);
+writeFileSync('public/promo-v1/music.wav', buf);
+console.log(`public/promo-v1/music.wav written, peak gain ${gain.toFixed(2)}`);

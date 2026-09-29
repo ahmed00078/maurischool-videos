@@ -1,14 +1,14 @@
 import React from 'react';
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import { ChatBubbles, Notebook, RingingPhone, Spreadsheet } from '../../components/Icons';
+import { ChatBubbles, Notebook, RingingPhone, Spreadsheet } from '../../../shared/ui/Illustrations';
 import { COPY } from '../copy';
-import { Camera } from '../fx';
-import { useBi, useLang } from '../lang';
-import { useBeat, useMarks } from '../timeline';
-import { APP, EASE_IN, EASE_IN_OUT, OUTFIT, tween } from '../tokens';
-import { Headline } from '../ui/Headline';
-import { ChatBubble, LogoAssemble } from '../ui/props';
-import { Scene, Sfx, Top } from './rig';
+import { Camera } from '../../../shared/fx';
+import { useBi, useLang } from '../../../shared/lang';
+import { useBeat, useMarks } from '../../../shared/beat';
+import { APP, EASE_IN, EASE_IN_OUT, OUTFIT, tween } from '../../../shared/tokens';
+import { Headline } from '../../../shared/ui/Headline';
+import { ChatBubble, LogoAssemble } from '../../../shared/ui/props';
+import { Scene, Sfx, Top } from '../../../shared/rig';
 
 const SENDERS = [
   { fr: 'Parent d’élève', ar: 'وليّ أمر' },

@@ -1,24 +1,23 @@
 import { createContext, useContext } from 'react';
 import type { Lang } from './lang';
-import data from './timeline.json';
 import { BEAT, FPS } from './tokens';
-import voiceAr from './voice.ar.json';
-import voiceFr from './voice.fr.json';
 
-export type SceneId =
-  | 'hook'
-  | 'chaos'
-  | 'logo'
-  | 'home'
-  | 'finance'
-  | 'payment'
-  | 'attendance'
-  | 'grades'
-  | 'languages'
-  | 'roles'
-  | 'cta';
+/**
+ * The beat grid every video is cut on, and the recorded voice fitted to it.
+ *
+ * A video describes its scenes in a timeline.json (lengths in beats, the
+ * transition into the next scene) and gets its voice files from
+ * scripts/fit-voice.mjs (voice.<lang>.json). buildTimeline turns both into
+ * frame-exact sequences; scenes then time themselves with useBeat()/useMarks().
+ */
 
 export type TransitionType = 'cut' | 'pushCut' | 'slideUp' | 'slideForward' | 'flip' | 'fade' | 'iris' | 'wipe';
+
+export type TimelineJson<Id extends string = string> = {
+  bpm: number;
+  fps: number;
+  scenes: { id: Id; beats: number; out: { type: TransitionType; frames: number } }[];
+};
 
 /** One recorded line, as written by scripts/fit-voice.mjs. */
 export type VoiceLine = {
@@ -29,18 +28,13 @@ export type VoiceLine = {
   speech: [number, number];
 };
 
-type VoiceFile = {
+/** A voice.<lang>.json file. */
+export type VoiceFile = {
   scenes: Record<string, VoiceLine & { beats: number; marks: Record<string, number> }>;
 };
 
-/** Recorded voice-overs, per language (Standard Arabic for now; a Hassaniya take will replace it). */
-const VOICES: Partial<Record<Lang, VoiceFile>> = {
-  fr: voiceFr as unknown as VoiceFile,
-  ar: voiceAr as unknown as VoiceFile,
-};
-
-export type TimedScene = {
-  id: SceneId;
+export type TimedScene<Id extends string = string> = {
+  id: Id;
   beats: number;
   /** Beat on the master timeline where this scene's cut lands. */
   cutBeat: number;
@@ -61,16 +55,20 @@ export type TimedScene = {
  *
  * With a recorded voice, a scene only grows (by whole beats) to fit its line.
  */
-export const timelineFor = (lang: Lang | 'base'): TimedScene[] => {
-  const voice = lang === 'base' ? undefined : VOICES[lang];
+export const buildTimeline = <Id extends string>(
+  data: TimelineJson<Id>,
+  voices: Partial<Record<Lang, VoiceFile>>,
+  lang: Lang | 'base',
+): TimedScene<Id>[] => {
+  const voice = lang === 'base' ? undefined : voices[lang];
   let beat = 0;
-  const scenes = data.scenes as { id: SceneId; beats: number; out: { type: TransitionType; frames: number } }[];
+  const scenes = data.scenes;
   return scenes.map((s, i) => {
     const line = voice?.scenes[s.id];
     const beats = line ? Math.max(s.beats, line.beats) : s.beats;
     const inFrames = i === 0 ? 0 : scenes[i - 1].out.frames;
     const outFrames = i === scenes.length - 1 ? 0 : s.out.frames;
-    const scene: TimedScene = {
+    const scene: TimedScene<Id> = {
       ...s,
       beats,
       cutBeat: beat,
@@ -83,9 +81,6 @@ export const timelineFor = (lang: Lang | 'base'): TimedScene[] => {
     return scene;
   });
 };
-
-/** The unvoiced timing: the no-voice cuts, and the reference every voice stretches from. */
-export const TIMELINE = timelineFor('base');
 
 export const totalFrames = (timeline: TimedScene[]) => timeline.reduce((sum, s) => sum + s.beats, 0) * BEAT;
 

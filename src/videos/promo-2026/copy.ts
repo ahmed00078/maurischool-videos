@@ -1,4 +1,4 @@
-import type { Bi } from './lang';
+import type { Bi } from '../../shared/lang';
 
 /**
  * Everything the video says in its own voice (headlines, chips, bubbles).

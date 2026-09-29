@@ -3,7 +3,7 @@
   "bpm": 120,
   "scenes": {
     "hook": {
-      "src": "v2/voice/ar/hook.mp3",
+      "src": "promo-2026/voice/ar/hook.mp3",
       "file": "ElevenLabs_2026-09-29T10_46_16_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": -0.08,
       "speech": [
@@ -22,7 +22,7 @@
       }
     },
     "chaos": {
-      "src": "v2/voice/ar/chaos.mp3",
+      "src": "promo-2026/voice/ar/chaos.mp3",
       "file": "ElevenLabs_2026-09-29T10_46_48_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.1,
       "speech": [
@@ -53,7 +53,7 @@
       }
     },
     "logo": {
-      "src": "v2/voice/ar/logo.mp3",
+      "src": "promo-2026/voice/ar/logo.mp3",
       "file": "ElevenLabs_2026-09-29T10_47_17_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.98,
       "speech": [
@@ -70,7 +70,7 @@
       "marks": {}
     },
     "home": {
-      "src": "v2/voice/ar/home.mp3",
+      "src": "promo-2026/voice/ar/home.mp3",
       "file": "ElevenLabs_2026-09-29T10_47_40_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.14,
       "speech": [
@@ -82,7 +82,7 @@
       "marks": {}
     },
     "finance": {
-      "src": "v2/voice/ar/finance.mp3",
+      "src": "promo-2026/voice/ar/finance.mp3",
       "file": "ElevenLabs_2026-09-29T10_48_05_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.12,
       "speech": [
@@ -103,7 +103,7 @@
       "marks": {}
     },
     "payment": {
-      "src": "v2/voice/ar/payment.mp3",
+      "src": "promo-2026/voice/ar/payment.mp3",
       "file": "ElevenLabs_2026-09-29T10_49_40_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.12,
       "speech": [
@@ -124,7 +124,7 @@
       "marks": {}
     },
     "attendance": {
-      "src": "v2/voice/ar/attendance.mp3",
+      "src": "promo-2026/voice/ar/attendance.mp3",
       "file": "ElevenLabs_2026-09-29T10_50_04_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 1.2,
       "speech": [
@@ -141,7 +141,7 @@
       "marks": {}
     },
     "grades": {
-      "src": "v2/voice/ar/grades.mp3",
+      "src": "promo-2026/voice/ar/grades.mp3",
       "file": "ElevenLabs_2026-09-29T10_50_21_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.1,
       "speech": [
@@ -166,7 +166,7 @@
       "marks": {}
     },
     "languages": {
-      "src": "v2/voice/ar/languages.mp3",
+      "src": "promo-2026/voice/ar/languages.mp3",
       "file": "ElevenLabs_2026-09-29T10_50_41_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.02,
       "speech": [
@@ -189,7 +189,7 @@
       }
     },
     "roles": {
-      "src": "v2/voice/ar/roles.mp3",
+      "src": "promo-2026/voice/ar/roles.mp3",
       "file": "ElevenLabs_2026-09-29T10_51_02_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.16,
       "speech": [
@@ -238,7 +238,7 @@
       }
     },
     "cta": {
-      "src": "v2/voice/ar/cta.mp3",
+      "src": "promo-2026/voice/ar/cta.mp3",
       "file": "ElevenLabs_2026-09-29T10_52_12_Eric - Dynamic and Energetic_pvc_sp100_s50_sb75_v3.mp3",
       "offsetSeconds": 0.48,
       "speech": [

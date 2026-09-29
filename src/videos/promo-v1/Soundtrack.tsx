@@ -18,26 +18,26 @@ export const Soundtrack: React.FC<{ frames: number[] }> = ({ frames }) => {
 
   const cues: Cue[] = [
     // A soft whoosh on every scene change, peaking mid-transition.
-    ...[s2, s3, s4, s5, s6, s7, s8].map((at) => ({ at: at - 3, src: 'sfx/soft-whoosh.wav', volume: 1 })),
+    ...[s2, s3, s4, s5, s6, s7, s8].map((at) => ({ at: at - 3, src: 'shared/sfx/soft-whoosh.wav', volume: 1 })),
     // Logo lands.
-    { at: s3 + 22, src: 'sfx/switch.wav', volume: 1 },
+    { at: s3 + 22, src: 'shared/sfx/switch.wav', volume: 1 },
     // Director's phone → parent's phone, then the reminder arrives.
-    { at: s4 + 84, src: 'sfx/whip.wav', volume: 0.5 },
-    { at: s4 + 104, src: 'sfx/ding.wav', volume: 0.9 },
+    { at: s4 + 84, src: 'shared/sfx/whip.wav', volume: 0.5 },
+    { at: s4 + 104, src: 'shared/sfx/ding.wav', volume: 0.9 },
     // Teacher taps "absent", then the parent is notified.
-    { at: s5 + 34, src: 'sfx/mouse-click.wav', volume: 1 },
-    { at: s5 + 64, src: 'sfx/whip.wav', volume: 0.5 },
-    { at: s5 + 80, src: 'sfx/ding.wav', volume: 0.9 },
+    { at: s5 + 34, src: 'shared/sfx/mouse-click.wav', volume: 1 },
+    { at: s5 + 64, src: 'shared/sfx/whip.wav', volume: 0.5 },
+    { at: s5 + 80, src: 'shared/sfx/ding.wav', volume: 0.9 },
     // Trust badges tick in.
-    ...[4, 16, 28].map((d) => ({ at: s7 + d, src: 'sfx/mouse-click.wav', volume: 1 })),
+    ...[4, 16, 28].map((d) => ({ at: s7 + d, src: 'shared/sfx/mouse-click.wav', volume: 1 })),
     // WhatsApp number pops.
-    { at: s8 + 20, src: 'sfx/switch.wav', volume: 1 },
+    { at: s8 + 20, src: 'shared/sfx/switch.wav', volume: 1 },
   ];
 
   return (
     <>
       <Audio
-        src={staticFile('music.wav')}
+        src={staticFile('promo-v1/music.wav')}
         volume={(f) => interpolate(f, [0, 20], [0, MUSIC], { extrapolateRight: 'clamp' })}
       />
       {cues.map((c, i) => (

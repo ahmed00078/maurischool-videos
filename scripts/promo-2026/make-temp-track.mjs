@@ -1,10 +1,10 @@
-// Synthesizes the v2 temp track: node scripts/make-temp-track.mjs [lang]
-//   no lang  → public/v2/temp-track.wav, on the base timing
-//   fr, ...  → public/v2/temp-track-<lang>.wav, on the timing stretched to that
-//              language's voice (src/v2/voice.<lang>.json, see fit-voice.mjs)
+// Synthesizes promo-2026's temp track: node scripts/promo-2026/make-temp-track.mjs [lang]
+//   no lang  → public/promo-2026/temp-track.wav, on the base timing
+//   fr, ...  → public/promo-2026/temp-track-<lang>.wav, on the timing stretched to that
+//              language's voice (voice.<lang>.json, see scripts/fit-voice.mjs)
 //
 // A stand-in so the animatic can be judged on rhythm; the final music replaces it.
-// It reads src/v2/timeline.json, so its sections follow the edit:
+// It reads src/videos/promo-2026/timeline.json, so its sections follow the edit:
 //   hook      tense pulse, then everything stops when the question lands
 //   chaos     a slam on every beat, then a riser
 //   logo      the drop, and the groove (D A Bm G) through the features
@@ -12,15 +12,15 @@
 //   roles/cta the groove again, then a held D chord to close
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
-const timeline = JSON.parse(readFileSync(new URL('../src/v2/timeline.json', import.meta.url), 'utf8'));
+const timeline = JSON.parse(readFileSync(new URL('../../src/videos/promo-2026/timeline.json', import.meta.url), 'utf8'));
 const lang = process.argv[2];
-const voiceUrl = lang ? new URL(`../src/v2/voice.${lang}.json`, import.meta.url) : null;
+const voiceUrl = lang ? new URL(`../../src/videos/promo-2026/voice.${lang}.json`, import.meta.url) : null;
 const voice = voiceUrl && existsSync(voiceUrl) ? JSON.parse(readFileSync(voiceUrl, 'utf8')) : null;
 if (lang && !voice) {
-  console.error(`no src/v2/voice.${lang}.json: run scripts/fit-voice.mjs first`);
+  console.error(`no src/videos/promo-2026/voice.${lang}.json: run scripts/fit-voice.mjs first`);
   process.exit(1);
 }
-// A voiced scene only ever grows, by whole beats, exactly as src/v2/timeline.ts does.
+// A voiced scene only ever grows, by whole beats, exactly as src/shared/beat.ts does.
 for (const s of timeline.scenes) s.beats = Math.max(s.beats, voice?.scenes[s.id]?.beats ?? 0);
 const BPM = timeline.bpm;
 const BEAT = 60 / BPM;
@@ -224,7 +224,7 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * gain)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * gain)) * 32767), 46 + i * 4);
 }
-mkdirSync('public/v2', { recursive: true });
-const out = lang ? `public/v2/temp-track-${lang}.wav` : 'public/v2/temp-track.wav';
+mkdirSync('public/promo-2026', { recursive: true });
+const out = lang ? `public/promo-2026/temp-track-${lang}.wav` : 'public/promo-2026/temp-track.wav';
 writeFileSync(out, buf);
 console.log(`${out}: ${TOTAL_BEATS} beats at ${BPM} BPM (${DUR.toFixed(1)} s), gain ${gain.toFixed(2)}`);

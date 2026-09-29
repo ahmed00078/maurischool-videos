@@ -1,11 +1,11 @@
 import React from 'react';
 import { Audio } from '@remotion/media';
 import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from 'remotion';
-import { Backdrop, Grain, Mood, SafeZones, Vignette } from '../fx';
-import { SAFE } from '../fx';
-import { useSilent } from '../sound';
-import { tween } from '../tokens';
-import { DEVICE_H, DEVICE_W } from '../ui/Device';
+import { Backdrop, Grain, Mood, SafeZones, Vignette } from './fx';
+import { SAFE } from './fx';
+import { useSilent } from './sound';
+import { tween } from './tokens';
+import { DEVICE_H, DEVICE_W } from './ui/Device';
 
 /** Portrait layout: the top band for text sits just under the Reels/TikTok top bar. */
 export const LAYOUT = {
@@ -157,6 +157,6 @@ export const Sfx: React.FC<{ at: number; name: SfxName; volume?: number; rate?: 
 }) =>
   useSilent() ? null : (
     <Sequence from={Math.max(0, Math.round(at))} layout="none" name={`sfx ${name}`}>
-      <Audio src={staticFile(`sfx/${name}.wav`)} volume={volume} playbackRate={rate} />
+      <Audio src={staticFile(`shared/sfx/${name}.wav`)} volume={volume} playbackRate={rate} />
     </Sequence>
   );

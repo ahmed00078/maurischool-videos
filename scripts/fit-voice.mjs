@@ -1,10 +1,10 @@
-// Fits a recorded voice-over to the edit:  node scripts/fit-voice.mjs <lang> <sourceDir> [--report]
+// Fits a recorded voice-over to a video:  node scripts/fit-voice.mjs <video> <lang> <sourceDir> [--report]
 //
 // Expects one file per scene, named 1..11 in timeline order (1.mp3 = hook, ...).
 // For each file it decodes the audio with Remotion's bundled ffmpeg, finds
 // where speech starts and ends and where the pauses are, then:
-//   - copies the files to public/v2/voice/<lang>/<scene>.mp3
-//   - writes src/v2/voice.<lang>.json: where each line starts in its scene,
+//   - copies the files to public/<video>/voice/<lang>/<scene>.mp3
+//   - writes src/videos/<video>/voice.<lang>.json: where each line starts in its scene,
 //     how many beats the scene needs so the line fits, and named marks
 //     (the hook's question lands on the second sentence).
 // The edit then grows a scene only by whole beats, so cuts stay on the music.
@@ -14,14 +14,15 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, extname, join } from 'node:path';
 
-const [lang, sourceDir, flag] = process.argv.slice(2);
-if (!lang || !sourceDir) {
-  console.error('usage: node scripts/fit-voice.mjs <lang> <sourceDir> [--report]');
+const [video, lang, sourceDir, flag] = process.argv.slice(2);
+if (!video || !lang || !sourceDir) {
+  console.error('usage: node scripts/fit-voice.mjs <video> <lang> <sourceDir> [--report]');
   process.exit(1);
 }
 const report = flag === '--report';
 
-const timeline = JSON.parse(readFileSync(new URL('../src/v2/timeline.json', import.meta.url), 'utf8'));
+const videoDir = join('src', 'videos', video);
+const timeline = JSON.parse(readFileSync(join(videoDir, 'timeline.json'), 'utf8'));
 const BEAT = 60 / timeline.bpm;
 const require = createRequire(import.meta.url);
 const pkg = `@remotion/compositor-${process.platform}-${process.arch}${process.platform === 'win32' ? '-msvc' : ''}`;
@@ -99,25 +100,25 @@ const LEAD_IN = 0.2; // seconds
 /** Room after the last word before the next cut. */
 const TAIL = 0.45; // seconds
 
-/** Hand-read cues for this recording (see scripts/voice-cues.<lang>.json). */
+/** Hand-read cues for this recording (src/videos/<video>/voice-cues.<lang>.json). */
 let cues = {};
 try {
-  cues = JSON.parse(readFileSync(new URL(`./voice-cues.${lang}.json`, import.meta.url), 'utf8'));
+  cues = JSON.parse(readFileSync(join(videoDir, `voice-cues.${lang}.json`), 'utf8'));
 } catch {
-  console.log(`no scripts/voice-cues.${lang}.json: every line starts ${LEAD_IN} s into its scene`);
+  console.log(`no ${videoDir}/voice-cues.${lang}.json: every line starts ${LEAD_IN} s into its scene`);
 }
 
 /** Marks land on the nearest quarter beat. */
 const toBeat = (seconds) => Math.round((seconds / BEAT) * 4) / 4;
 
-const outDir = join('public', 'v2', 'voice', lang);
+const outDir = join('public', video, 'voice', lang);
 mkdirSync(outDir, { recursive: true });
 const scenes = {};
 timeline.scenes.forEach((scene, i) => {
   const file = join(sourceDir, files[i]);
   const a = analyse(file);
   const cue = cues[scene.id] ?? {};
-  const src = `v2/voice/${lang}/${scene.id}${extname(files[i]).toLowerCase()}`;
+  const src = `${video}/voice/${lang}/${scene.id}${extname(files[i]).toLowerCase()}`;
   const longestResume = a.pauses.length
     ? a.pauses.reduce((best, p) => (p[1] - p[0] > best[1] - best[0] ? p : best))[1]
     : a.start;
@@ -150,6 +151,6 @@ timeline.scenes.forEach((scene, i) => {
   );
 });
 if (!report) {
-  writeFileSync(join('src', 'v2', `voice.${lang}.json`), `${JSON.stringify({ lang, bpm: timeline.bpm, scenes }, null, 2)}\n`);
-  console.log(`wrote src/v2/voice.${lang}.json and ${files.length} files in ${outDir}`);
+  writeFileSync(join(videoDir, `voice.${lang}.json`), `${JSON.stringify({ lang, bpm: timeline.bpm, scenes }, null, 2)}\n`);
+  console.log(`wrote ${videoDir}/voice.${lang}.json and ${files.length} files in ${outDir}`);
 }
