@@ -5,6 +5,7 @@ import { FPS } from './theme';
 import { Kit, KitProps } from './v2/Kit';
 import { LangProvider, Lang } from './v2/lang';
 import { PromoV2, PromoV2Props, SCENE_COMPONENTS } from './v2/PromoV2';
+import { Cover, PromoFast, PromoFastProps, SPEEDS } from './v2/PromoFast';
 import { LeadContext, MarksContext, SceneId, TIMELINE, timelineFor, totalFrames } from './v2/timeline';
 
 /** One v2 scene on its own, with the lead and voice marks it has in the full video. */
@@ -26,6 +27,12 @@ const PROMO_V2: { id: string; props: PromoV2Props }[] = [
   { id: 'PromoV2-FR', props: { lang: 'fr', safeZones: false, music: 0.8, voice: true } },
   { id: 'PromoV2-FR-NoVoice', props: { lang: 'fr', safeZones: false, music: 0.8, voice: false } },
   { id: 'PromoV2-AR', props: { lang: 'ar', safeZones: false, music: 0.8, voice: true } },
+];
+
+// The social cuts. Their real length is fastFrames(): render with --frames (see PromoFast.tsx).
+const PROMO_FAST: { id: string; props: PromoFastProps }[] = [
+  { id: 'PromoFast-FR', props: { lang: 'fr', speed: SPEEDS.fr, cover: true, safeZones: false } },
+  { id: 'PromoFast-AR', props: { lang: 'ar', speed: SPEEDS.ar, cover: true, safeZones: false } },
 ];
 
 /** The length follows the timeline of the language and whether its voice plays. */
@@ -72,6 +79,32 @@ export const RemotionRoot: React.FC = () => (
         durationInFrames={totalFrames(TIMELINE)}
         calculateMetadata={promoLength}
         defaultProps={p.props}
+      />
+    ))}
+    {PROMO_FAST.map((p) => (
+      <Composition
+        key={p.id}
+        id={p.id}
+        component={PromoFast}
+        width={W}
+        height={H}
+        fps={FPS}
+        durationInFrames={totalFrames(timelineFor(p.props.lang))}
+        defaultProps={p.props}
+      />
+    ))}
+    {(['fr', 'ar'] as Lang[]).map((lang) => (
+      <Composition
+        key={lang}
+        id={`Cover-${lang.toUpperCase()}`}
+        component={Cover}
+        width={W}
+        height={H}
+        fps={FPS}
+        // Long on purpose: Remotion clamps a frozen frame to the composition's
+        // length, so a 1-frame composition would freeze the home scene on frame 0.
+        durationInFrames={totalFrames(timelineFor(lang))}
+        defaultProps={{ lang }}
       />
     ))}
     <Folder name="V2-Scenes">

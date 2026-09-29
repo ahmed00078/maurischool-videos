@@ -9,6 +9,7 @@ import { slide } from '@remotion/transitions/slide';
 import { wipe } from '@remotion/transitions/wipe';
 import { AbsoluteFill, interpolate, Sequence, staticFile, useVideoConfig } from 'remotion';
 import { SafeZones } from './fx';
+import { useSilent } from './sound';
 import { Lang, LangProvider } from './lang';
 import { ChaosScene, HookScene, LogoScene } from './scenes/Act1';
 import { AttendanceScene, FinanceScene, GradesScene, HomeScene, PaymentScene } from './scenes/Act2';
@@ -88,6 +89,7 @@ export const PromoV2: React.FC<PromoV2Props> = ({ lang, safeZones, music, voice 
   const voiced = timeline.some((s) => s.voice);
   const total = totalFrames(timeline);
   const windows = speechWindows(timeline);
+  const silent = useSilent();
   return (
     <LangProvider lang={lang}>
       <AbsoluteFill style={{ background: '#0b1033' }}>
@@ -102,7 +104,7 @@ export const PromoV2: React.FC<PromoV2Props> = ({ lang, safeZones, music, voice 
                     <Scene />
                   </MarksContext.Provider>
                 </LeadContext.Provider>
-                {s.voice ? (
+                {s.voice && !silent ? (
                   // A line that starts a hair before the cut is trimmed rather than shifted.
                   <Sequence from={Math.max(0, voiceFrom)} layout="none" name={`voice ${s.id}`}>
                     <Audio src={staticFile(s.voice.src)} trimBefore={Math.max(0, -voiceFrom)} volume={1} />
@@ -125,6 +127,7 @@ export const PromoV2: React.FC<PromoV2Props> = ({ lang, safeZones, music, voice 
         </TransitionSeries>
         <SafeZones show={safeZones} />
       </AbsoluteFill>
+      {silent ? null : (
       <Audio
         src={staticFile(musicTrackFor(voiced, lang))}
         volume={(f) =>
@@ -132,6 +135,7 @@ export const PromoV2: React.FC<PromoV2Props> = ({ lang, safeZones, music, voice 
           (1 - (1 - DUCK) * duckAt(f, windows))
         }
       />
+      )}
     </LangProvider>
   );
 };

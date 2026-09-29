@@ -3,6 +3,7 @@ import { Audio } from '@remotion/media';
 import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from 'remotion';
 import { Backdrop, Grain, Mood, SafeZones, Vignette } from '../fx';
 import { SAFE } from '../fx';
+import { useSilent } from '../sound';
 import { tween } from '../tokens';
 import { DEVICE_H, DEVICE_W } from '../ui/Device';
 
@@ -147,14 +148,15 @@ export const Tap: React.FC<{ x: number; y: number; at: number; size?: number }> 
 
 export type SfxName = 'soft-whoosh' | 'whoosh' | 'whip' | 'ding' | 'mouse-click' | 'switch';
 
-/** A sound effect at a frame of the current scene. */
+/** A sound effect at a frame of the current scene (nothing when the subtree is silent). */
 export const Sfx: React.FC<{ at: number; name: SfxName; volume?: number; rate?: number }> = ({
   at,
   name,
   volume = 0.8,
   rate = 1,
-}) => (
-  <Sequence from={Math.max(0, Math.round(at))} layout="none" name={`sfx ${name}`}>
-    <Audio src={staticFile(`sfx/${name}.wav`)} volume={volume} playbackRate={rate} />
-  </Sequence>
-);
+}) =>
+  useSilent() ? null : (
+    <Sequence from={Math.max(0, Math.round(at))} layout="none" name={`sfx ${name}`}>
+      <Audio src={staticFile(`sfx/${name}.wav`)} volume={volume} playbackRate={rate} />
+    </Sequence>
+  );
