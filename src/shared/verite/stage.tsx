@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { useStoryFrame } from '../beat';
 import { FAMILY } from '../demo';
 import { Grain, Vignette } from '../fx';
 import { Bi, useBi, useLang } from '../lang';
@@ -15,8 +16,7 @@ import { Boy, Face, Father, Girl } from '../ui/people';
  * Scenes are cut from the set, so idle motion (breathing, blinks) runs on the
  * story clock, not the scene's, and nothing jumps on a hard cut.
  */
-export const StoryClock = createContext(0);
-export const useStoryFrame = () => useCurrentFrame() + useContext(StoryClock);
+export { StoryClock, useStoryFrame } from '../beat';
 
 export type Who = 'son' | 'daughter' | 'father';
 export const ORDER: Who[] = ['son', 'daughter', 'father'];

@@ -146,7 +146,7 @@ export const AppButton: React.FC<{
 };
 
 /** PinnedFooter: the primary action floating above the tab pill, the list fading out behind it. */
-const PinnedFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PinnedFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { c } = useApp();
   return (
     <div style={{ position: 'absolute', left: 0, right: 0, bottom: pt(TAB_INSET), zIndex: 4 }}>
@@ -509,16 +509,19 @@ export const EVALUATION_TARGETS = {
 
 /**
  * ConfirmDialog (type "info"): a 16 pt card on a 50 % scrim, the icon in a
- * tinted disc, centred title and message, then Annuler / the action.
+ * tinted disc, centred title and message, then Annuler / the action. `icon`
+ * replaces the type's own, as a caller of the app's dialog may (the
+ * announcement composer passes « megaphone-outline »).
  */
-const ConfirmDialog: React.FC<{ open: number; title: string; message: string; confirm: string; cancel: string; confirmPress: number }> = ({
-  open,
-  title,
-  message,
-  confirm,
-  cancel,
-  confirmPress,
-}) => {
+export const ConfirmDialog: React.FC<{
+  open: number;
+  title: string;
+  message: string;
+  confirm: string;
+  cancel: string;
+  confirmPress: number;
+  icon?: IconName;
+}> = ({ open, title, message, confirm, cancel, confirmPress, icon = 'information-circle' }) => {
   const { c } = useApp();
   const w = useWeights();
   return (
@@ -558,7 +561,7 @@ const ConfirmDialog: React.FC<{ open: number; title: string; message: string; co
               marginBottom: pt(14),
             }}
           >
-            <Ionicon name="information-circle" size={pt(28)} color={APP.info} />
+            <Ionicon name={icon} size={pt(28)} color={APP.info} />
           </div>
           <div style={{ fontSize: pt(18), fontWeight: w.semiBold, color: c.text, textAlign: 'center' }}>{title}</div>
           <div style={{ fontSize: pt(14), lineHeight: `${pt(20)}px`, color: c.textSecondary, marginTop: pt(6), textAlign: 'center', marginBottom: pt(16) }}>

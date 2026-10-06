@@ -1,7 +1,7 @@
 import React from 'react';
 import { spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { SCREEN_COPY } from '../appCopy';
-import { useBi, useLang } from '../lang';
+import { Bi, useBi, useLang } from '../lang';
 import { APP, OUTFIT, pt, SCREEN_H, SCREEN_W } from '../tokens';
 import { LogoMark } from './LogoMark';
 
@@ -10,8 +10,9 @@ const DATE = { fr: 'lundi 12 octobre', ar: 'الاثنين 12 أكتوبر' };
 /**
  * The parent's lock screen: wallpaper, clock, and MauriSchool notifications
  * landing on top. The status bar comes from <Device statusTone="light">.
+ * `date` is the day under the clock, when the story is not on Monday 12 October.
  */
-export const LockScreen: React.FC<{ children?: React.ReactNode; time?: string }> = ({ children, time = '08:16' }) => {
+export const LockScreen: React.FC<{ children?: React.ReactNode; time?: string; date?: Bi }> = ({ children, time = '08:16', date = DATE }) => {
   const bi = useBi();
   const { font } = useLang();
   return (
@@ -26,7 +27,7 @@ export const LockScreen: React.FC<{ children?: React.ReactNode; time?: string }>
       }}
     >
       <div style={{ marginTop: pt(92), textAlign: 'center', fontFamily: font, fontSize: pt(17), fontWeight: 500, opacity: 0.85 }}>
-        {bi(DATE)}
+        {bi(date)}
       </div>
       <div
         style={{

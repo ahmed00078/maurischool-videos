@@ -174,3 +174,56 @@ export const FAMILY = {
   /** The second term, paid at the desk in December. */
   termPayment: { amount: '7 500', receipt: 'RCP-2026-000418' },
 };
+
+/**
+ * « La chèvre et le reçu » (chevre-01): the father pays Sidi's October fees at
+ * the school's counter, in cash, on Monday 12 October. The accountant records
+ * it in the app and the receipt reaches his phone. Numbers follow the backend's
+ * formats: receipts RCP-<year>-<6 digits> (finance_numbering.py), invoices
+ * INV-<year>-<6 digits>, a pupil's matricule <school code><S><4 digits>.
+ * The paper receipt book's red serial is the app receipt's last six digits,
+ * so the scrap in the goat's mouth (« …0412 ») matches the phone.
+ */
+export const FEES_PAYMENT = {
+  amount: 7500,
+  /** formatAmount: a narrow no-break space between thousands. */
+  amountText: '7 500',
+  receipt: 'RCP-2026-000412',
+  serial: '000412',
+  invoice: 'INV-2026-000287',
+  date: '12/10/2026',
+  time: '10:24',
+  /** The morning reminder that came before it, for the invoice due on the 15th. */
+  reminder: { due: '15/10/2026', time: '07:30' },
+  /** The school names the fee; the app prints the school's words. */
+  description: { fr: 'Scolarité — Octobre', ar: 'رسوم الدراسة — أكتوبر' } as Bi,
+  studentCode: 'NEIS0187',
+  /** Sidi's father, named after his own father as Sidi is after him. */
+  payer: { fr: 'Mocktar Ould Sidi', ar: 'المختار ولد سيدي' } as Bi,
+  cashier: { fr: 'Vatimetou Mint Abdallahi', ar: 'فاطمتو بنت عبد الله' } as Bi,
+};
+
+/**
+ * « Le groupe des parents » (groupe-01): on Tuesday 20 October 2026 at 18:04
+ * the director tells 5e A about Thursday's maths test. The title and the body
+ * are free text the director types (≤ 120 and ≤ 1000 characters), shown as
+ * typed to every reader, so each cut has them in its own language. It is the
+ * same text the director posted in the class's chat group.
+ *
+ * For a class, the recipients are its pupils, their guardians and its
+ * assigned teachers, the sender excluded; the preview sorts the breakdown by
+ * role (parent, student, teacher): 41 + 28 (CLASS_SIZE) + 9 = 78.
+ */
+export const CLASS_ANNOUNCEMENT = {
+  title: { fr: 'Composition de maths jeudi', ar: 'امتحان الرياضيات يوم الخميس' } as Bi,
+  body: { fr: 'Révisez le chapitre 3. Apportez une calculatrice.', ar: 'راجعوا الفصل الثالث. أحضروا آلة حاسبة.' } as Bi,
+  time: '18:04',
+  /** Tuesday 20 October 2026; the test is on Thursday 22. */
+  day: 20,
+  breakdown: [
+    { role: 'parent', count: 41 },
+    { role: 'student', count: CLASS_SIZE },
+    { role: 'teacher', count: 9 },
+  ] as const,
+  total: 41 + CLASS_SIZE + 9,
+};

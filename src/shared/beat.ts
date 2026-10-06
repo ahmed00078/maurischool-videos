@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { useCurrentFrame } from 'remotion';
 import type { Lang } from './lang';
 import { BEAT, FPS } from './tokens';
 
@@ -114,3 +115,12 @@ export const useMarks = () => {
   const marks = useContext(MarksContext);
   return (name: string, fallback: number) => marks[name] ?? fallback;
 };
+
+/**
+ * The video's own clock, for idle motion that must not jump on a hard cut
+ * (breathing, blinks, a goat chewing): a scene cut from one continuous set
+ * provides the frame its sequence starts at, and useStoryFrame() counts from
+ * the start of the video.
+ */
+export const StoryClock = createContext(0);
+export const useStoryFrame = () => useCurrentFrame() + useContext(StoryClock);

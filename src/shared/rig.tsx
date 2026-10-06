@@ -172,7 +172,17 @@ export type SfxName =
   | 'stamp'
   | 'buzz'
   | 'sting'
-  | 'wahwah';
+  | 'wahwah'
+  // scripts/make-goat-sfx.mjs
+  | 'chew'
+  | 'paper'
+  | 'rewind'
+  | 'bleat'
+  // scripts/make-chat-sfx.mjs
+  | 'blip'
+  | 'flick'
+  | 'tear'
+  | 'freeze';
 
 /**
  * A sound effect at a frame of the current scene (nothing when the subtree is

@@ -142,3 +142,65 @@ export const StatusBar: React.FC<{ tone: 'dark' | 'light'; offline?: boolean; ti
     </div>
   );
 };
+
+/**
+ * The same handset seen from behind: the frame, a matte back, the camera
+ * island in the top corner (on the left seen from behind). For a phone held
+ * up to a face, or lying face down on a table.
+ */
+export const DeviceBack: React.FC<{ style?: React.CSSProperties }> = ({ style }) => (
+  <div
+    style={{
+      position: 'relative',
+      width: DEVICE_W,
+      height: DEVICE_H,
+      borderRadius: SCREEN_RADIUS + BEZEL,
+      background: 'linear-gradient(150deg, #3c4258 0%, #23273a 50%, #2e3348 100%)',
+      boxShadow: ['0 0 0 2px #5b6076 inset', '0 0 0 6px #1b1e2c inset', '0 40px 70px -20px rgba(8, 12, 40, 0.55)'].join(', '),
+      ...style,
+    }}
+  >
+    <div style={{ position: 'absolute', left: 44, top: 44, width: 190, height: 190, borderRadius: 54, background: 'linear-gradient(145deg, #2a2f44, #171a28)', boxShadow: '0 0 0 3px #4a5068 inset' }}>
+      {[
+        [58, 58],
+        [132, 58],
+        [58, 132],
+      ].map(([x, y], i) => (
+        <div key={i} style={{ position: 'absolute', left: x - 28, top: y - 28, width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, #3a4a78 0%, #0b0d16 60%)', boxShadow: '0 0 0 5px #3a3f55' }} />
+      ))}
+      <div style={{ position: 'absolute', left: 124, top: 124, width: 16, height: 16, borderRadius: '50%', background: '#f6e7b0' }} />
+    </div>
+    <div style={{ position: 'absolute', left: 0, right: 0, top: '42%', height: 200, background: 'linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 70%)' }} />
+  </div>
+);
+
+/**
+ * A phone that turns over about its long axis: `turn` 0 shows the screen
+ * (`children` on a <Device>), 1 its back. Put it under a perspective.
+ */
+export const TurningDevice: React.FC<{ turn: number; children: React.ReactNode; statusTone?: 'dark' | 'light'; time?: string; glare?: number }> = ({
+  turn,
+  children,
+  statusTone,
+  time,
+  glare,
+}) =>
+  // At rest it is drawn flat: a 3D layer is rasterised soft, and the screen must stay sharp.
+  turn <= 0 ? (
+    <Device statusTone={statusTone} time={time} glare={glare}>
+      {children}
+    </Device>
+  ) : turn >= 1 ? (
+    <DeviceBack />
+  ) : (
+  <div style={{ position: 'relative', width: DEVICE_W, height: DEVICE_H, transformStyle: 'preserve-3d', transform: `rotateY(${turn * 180}deg)` }}>
+    <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden' }}>
+      <Device statusTone={statusTone} time={time} glare={glare}>
+        {children}
+      </Device>
+    </div>
+    <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+      <DeviceBack />
+    </div>
+  </div>
+);

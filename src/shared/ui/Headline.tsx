@@ -155,3 +155,37 @@ export const RoleChip: React.FC<{
     </div>
   );
 };
+
+/**
+ * A small caption in a dark pill: where and when we are (« Mardi soir »,
+ * « Un mois plus tard… »). Pops in at `at`, leaves at `out`.
+ */
+export const PlaceTag: React.FC<{ text: string; at: number; out?: number; style?: React.CSSProperties }> = ({ text, at, out, style }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const { font, dir, rtl } = useLang();
+  const p = spring({ frame: frame - at, fps, config: { damping: 14, stiffness: 160 } });
+  const leave = out === undefined ? 0 : tween(frame, [out, out + 8], [0, 1], EASE_IN);
+  if (frame < at) return null;
+  return (
+    <div
+      dir={dir}
+      style={{
+        padding: rtl ? '6px 28px 12px' : '10px 28px',
+        borderRadius: 999,
+        background: 'rgba(30,22,18,0.82)',
+        color: '#fff4dc',
+        fontFamily: font,
+        fontWeight: 700,
+        fontSize: 40,
+        fontStyle: rtl ? 'normal' : 'italic',
+        whiteSpace: 'nowrap',
+        opacity: Math.min(1, p * 1.5) * (1 - leave),
+        scale: String(0.85 + 0.15 * p),
+        ...style,
+      }}
+    >
+      {text}
+    </div>
+  );
+};

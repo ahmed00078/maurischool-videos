@@ -191,6 +191,9 @@ export const INBOX_COPY = {
 export const ROLES = {
   parent: { fr: 'Parent', ar: 'ولي الأمر' },
   teacher: { fr: 'Enseignant', ar: 'المعلم' },
+  accountant: { fr: 'Comptable', ar: 'المحاسب' },
+  /** The director's account. */
+  schoolAdmin: { fr: 'Administrateur', ar: 'مدير المدرسة' },
 } satisfies Record<string, Bi>;
 
 /**
@@ -221,6 +224,89 @@ export const CHILD_GRADES_COPY = {
   subjectCoefficient: { fr: 'Coefficient de la matière : {value}', ar: 'معامل المادة: {value}' },
 } satisfies Record<string, unknown>;
 
+/**
+ * What a locked phone shows instead of a sensitive notification's message
+ * (SENSITIVE_PUSH_BODY, backend/app/core/notification_i18n.py): the title
+ * stays, the amount or the grade never shows. payment_received is sensitive.
+ */
+export const SENSITIVE_PUSH_BODY = {
+  fr: 'Ouvrez MauriSchool pour consulter le détail.',
+  ar: 'افتحوا MauriSchool للاطّلاع على التفاصيل.',
+} satisfies Bi;
+
+/** The parent's « Frais » tab (app/(app)/(parent)/fees.tsx), from mobile_app/src/i18n/{fr,ar}/common.json. */
+export const FEES_COPY = {
+  fees: { fr: 'Frais', ar: 'الرسوم' },
+  totalDue: { fr: 'Total dû', ar: 'المبلغ المستحق' },
+  overdueAmount: { fr: 'Montant en retard', ar: 'المبلغ المتأخر' },
+  pendingFees: { fr: 'Frais en attente', ar: 'الرسوم المعلقة' },
+  paymentHistory: { fr: 'Historique', ar: 'السجل' },
+  downloadReceipt: { fr: 'Télécharger le reçu', ar: 'تحميل الإيصال' },
+  allPaid: { fr: 'Tout est à jour !', ar: 'كل شيء محدث!' },
+  noFeesPending: { fr: 'Aucun frais en attente', ar: 'لا توجد رسوم معلقة' },
+} satisfies Record<string, Bi>;
+
+/**
+ * The payment receipt PDF (backend/app/services/pdf_service.py: _labels,
+ * _status_label; core/payment_methods.py; templates/documents/_footer.html).
+ * The template upper-cases the title and the panel headings.
+ */
+export const RECEIPT_PDF = {
+  receipt: { fr: 'Reçu de paiement', ar: 'إيصال دفع' },
+  number: { fr: 'Numéro', ar: 'الرقم' },
+  date: { fr: 'Date', ar: 'التاريخ' },
+  student: { fr: 'Élève', ar: 'التلميذ' },
+  code: { fr: 'Matricule', ar: 'الرقم المدرسي' },
+  payer: { fr: 'Payeur', ar: 'الدافع' },
+  invoiceNumber: { fr: 'Facture', ar: 'رقم الفاتورة' },
+  method: { fr: 'Mode de paiement', ar: 'طريقة الدفع' },
+  processedBy: { fr: 'Traité par', ar: 'سجله' },
+  paid: { fr: 'Payé', ar: 'المدفوع' },
+  balanceAfter: { fr: 'Solde restant', ar: 'الرصيد المتبقي' },
+  signature: { fr: 'Signature autorisée', ar: 'التوقيع' },
+  stamp: { fr: "Cachet de l'école", ar: 'الختم' },
+  /** status "completed" */
+  completed: { fr: 'Payé', ar: 'مدفوع' },
+  cash: { fr: 'Espèces', ar: 'نقدًا' },
+  generatedWith: { fr: 'Document généré avec', ar: 'تم إنشاء المستند بواسطة' },
+} satisfies Record<string, Bi>;
+
 /** Fill "{name}" placeholders the way i18next does. */
 export const fill = (template: string, params: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(params[key] ?? `{${key}}`));
+
+/**
+ * The director's « Nouvelle annonce » (components/admin/AnnouncementComposer.tsx and
+ * app/(app)/(admin)/announcements/compose.tsx), from mobile_app/src/i18n/{fr,ar}/admin.json
+ * → announcements. The apostrophes are the typographic ones the app ships.
+ * Counted nouns follow i18next's plural rules: French one/other; Arabic zero,
+ * one, two, few (3–10), many (11–99), other (100+).
+ */
+export const ANNOUNCEMENT_COPY = {
+  title: { fr: "Nouvelle annonce", ar: "إعلان جديد" },
+  subtitle: { fr: "Message immédiat à la communauté", ar: "رسالة فورية إلى المجتمع المدرسي" },
+  messageSection: { fr: "Message", ar: "الرسالة" },
+  titleLabel: { fr: "Titre", ar: "العنوان" },
+  bodyLabel: { fr: "Contenu", ar: "المحتوى" },
+  audienceSection: { fr: "Destinataires", ar: "المستلمون" },
+  audience_school: { fr: "Toute l’école", ar: "كل المدرسة" },
+  audience_role: { fr: "Par rôle", ar: "حسب الدور" },
+  audience_class: { fr: "Par classe", ar: "حسب القسم" },
+  recipientsTitle: { fr: "Destinataires", ar: "المستلمون" },
+  send: { fr: "Envoyer l’annonce", ar: "إرسال الإعلان" },
+  confirmTitle: { fr: "Envoyer l’annonce ?", ar: "إرسال الإعلان؟" },
+  confirmMessage: { fr: "Cette annonce sera envoyée à {count} destinataire(s) : {audience}.", ar: "سيُرسَل هذا الإعلان إلى {count} مستلم: {audience}." },
+  confirmSend: { fr: "Envoyer", ar: "إرسال" },
+  successToast: { fr: "Annonce envoyée à {count} destinataire(s)", ar: "تم إرسال الإعلان إلى {count} مستلم" },
+  /** recipientsUnit_*: after the total. */
+  recipientsUnit: { fr: {"one":"personne","other":"personnes"}, ar: {"zero":"شخص","one":"شخص","two":"شخصان","few":"أشخاص","many":"شخصًا","other":"شخص"} },
+  /** roleCount.*: the noun after each count in the breakdown. */
+  roleCount: {
+    parent: { fr: {"one":"parent","other":"parents"}, ar: {"zero":"ولي أمر","one":"ولي أمر","two":"وليا أمر","few":"أولياء أمور","many":"ولي أمر","other":"ولي أمر"} },
+    student: { fr: {"one":"élève","other":"élèves"}, ar: {"zero":"تلميذ","one":"تلميذ","two":"تلميذان","few":"تلاميذ","many":"تلميذًا","other":"تلميذ"} },
+    teacher: { fr: {"one":"enseignant","other":"enseignants"}, ar: {"zero":"معلم","one":"معلم","two":"معلمان","few":"معلمين","many":"معلمًا","other":"معلم"} },
+  },
+} satisfies Record<string, unknown>;
+
+/** i18next's plural category for a count (Intl.PluralRules, as i18next uses it). */
+export const pluralKey = (lang: 'fr' | 'ar', count: number) => new Intl.PluralRules(lang).select(count);

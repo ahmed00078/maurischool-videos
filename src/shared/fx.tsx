@@ -177,3 +177,81 @@ export const SafeZones: React.FC<{ show: boolean }> = ({ show }) => {
 
 /** Handy for scenes: a 0→1 ramp between two frames with the in-out curve. */
 export const ramp = (frame: number, a: number, b: number) => interpolate(frame, [a, b], [0, 1], { ...clamp, easing: EASE_IN_OUT });
+
+/**
+ * A VHS tape over a scene, for a rewind: the picture's colour channels slip
+ * apart, scanlines, a bright band of tracking noise rolling up, the whole
+ * frame jittering sideways, and the deck's on-screen symbol blinking in the
+ * corner (`osd`: ◀◀ rewinding, ▶ playing). `amount` (0 to 1) fades it all.
+ * Plain SVG filters and CSS, like the rest of the stage.
+ */
+export const Vhs: React.FC<{ amount: number; osd?: 'rew' | 'play' | null; children: React.ReactNode }> = ({ amount, osd = null, children }) => {
+  const frame = useCurrentFrame();
+  const id = `vhs${React.useId().replace(/[^a-zA-Z0-9]/g, '')}`;
+  const a = Math.max(0, Math.min(1, amount));
+  const rnd = (n: number) => {
+    const x = Math.sin(frame * 12.9898 + n * 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  };
+  const shift = 9 * a;
+  const jitter = (rnd(1) - 0.5) * 14 * a;
+  const band = ((frame * 47) % 2300) - 200;
+  const noise = `<svg xmlns='http://www.w3.org/2000/svg' width='300' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9 0.05' numOctaves='2' seed='${frame % 50}'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
+  const blink = Math.floor(frame / 8) % 2 === 0;
+  return (
+    <AbsoluteFill>
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <filter id={id} x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+          <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
+          <feOffset in="r" dx={shift} dy="0" result="r2" />
+          <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g" />
+          <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b" />
+          <feOffset in="b" dx={-shift} dy="0" result="b2" />
+          <feBlend in="r2" in2="g" mode="screen" result="rg" />
+          <feBlend in="rg" in2="b2" mode="screen" />
+        </filter>
+      </svg>
+      <AbsoluteFill
+        style={{
+          filter: a > 0 ? `url(#${id}) saturate(${1 - 0.35 * a}) contrast(${1 + 0.15 * a}) brightness(${1 + 0.08 * a * (rnd(2) - 0.3)})` : undefined,
+          translate: `${jitter}px 0px`,
+        }}
+      >
+        {children}
+      </AbsoluteFill>
+      {a > 0 ? (
+        <AbsoluteFill style={{ pointerEvents: 'none', opacity: a }}>
+          <AbsoluteFill style={{ background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 2px, transparent 2px, transparent 6px)' }} />
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: band,
+              height: 150,
+              backgroundImage: `url("data:image/svg+xml;utf8,${noise}")`,
+              backgroundSize: '300px 80px',
+              mixBlendMode: 'screen',
+              opacity: 0.75,
+              filter: 'contrast(1.6)',
+            }}
+          />
+          <div style={{ position: 'absolute', left: 0, right: 0, top: band + 180, height: 6, background: 'rgba(255,255,255,0.45)' }} />
+          <AbsoluteFill style={{ background: 'radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0,0,20,0.45) 100%)' }} />
+        </AbsoluteFill>
+      ) : null}
+      {osd && blink ? (
+        <svg width="160" height="80" viewBox="0 0 160 80" style={{ position: 'absolute', left: SAFE.side + 30, top: SAFE.top + 40, filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(3px 3px 0 rgba(0,0,0,0.5))' }}>
+          {osd === 'rew' ? (
+            <>
+              <path d="M 70 8 L 70 72 L 22 40 Z" fill="#fff" />
+              <path d="M 122 8 L 122 72 L 74 40 Z" fill="#fff" />
+            </>
+          ) : (
+            <path d="M 30 8 L 30 72 L 86 40 Z" fill="#fff" />
+          )}
+        </svg>
+      ) : null}
+    </AbsoluteFill>
+  );
+};

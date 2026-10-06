@@ -10,7 +10,7 @@ import React from 'react';
  * family can come back from one video to the next.
  */
 
-export type Mouth = 'smile' | 'grin' | 'flat' | 'o' | 'wobble' | 'smirk' | 'talk';
+export type Mouth = 'smile' | 'grin' | 'flat' | 'o' | 'wobble' | 'smirk' | 'talk' | 'yawn';
 
 export type Face = {
   /** Where the pupils point, -1 to 1 on each axis (x is screen left to right). */
@@ -22,7 +22,7 @@ export type Face = {
   /** 0 to 1: inner ends up, the worried look. */
   worry?: number;
   mouth?: Mouth;
-  /** For 'talk': 0 closed to 1 wide. */
+  /** For 'talk' and 'yawn': 0 closed to 1 wide. */
   open?: number;
   /** 0 to 1: drops at the temple. */
   sweat?: number;
@@ -33,10 +33,10 @@ export type Face = {
 
 const INK = '#2a1d1a';
 
-type Head = { cx: number; cy: number; r: number; skin: string; shade: string };
+export type Head = { cx: number; cy: number; r: number; skin: string; shade: string };
 
 /** Eyes, brows, nose, mouth, cheeks and sweat, laid out on a round head. */
-const FaceFeatures: React.FC<{ head: Head; face: Face; mouthY?: number; mouthW?: number }> = ({ head, face, mouthY, mouthW }) => {
+export const FaceFeatures: React.FC<{ head: Head; face: Face; mouthY?: number; mouthW?: number }> = ({ head, face, mouthY, mouthW }) => {
   const { cx, cy, r, shade } = head;
   const { look = [0, 0], blink = 0, brows = 0, worry = 0, mouth = 'smile', open = 0, sweat = 0, blush = 0, t = 0 } = face;
   const ex = r * 0.36;
@@ -96,6 +96,17 @@ const FaceFeatures: React.FC<{ head: Head; face: Face; mouthY?: number; mouthW?:
     case 'o':
       mouthEl = <ellipse cx={cx} cy={my + mw * 0.25} rx={mw * 0.32} ry={mw * 0.42} fill={lip} />;
       break;
+    case 'yawn': {
+      // A tall open oval, the tongue at the bottom: `open` from a gape to the full yawn.
+      const o = Math.max(0.2, Math.min(1, open));
+      mouthEl = (
+        <g>
+          <ellipse cx={cx} cy={my + r * 0.13 * o} rx={r * (0.12 + 0.07 * o)} ry={r * (0.08 + 0.2 * o)} fill={lip} />
+          <ellipse cx={cx} cy={my + r * 0.3 * o} rx={r * (0.08 + 0.04 * o)} ry={r * 0.06 * o} fill="#c9575a" />
+        </g>
+      );
+      break;
+    }
     case 'wobble': {
       const n = 6;
       const pts = Array.from({ length: n + 1 }, (_, i) => {
@@ -159,7 +170,7 @@ const FaceFeatures: React.FC<{ head: Head; face: Face; mouthY?: number; mouthW?:
   );
 };
 
-type BustProps = {
+export type BustProps = {
   face: Face;
   /** Degrees; the head turns about the neck. */
   tilt?: number;
@@ -252,16 +263,14 @@ export const Girl: React.FC<BustProps> = ({ face, tilt = 0, width = 340, style }
  * beard. With an `envelopeLabel`, a school-fees envelope sticks out of the
  * pocket, `envelope` (0 to 1) being how far it has risen: at 0 only its corner
  * shows, a clue a viewer can catch.
+ *
+ * `phone` puts his phone in the same pocket, its top `rise` (0 to 1) out and
+ * `shake` units sideways when it buzzes; `pocketOut` (0 to 1) turns the
+ * pocket's lining out, the universal sign for « nothing left in here ».
  */
-export const Father: React.FC<BustProps & { envelope?: number; envelopeLabel?: string; labelFont?: string }> = ({
-  face,
-  tilt = 0,
-  width = 340,
-  style,
-  envelope = 0,
-  envelopeLabel,
-  labelFont,
-}) => {
+export const Father: React.FC<
+  BustProps & { envelope?: number; envelopeLabel?: string; labelFont?: string; phone?: { rise: number; shake?: number }; pocketOut?: number }
+> = ({ face, tilt = 0, width = 340, style, envelope = 0, envelopeLabel, labelFont, phone, pocketOut = 0 }) => {
   const head: Head = { cx: 200, cy: 236, r: 106, skin: '#8f5b3b', shade: '#72462c' };
   const daraa = '#6aa6dd';
   const gold = '#f2d38b';
@@ -283,9 +292,24 @@ export const Father: React.FC<BustProps & { envelope?: number; envelopeLabel?: s
           </text>
         </g>
       ) : null}
+      {phone ? (
+        <g transform={`translate(${phone.shake ?? 0} ${40 - phone.rise * 78}) rotate(4 270 520)`}>
+          <rect x="236" y="466" width="68" height="130" rx="12" fill="#1c1f2e" />
+          <rect x="241" y="471" width="58" height="120" rx="8" fill="#2b3150" />
+          <circle cx="270" cy="479" r="3" fill="#0b0d16" />
+        </g>
+      ) : null}
       <rect x="214" y="500" width="112" height="120" rx="12" fill="#5b95cc" />
       <path d="M 226 516 q 22 -14 44 0 t 44 0 M 226 540 q 22 -14 44 0 t 44 0" stroke={gold} strokeWidth="4" fill="none" />
       <circle cx="270" cy="584" r="14" fill="none" stroke={gold} strokeWidth="4" />
+      {pocketOut > 0 ? (
+        // The lining, pulled out over the pocket's front: a pale flap with a seam and a crumple.
+        <g transform={`translate(0 504) scale(1 ${pocketOut}) translate(0 -504)`}>
+          <path d="M 220 502 L 320 502 Q 326 560 304 604 Q 290 590 276 606 Q 262 588 248 604 Q 232 592 222 600 Q 212 556 220 502 Z" fill="#f3efe3" />
+          <path d="M 226 520 Q 270 530 314 520" stroke="#d8d0bb" strokeWidth="4" fill="none" />
+          <path d="M 246 548 q 10 16 4 34 M 292 546 q -8 18 0 36" stroke="#e2dac6" strokeWidth="5" fill="none" strokeLinecap="round" />
+        </g>
+      ) : null}
       <g transform={`rotate(${tilt} 200 350)`}>
         <circle cx="94" cy="246" r="23" fill={head.skin} />
         <circle cx="306" cy="246" r="23" fill={head.skin} />
@@ -301,3 +325,120 @@ export const Father: React.FC<BustProps & { envelope?: number; envelopeLabel?: s
     </Svg>
   );
 };
+
+type Pt = [number, number];
+
+/**
+ * One arm, in a bust's own drawing units (400 × 1700): a sleeve from the
+ * shoulder to the wrist, bent at the elbow (`bend` pushes the elbow sideways,
+ * negative to the left), and a round hand with its thumb. Draw it inside a
+ * <BustLayer> laid over the bust, so it lines up with the body.
+ */
+export const Arm: React.FC<{
+  from: Pt;
+  to: Pt;
+  sleeve: string;
+  skin: string;
+  thickness?: number;
+  bend?: number;
+  /** Which side the thumb sits on, -1 left or 1 right of the hand. */
+  thumb?: -1 | 1;
+}> = ({ from, to, sleeve, skin, thickness = 64, bend = 40, thumb = 1 }) => {
+  const [sx, sy] = from;
+  const [hx, hy] = to;
+  const ex = (sx + hx) / 2 + bend;
+  const ey = (sy + hy) / 2 + Math.abs(bend) * 0.3;
+  const d = `M ${sx} ${sy} Q ${ex} ${ey} ${hx} ${hy}`;
+  const r = thickness * 0.42;
+  return (
+    <g>
+      <path d={d} stroke={sleeve} strokeWidth={thickness} strokeLinecap="round" fill="none" />
+      <path d={d} stroke="rgba(0,0,0,0.1)" strokeWidth={thickness * 0.28} strokeLinecap="round" fill="none" transform={`translate(${thickness * 0.2} 0)`} />
+      <circle cx={hx} cy={hy} r={r} fill={skin} />
+      <circle cx={hx} cy={hy + r * 0.15} r={r} fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth={3} />
+      <ellipse
+        cx={hx + thumb * r * 0.85}
+        cy={hy - r * 0.35}
+        rx={r * 0.34}
+        ry={r * 0.5}
+        fill={skin}
+        transform={`rotate(${thumb * 30} ${hx + thumb * r * 0.85} ${hy - r * 0.35})`}
+      />
+    </g>
+  );
+};
+
+/** An SVG over a bust, in its drawing units: where arms and held things go. */
+export const BustLayer: React.FC<{ width: number; children: React.ReactNode; style?: React.CSSProperties }> = ({ width, children, style }) => (
+  <svg width={width} height={width * 4.25} viewBox="0 0 400 1700" style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible', ...style }}>
+    {children}
+  </svg>
+);
+
+/** Where the father's shoulders are, for his arms: [screen-left, screen-right]. */
+export const FATHER_SHOULDERS: [Pt, Pt] = [
+  [84, 520],
+  [316, 520],
+];
+export const FATHER_COLORS = { sleeve: '#6aa6dd', skin: '#8f5b3b' } as const;
+
+const MELHFA = { base: '#e39b2d', light: '#f2bd5c', motif: '#b35f16', edge: '#c9761c' };
+
+/**
+ * A school accountant: a grown woman in a saffron melhfa draped over her head
+ * and shoulders, small round glasses. Neutral and friendly: she asks for the
+ * receipt because that is her job. A stranger to the family, so she is nobody
+ * from the « Vérité » series.
+ */
+export const Accountant: React.FC<BustProps & { glasses?: boolean }> = ({ face, tilt = 0, width = 340, style, glasses = true }) => {
+  const head: Head = { cx: 200, cy: 268, r: 100, skin: '#a86b45', shade: '#8a5535' };
+  const id = `melhfa${React.useId().replace(/[^a-zA-Z0-9]/g, '')}`;
+  const ex = head.r * 0.36;
+  const ey = head.cy - head.r * 0.02;
+  const cloth = (d: string, light = false) => (
+    <>
+      <path d={d} fill={light ? MELHFA.light : MELHFA.base} />
+      <path d={d} fill={`url(#${id})`} opacity={light ? 0.7 : 1} />
+    </>
+  );
+  return (
+    <Svg width={width} style={style}>
+      <defs>
+        <pattern id={id} width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+          <path d="M 12 10 q 6 -9 12 0 q -6 9 -12 0 Z" fill={MELHFA.motif} opacity="0.55" />
+          <circle cx="35" cy="33" r="3.2" fill={MELHFA.motif} opacity="0.5" />
+          <circle cx="8" cy="36" r="2" fill="#fff4dc" opacity="0.6" />
+        </pattern>
+      </defs>
+      {/* The melhfa over the body, and its drape across the chest */}
+      {cloth('M 26 1700 L 26 610 Q 36 474 200 456 Q 364 474 374 610 L 374 1700 Z')}
+      {cloth('M 40 560 Q 190 600 374 860 L 374 990 Q 200 720 30 680 Z', true)}
+      <path d="M 44 600 Q 190 640 374 900" stroke={MELHFA.edge} strokeWidth="5" fill="none" opacity="0.6" />
+      <g transform={`rotate(${tilt} 200 390)`}>
+        {cloth('M 200 104 Q 348 104 350 272 Q 354 430 304 490 L 96 490 Q 46 430 50 272 Q 52 104 200 104 Z')}
+        <ellipse cx={head.cx} cy={head.cy + 6} rx="90" ry="110" fill={head.skin} />
+        {/* A line of hair under the fabric's edge */}
+        <path d="M 116 214 Q 124 176 200 172 Q 276 176 284 214 Q 262 194 200 192 Q 138 194 116 214 Z" fill="#231a18" />
+        <path d="M 104 250 Q 104 148 200 142 Q 296 148 296 250 Q 288 176 200 170 Q 112 176 104 250 Z" fill={MELHFA.light} />
+        <FaceFeatures head={head} face={face} />
+        {glasses ? (
+          <g stroke="#3b2a22" strokeWidth="5" fill="rgba(255,255,255,0.08)">
+            <rect x={head.cx - ex - 27} y={ey - 22} width="54" height="44" rx="18" />
+            <rect x={head.cx + ex - 27} y={ey - 22} width="54" height="44" rx="18" />
+            <path d={`M ${head.cx - ex + 27} ${ey - 4} Q ${head.cx} ${ey - 14} ${head.cx + ex - 27} ${ey - 4}`} fill="none" />
+          </g>
+        ) : null}
+      </g>
+      {/* The melhfa wrapped under the chin and over the shoulders */}
+      {cloth('M 66 506 Q 118 444 200 466 Q 282 444 334 506 L 356 616 Q 200 532 44 616 Z')}
+      <path d="M 96 480 Q 200 530 304 480" stroke={MELHFA.light} strokeWidth="10" fill="none" strokeLinecap="round" />
+    </Svg>
+  );
+};
+
+/** The accountant's shoulders and colours, for her arms. */
+export const ACCOUNTANT_SHOULDERS: [Pt, Pt] = [
+  [78, 560],
+  [322, 560],
+];
+export const ACCOUNTANT_COLORS = { sleeve: MELHFA.base, skin: '#a86b45' } as const;

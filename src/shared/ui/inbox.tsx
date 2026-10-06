@@ -20,11 +20,12 @@ const CATEGORY = {
   grades: { icon: 'school', color: APP.info },
   finance: { icon: 'card', color: '#7c3aed' },
   behavior: { icon: 'eye', color: '#db2777' },
+  announcements: { icon: 'megaphone', color: APP.brand[500] },
 } as const satisfies Record<string, { icon: IconName; color: string }>;
 
 export type InboxItem = {
   category: keyof typeof CATEGORY;
-  /** HIGH and URGENT fill the icon tile instead of tinting it (a payment overdue is HIGH). */
+  /** HIGH and URGENT fill the icon tile instead of tinting it (a payment overdue and an announcement are HIGH). */
   elevated?: boolean;
   unread?: boolean;
   title: string;

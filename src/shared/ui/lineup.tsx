@@ -231,10 +231,13 @@ export const Placard: React.FC<{
  * A verdict on what was said, never on the person. Beyond true and false:
  * `bravo`, gold, lands over a FAUX that hid good news, and `unverifiable`,
  * grey-blue, for a claim nobody can check (a father's grades, long ago).
+ *
+ * `zero` is not a verdict: an office stamp in dark red ink that counts what
+ * can be shown (« PREUVE : 0 »), when the claim is true and nothing proves it.
  */
-export type Verdict = 'true' | 'false' | 'bravo' | 'unverifiable';
-const VERDICT_COLOR: Record<Verdict, string> = { true: '#22c55e', false: '#ef4444', bravo: '#e3a008', unverifiable: '#5f7a96' };
-const VERDICT_TURN: Record<Verdict, number> = { true: -9, false: -12, bravo: 7, unverifiable: -5 };
+export type Verdict = 'true' | 'false' | 'bravo' | 'unverifiable' | 'zero';
+const VERDICT_COLOR: Record<Verdict, string> = { true: '#22c55e', false: '#ef4444', bravo: '#e3a008', unverifiable: '#5f7a96', zero: '#a3222b' };
+const VERDICT_TURN: Record<Verdict, number> = { true: -9, false: -12, bravo: 7, unverifiable: -5, zero: -7 };
 
 /**
  * A rubber stamp slammed onto a placard at `at`: it drops from above, big,

@@ -101,6 +101,24 @@ const GLYPHS = {
   card: 61927,
   'card-outline': 61928,
   eye: 62182,
+  // The system PDF viewer's bar
+  'share-social-outline': 62837,
+  'ellipsis-vertical': 62164,
+  'document-outline': 62129,
+  // The announcements category (notificationCategories.ts)
+  megaphone: 62542,
+  // The generic chat app (chat.tsx)
+  mic: 62548,
+  play: 62662,
+  'checkmark-done': 61985,
+  'arrow-redo': 61753,
+  'camera-outline': 61916,
+  'call-outline': 61913,
+  'videocam-outline': 62993,
+  'search-outline': 62819,
+  'happy-outline': 62306,
+  attach: 61777,
+  chatbubble: 61969,
 } as const;
 
 export type IconName = keyof typeof GLYPHS;

@@ -2,7 +2,11 @@ import React from 'react';
 import { Composition, Folder } from 'remotion';
 import { PORTRAIT } from './formats';
 import { Kit, KitProps } from './Kit';
+import { KitAnnounce, KitRoom } from './KitAnnounce';
 import { KitCast } from './KitCast';
+import { KitChat } from './KitChat';
+import { KitFees } from './KitFees';
+import { KitGoat, KitGoatClose } from './KitGoat';
 import { KitInbox } from './KitInbox';
 import { FPS } from './tokens';
 
@@ -26,5 +30,17 @@ export const KitCompositions: React.FC = () => (
     <Composition id="Kit-Cast" component={KitCast} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
     <Composition id="Kit-Inbox-FR" component={KitInbox} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
     <Composition id="Kit-Inbox-AR" component={KitInbox} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
+    <Composition id="Kit-Goat-FR" component={KitGoat} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Goat-AR" component={KitGoat} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
+    <Composition id="Kit-Fees-FR" component={KitFees} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Fees-AR" component={KitFees} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
+    <Composition id="Kit-Chat-FR" component={KitChat} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Chat-AR" component={KitChat} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
+    <Composition id="Kit-Announce-FR" component={KitAnnounce} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Announce-AR" component={KitAnnounce} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
+    {(['night', 'dusk', 'morning'] as const).map((light) => (
+      <Composition key={light} id={`Kit-Room-${light}`} component={KitRoom} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const, light }} />
+    ))}
+    <Composition id="Kit-Goat-Close" component={KitGoatClose} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const, coat: 'caramel' as const }} />
   </Folder>
 );

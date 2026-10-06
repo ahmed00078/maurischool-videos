@@ -231,7 +231,11 @@ export const PaymentScreen: React.FC<{
   press?: number;
   done?: number;
   value: number;
-}> = ({ theme = 'light', enterFrom, typed, press = 0, done = 0, value }) => {
+  /** Whose invoice is being paid (Mariem, 5e A, 3 000 MRU left unless told otherwise). */
+  pupil?: Bi;
+  pupilClass?: Bi;
+  due?: number;
+}> = ({ theme = 'light', enterFrom, typed, press = 0, done = 0, value, pupil = PUPIL, pupilClass = PUPIL_CLASS, due = 3000 }) => {
   const bi = useBi();
   const { rtl } = useLang();
   const digits = amount(value);
@@ -246,7 +250,7 @@ export const PaymentScreen: React.FC<{
       </Enter>
       <Enter order={1}>
         <div style={{ padding: `0 ${pt(16)}px`, marginBottom: pt(12) }}>
-          <StudentCard />
+          <StudentCard pupil={pupil} pupilClass={pupilClass} due={due} />
         </div>
       </Enter>
       <Enter order={2}>
@@ -261,17 +265,17 @@ export const PaymentScreen: React.FC<{
   );
 };
 
-const StudentCard: React.FC = () => {
+const StudentCard: React.FC<{ pupil: Bi; pupilClass: Bi; due: number }> = ({ pupil, pupilClass, due }) => {
   const bi = useBi();
   const { c } = useApp();
   const w = useWeights();
   return (
     <Card>
       <div style={{ display: 'flex', alignItems: 'center', gap: pt(12) }}>
-        <Avatar name={bi(PUPIL)} size={44} />
+        <Avatar name={bi(pupil)} size={44} />
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: pt(16), fontWeight: w.semiBold, color: c.text }}>{bi(PUPIL)}</div>
-          <div style={{ fontSize: pt(13), color: c.textSecondary, marginTop: pt(2) }}>{bi(PUPIL_CLASS)}</div>
+          <div style={{ fontSize: pt(16), fontWeight: w.semiBold, color: c.text }}>{bi(pupil)}</div>
+          <div style={{ fontSize: pt(13), color: c.textSecondary, marginTop: pt(2) }}>{bi(pupilClass)}</div>
         </div>
       </div>
       <div
@@ -289,7 +293,7 @@ const StudentCard: React.FC = () => {
           <div style={{ fontSize: pt(14), fontWeight: w.medium, color: c.text }}>{bi({ fr: 'Facture d’octobre', ar: 'فاتورة أكتوبر' })}</div>
           <div style={{ fontSize: pt(12), color: APP.warning, marginTop: pt(2) }}>{bi({ fr: 'Reste à payer', ar: 'المتبقي' })}</div>
         </div>
-        <div style={{ fontSize: pt(15), fontWeight: w.semiBold, color: c.text }}>{money(3000)}</div>
+        <div style={{ fontSize: pt(15), fontWeight: w.semiBold, color: c.text }}>{money(due)}</div>
       </div>
     </Card>
   );
