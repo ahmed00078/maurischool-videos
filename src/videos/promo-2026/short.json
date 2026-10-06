@@ -1,0 +1,12 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "The short cut (Promo2026-*-Short), 41 beats = 20.5 s, no voice. It opens on the end of the story (the father's lock screen) and rewinds to how he knew; then payment, the director's morning, the call to action. `from` is the beat of the full scene the short starts it at. scripts/promo-2026/make-temp-track.mjs short reads this file, so the music follows any retiming.",
+  "scenes": [
+    { "id": "alert", "beats": 6, "out": { "type": "cut", "frames": 0 } },
+    { "id": "attendance", "beats": 8, "from": 1, "out": { "type": "pushCut", "frames": 12 } },
+    { "id": "payment", "beats": 9, "from": 1, "out": { "type": "slideUp", "frames": 12 } },
+    { "id": "home", "beats": 8, "out": { "type": "wipe", "frames": 14 } },
+    { "id": "cta", "beats": 10, "out": { "type": "cut", "frames": 0 } }
+  ]
+}

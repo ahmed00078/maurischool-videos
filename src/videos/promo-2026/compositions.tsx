@@ -5,6 +5,7 @@ import { PORTRAIT } from '../../shared/formats';
 import { Lang, LangProvider } from '../../shared/lang';
 import { FPS } from '../../shared/tokens';
 import { Cover, PromoFast, PromoFastProps, SPEEDS } from './PromoFast';
+import { PromoShort, PromoShortProps, SHORT_FRAMES } from './PromoShort';
 import { PromoV2, PromoV2Props, SCENE_COMPONENTS } from './PromoV2';
 import { SceneId, TIMELINE, timelineFor } from './timeline';
 
@@ -16,6 +17,7 @@ import { SceneId, TIMELINE, timelineFor } from './timeline';
  *   Promo2026-FR-NoVoice     the base timing with the temp music only
  *   Promo2026-FR/AR-Fast     the published cuts, ×1.3 / ×1.4, cover on frame 0
  *   Promo2026-Cover-FR/AR    the cover as a still
+ *   Promo2026-FR/AR-Short    the 20.5 s social cut: no voice, opens on the payoff (see PromoShort.tsx)
  *   Promo2026-<scene>        each scene alone, in its French timing
  */
 
@@ -51,6 +53,12 @@ const FAST: { id: string; props: PromoFastProps }[] = [
   { id: 'Promo2026-AR-Fast', props: { lang: 'ar', speed: SPEEDS.ar, cover: true, safeZones: false } },
 ];
 
+// The short cuts: frame 0 is already the picture, so they need no cover.
+const SHORT: { id: string; props: PromoShortProps }[] = [
+  { id: 'Promo2026-FR-Short', props: { lang: 'fr', safeZones: false, music: 0.8 } },
+  { id: 'Promo2026-AR-Short', props: { lang: 'ar', safeZones: false, music: 0.8 } },
+];
+
 export const Promo2026Compositions: React.FC = () => (
   <Folder name="promo-2026">
     {VOICED.map((p) => (
@@ -76,6 +84,9 @@ export const Promo2026Compositions: React.FC = () => (
         durationInFrames={totalFrames(timelineFor(p.props.lang))}
         defaultProps={p.props}
       />
+    ))}
+    {SHORT.map((p) => (
+      <Composition key={p.id} id={p.id} component={PromoShort} {...PORTRAIT} fps={FPS} durationInFrames={SHORT_FRAMES} defaultProps={p.props} />
     ))}
     {(['fr', 'ar'] as Lang[]).map((lang) => (
       <Composition

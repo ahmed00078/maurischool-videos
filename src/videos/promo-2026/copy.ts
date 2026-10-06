@@ -8,6 +8,11 @@ import type { Bi } from '../../shared/lang';
  * In a headline, *asterisks* mark the word painted in the brand colour.
  */
 export const COPY = {
+  /** The short cut's opening, over the father's lock screen. */
+  alert: {
+    line1: { fr: 'Mariem est absente…', ar: 'مريم ليست في القسم…' },
+    line2: { fr: '*Son père le sait déjà.*', ar: '*ووالدها على علم بالفعل.*' },
+  },
   hook: {
     bubbles: [
       { fr: 'Il a payé, Ahmed ?', ar: 'هل دفع أحمد؟' },

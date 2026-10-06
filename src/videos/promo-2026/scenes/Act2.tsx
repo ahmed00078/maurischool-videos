@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import { fill, FINANCE_COPY, NOTIFS } from '../../../shared/appCopy';
+import { fill, FINANCE_COPY, NOTIFS, SENSITIVE_PUSH_BODY } from '../../../shared/appCopy';
 import { COPY } from '../copy';
 import { Camera } from '../../../shared/fx';
 import { FINANCE, PUPIL, PUPIL_CLASS, TODAY } from '../../../shared/demo';
@@ -16,18 +16,16 @@ import { FinanceScreen, HomeScreen } from '../../../shared/ui/screens';
 import { AttendanceScreen, GradesScreen, OVERALL_AVERAGE, PaymentScreen, PERIOD } from '../../../shared/ui/screens2';
 import { LAYOUT, mix, PhoneRig, Pose, Scene, screenToCanvas, Sfx, Tap, Top } from '../../../shared/rig';
 
-const RECEIPT = 'NEI-RCP-2026-000418';
-
 /** A screen-sized layer inside a PhoneRig, exactly over the phone's screen, with no frame. */
 const ScreenLayer: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
   <div style={{ position: 'absolute', left: BEZEL, top: BEZEL, width: SCREEN_W, height: SCREEN_H, ...style }}>{children}</div>
 );
 
 /** Where a lock-screen notification sits on the canvas, when its phone is centred: the camera pushes in on it. */
-const NOTIFICATION_FOCUS = screenToCanvas({}, SCREEN_W / 2, 480);
+export const NOTIFICATION_FOCUS = screenToCanvas({}, SCREEN_W / 2, 480);
 
 /** A short buzz: the phone shivers as a notification lands. */
-const buzz = (frame: number, at: number) => {
+export const buzz =(frame: number, at: number) => {
   const t = frame - at;
   return t >= 0 && t < 18 ? Math.sin(t * 3.1) * 2.2 * (1 - t / 18) : 0;
 };
@@ -193,7 +191,7 @@ export const PaymentScene: React.FC = () => {
   const tokenY = button[1] + (target[1] - button[1]) * fly - Math.sin(fly * Math.PI) * 380;
   const tokenOn = frame >= b(4.4) && frame < b(7) + 2;
   const n = NOTIFS.payment_received;
-  const params = { student_name: bi(PUPIL), amount: amount(3000), receipt_number: RECEIPT };
+  const params = { student_name: bi(PUPIL) };
   return (
     <Scene mood="night">
       <Camera drift={0.02} push={[b(7), b(8.6), 1.28]} focus={[NOTIFICATION_FOCUS[0], NOTIFICATION_FOCUS[1]]} shift={[0, 230]}>
@@ -206,7 +204,8 @@ export const PaymentScene: React.FC = () => {
         <PhoneRig pose={poseB}>
           <Device statusTone="light">
             <LockScreen>
-              <Notification at={b(7)} title={fill(bi(n.title), params)} message={fill(bi(n.message), params)} />
+              {/* payment_received is sensitive: a locked phone never shows the amount. */}
+              <Notification at={b(7)} title={fill(bi(n.title), params)} message={bi(SENSITIVE_PUSH_BODY)} />
             </LockScreen>
           </Device>
         </PhoneRig>

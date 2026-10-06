@@ -2,6 +2,9 @@
 //   no lang  → public/promo-2026/temp-track.wav, on the base timing
 //   fr, ...  → public/promo-2026/temp-track-<lang>.wav, on the timing stretched to that
 //              language's voice (voice.<lang>.json, see scripts/fit-voice.mjs)
+//   short    → public/promo-2026/temp-track-short.wav, on short.json (the 20.5 s cut): a hit
+//              and a tense pulse under the lock screen, a riser under the rewind, then
+//              the groove from the attendance scene and the held D chord
 //
 // A stand-in so the animatic can be judged on rhythm; the final music replaces it.
 // It reads src/videos/promo-2026/timeline.json, so its sections follow the edit:
@@ -12,8 +15,10 @@
 //   roles/cta the groove again, then a held D chord to close
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
-const timeline = JSON.parse(readFileSync(new URL('../../src/videos/promo-2026/timeline.json', import.meta.url), 'utf8'));
-const lang = process.argv[2];
+const short = process.argv[2] === 'short';
+const timelineFile = short ? 'short.json' : 'timeline.json';
+const timeline = JSON.parse(readFileSync(new URL(`../../src/videos/promo-2026/${timelineFile}`, import.meta.url), 'utf8'));
+const lang = short ? undefined : process.argv[2];
 const voiceUrl = lang ? new URL(`../../src/videos/promo-2026/voice.${lang}.json`, import.meta.url) : null;
 const voice = voiceUrl && existsSync(voiceUrl) ? JSON.parse(readFileSync(voiceUrl, 'utf8')) : null;
 if (lang && !voice) {
@@ -135,11 +140,13 @@ const CHORDS = {
 };
 const PROG = ['D', 'A', 'Bm', 'G'];
 
+// The groove's bars count from where it first comes in.
+const GROOVE_FROM = short ? starts.attendance : starts.logo;
 const groove = (fromBeat, toBeat, { drums = true } = {}) => {
   for (let b = fromBeat; b < toBeat; b++) {
     const t = beatTime(b);
-    const barBeat = (b - starts.logo) % 4;
-    const chord = CHORDS[PROG[Math.floor((b - starts.logo) / 4) % 4]];
+    const barBeat = (b - GROOVE_FROM) % 4;
+    const chord = CHORDS[PROG[Math.floor((b - GROOVE_FROM) / 4) % 4]];
     if (drums) {
       if (barBeat === 0 || barBeat === 2) kick(t);
       if (barBeat === 1 || barBeat === 3) clap(t);
@@ -157,6 +164,19 @@ const groove = (fromBeat, toBeat, { drums = true } = {}) => {
   }
 };
 
+if (short) {
+  // The lock screen: a hit on frame 0, then a tense pulse; a riser under the rewind.
+  impact(0, 0.7);
+  for (let b = 0; b < starts.alert + 4.5; b += 0.5) {
+    hat(beatTime(b), 0.05);
+    if (b % 1 === 0) tone(beatTime(b), 35, 0.3, 0.25, { harmonics: 2, decay: 0.15 });
+  }
+  pad(0, beatTime(4.5), [47, 50, 54], 0.022);
+  riser(beatTime(4.5), beatTime(starts.attendance), 0.3);
+  // The tape plays: the drop, and the groove to the end.
+  impact(beatTime(starts.attendance), 0.9);
+  groove(starts.attendance, TOTAL_BEATS - 4);
+} else {
 // Hook: a tense pulse that speeds up, then silence under the question.
 const hookEnd = starts.chaos;
 const freeze = starts.hook + (voice?.scenes.hook?.marks?.question ?? 4);
@@ -185,6 +205,7 @@ groove(starts.languages, starts.roles, { drums: false });
 riser(beatTime(starts.roles - 2), beatTime(starts.roles), 0.25);
 impact(beatTime(starts.roles), 0.6);
 groove(starts.roles, TOTAL_BEATS - 4);
+}
 
 // Close on a held D chord.
 const end = beatTime(TOTAL_BEATS - 4);
@@ -225,6 +246,6 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * gain)) * 32767), 46 + i * 4);
 }
 mkdirSync('public/promo-2026', { recursive: true });
-const out = lang ? `public/promo-2026/temp-track-${lang}.wav` : 'public/promo-2026/temp-track.wav';
+const out = short ? 'public/promo-2026/temp-track-short.wav' : lang ? `public/promo-2026/temp-track-${lang}.wav` : 'public/promo-2026/temp-track.wav';
 writeFileSync(out, buf);
 console.log(`${out}: ${TOTAL_BEATS} beats at ${BPM} BPM (${DUR.toFixed(1)} s), gain ${gain.toFixed(2)}`);
