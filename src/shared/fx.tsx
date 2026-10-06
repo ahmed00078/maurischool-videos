@@ -124,6 +124,37 @@ export const Camera: React.FC<{
 };
 
 /**
+ * A shot for <CameraPath>: from frame `at` the camera holds `zoom`, with the
+ * canvas point `focus` shown at `to` (default: where it already is).
+ */
+export type Shot = { at: number; zoom: number; focus: [number, number]; to?: [number, number] };
+
+/**
+ * A camera that moves from shot to shot: it leaves `move` frames before each
+ * shot's `at` and settles on it, eased, then holds. Zoom, focus and target
+ * interpolate together, so nothing jumps between shots. Keep the first shot
+ * at frame 0.
+ */
+export const CameraPath: React.FC<{ shots: Shot[]; move?: number; children: React.ReactNode }> = ({ shots, move = 14, children }) => {
+  const frame = useCurrentFrame();
+  let zoom = shots[0].zoom;
+  let focus = shots[0].focus;
+  let to = shots[0].to ?? shots[0].focus;
+  for (const next of shots.slice(1)) {
+    const t = interpolate(frame, [next.at - move, next.at], [0, 1], { ...clamp, easing: EASE_IN_OUT });
+    if (t <= 0) break;
+    const nextTo = next.to ?? next.focus;
+    zoom += (next.zoom - zoom) * t;
+    focus = [focus[0] + (next.focus[0] - focus[0]) * t, focus[1] + (next.focus[1] - focus[1]) * t];
+    to = [to[0] + (nextTo[0] - to[0]) * t, to[1] + (nextTo[1] - to[1]) * t];
+  }
+  // p → to + zoom · (p − focus)
+  const tx = to[0] - zoom * focus[0];
+  const ty = to[1] - zoom * focus[1];
+  return <AbsoluteFill style={{ transformOrigin: '0 0', transform: `translate(${tx}px, ${ty}px) scale(${zoom})` }}>{children}</AbsoluteFill>;
+};
+
+/**
  * Where Reels and TikTok draw their own interface over a 1080 x 1920 video:
  * the top bar, the caption and buttons at the bottom, the action column on the
  * right. Key text must stay out of the red. Only drawn when `show` is on.

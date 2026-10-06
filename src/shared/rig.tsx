@@ -16,15 +16,23 @@ export const LAYOUT = {
   phone: { x: 540, y: 1175, scale: 0.8 },
 } as const;
 
-/** Every scene: background, content, then vignette, grain, and the safe-zone guide on top. */
+/**
+ * Every scene: background, content, then vignette, grain, and the safe-zone
+ * guide on top. `backdropFrom` starts the background's slow drift that many
+ * frames in, so a scene that continues another across a hard cut does not
+ * make its background jump.
+ */
 export const Scene: React.FC<{
   mood: Mood;
   children: React.ReactNode;
   grid?: boolean;
   safeZones?: boolean;
-}> = ({ mood, children, grid, safeZones = false }) => (
+  backdropFrom?: number;
+}> = ({ mood, children, grid, safeZones = false, backdropFrom = 0 }) => (
   <AbsoluteFill style={{ overflow: 'hidden' }}>
-    <Backdrop mood={mood} grid={grid} />
+    <Sequence from={-backdropFrom} layout="none" name="backdrop">
+      <Backdrop mood={mood} grid={grid} />
+    </Sequence>
     <AbsoluteFill style={{ perspective: 2600 }}>{children}</AbsoluteFill>
     <Vignette strength={mood === 'paper' ? 0.1 : 0.35} />
     <Grain />
@@ -146,17 +154,44 @@ export const Tap: React.FC<{ x: number; y: number; at: number; size?: number }> 
   );
 };
 
-export type SfxName = 'soft-whoosh' | 'whoosh' | 'whip' | 'ding' | 'mouse-click' | 'switch';
+export type SfxName =
+  | 'soft-whoosh'
+  | 'whoosh'
+  | 'whip'
+  | 'ding'
+  | 'mouse-click'
+  | 'switch'
+  // scripts/make-classroom-sfx.mjs
+  | 'chalk'
+  | 'chalk-tap'
+  | 'eraser'
+  | 'tick'
+  | 'bell'
+  // scripts/make-lineup-sfx.mjs
+  | 'pop'
+  | 'stamp'
+  | 'buzz'
+  | 'sting'
+  | 'wahwah';
 
-/** A sound effect at a frame of the current scene (nothing when the subtree is silent). */
-export const Sfx: React.FC<{ at: number; name: SfxName; volume?: number; rate?: number }> = ({
+/**
+ * A sound effect at a frame of the current scene (nothing when the subtree is
+ * silent). `length` cuts it short, in frames, with a quick fade: a chalk line
+ * lasts as long as its writing.
+ */
+export const Sfx: React.FC<{ at: number; name: SfxName; volume?: number; rate?: number; length?: number }> = ({
   at,
   name,
   volume = 0.8,
   rate = 1,
+  length,
 }) =>
   useSilent() ? null : (
-    <Sequence from={Math.max(0, Math.round(at))} layout="none" name={`sfx ${name}`}>
-      <Audio src={staticFile(`shared/sfx/${name}.wav`)} volume={volume} playbackRate={rate} />
+    <Sequence from={Math.max(0, Math.round(at))} durationInFrames={length} layout="none" name={`sfx ${name}`}>
+      <Audio
+        src={staticFile(`shared/sfx/${name}.wav`)}
+        volume={length === undefined ? volume : (f) => volume * Math.min(1, Math.max(0, (length - f) / 4))}
+        playbackRate={rate}
+      />
     </Sequence>
   );

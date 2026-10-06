@@ -21,8 +21,12 @@ export const Device: React.FC<{
   statusBar?: boolean;
   /** 0 to 1: the diagonal glass reflection, stronger when the phone turns. */
   glare?: number;
+  /** No network: empty signal bars and no wifi, for the offline scenes. */
+  offline?: boolean;
+  /** The clock in the status bar, when the story is not at 08:15. */
+  time?: string;
   style?: React.CSSProperties;
-}> = ({ children, statusTone = 'dark', statusBar = true, glare = 0.5, style }) => (
+}> = ({ children, statusTone = 'dark', statusBar = true, glare = 0.5, offline = false, time, style }) => (
   <div
     style={{
       position: 'relative',
@@ -60,7 +64,7 @@ export const Device: React.FC<{
       }}
     >
       {children}
-      {statusBar ? <StatusBar tone={statusTone} /> : null}
+      {statusBar ? <StatusBar tone={statusTone} offline={offline} time={time} /> : null}
       {/* Punch-hole camera */}
       <div
         style={{
@@ -91,8 +95,8 @@ export const Device: React.FC<{
   </div>
 );
 
-/** 08:15 on a school morning, full signal, full battery: no clutter from a real phone. */
-export const StatusBar: React.FC<{ tone: 'dark' | 'light' }> = ({ tone }) => {
+/** 08:15 on a school morning (or `time`), full signal, full battery: no clutter from a real phone. */
+export const StatusBar: React.FC<{ tone: 'dark' | 'light'; offline?: boolean; time?: string }> = ({ tone, offline = false, time = '08:15' }) => {
   const c = tone === 'dark' ? '#111827' : '#ffffff';
   return (
     <div
@@ -114,16 +118,22 @@ export const StatusBar: React.FC<{ tone: 'dark' | 'light' }> = ({ tone }) => {
         direction: 'ltr',
       }}
     >
-      <span>08:15</span>
+      <span>{time}</span>
       <svg width="96" height="22" viewBox="0 0 96 22">
-        {/* signal */}
+        {/* signal: four bars, or four empty ones and a cross with no network */}
         {[0, 1, 2, 3].map((i) => (
-          <rect key={i} x={i * 7} y={16 - i * 4} width="5" height={6 + i * 4} rx="1.5" fill={c} />
+          <rect key={i} x={i * 7} y={16 - i * 4} width="5" height={6 + i * 4} rx="1.5" fill={c} fillOpacity={offline ? 0.28 : 1} />
         ))}
-        {/* wifi */}
-        <path d="M44 18 l4 -4 a6 6 0 0 0 -8 0z" fill={c} />
-        <path d="M36.5 10.5 a11 11 0 0 1 15 0 l-2.2 2.2 a8 8 0 0 0 -10.6 0z" fill={c} />
-        <path d="M33 7 a16 16 0 0 1 22 0 l-2.2 2.2 a13 13 0 0 0 -17.6 0z" fill={c} />
+        {offline ? (
+          <path d="M36 5 l9 9 M45 5 l-9 9" stroke={c} strokeWidth="2.6" strokeLinecap="round" />
+        ) : (
+          <>
+            {/* wifi */}
+            <path d="M44 18 l4 -4 a6 6 0 0 0 -8 0z" fill={c} />
+            <path d="M36.5 10.5 a11 11 0 0 1 15 0 l-2.2 2.2 a8 8 0 0 0 -10.6 0z" fill={c} />
+            <path d="M33 7 a16 16 0 0 1 22 0 l-2.2 2.2 a13 13 0 0 0 -17.6 0z" fill={c} />
+          </>
+        )}
         {/* battery */}
         <rect x="62" y="4" width="28" height="14" rx="4" fill="none" stroke={c} strokeOpacity="0.45" strokeWidth="2" />
         <rect x="65" y="7" width="22" height="8" rx="2" fill={c} />

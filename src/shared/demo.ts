@@ -61,3 +61,116 @@ export const ACTIVITY: Activity[] = [
 /** The pupil we follow from the teacher's register to the parent's phone. */
 export const PUPIL: Bi = { fr: 'Mariem Mint Ahmed', ar: 'مريم بنت أحمد' };
 export const PUPIL_CLASS: Bi = { fr: '5e A', ar: 'الخامسة أ' };
+
+/** 5e A as the teacher's register lists it: the first rows on screen, and the class size. */
+export const CLASS_ROSTER: Bi[] = [
+  { fr: 'Aminetou Mint Mahmoud', ar: 'أمينتو بنت محمود' },
+  { fr: 'Sidi Mohamed Ould Ali', ar: 'سيدي محمد ولد علي' },
+  PUPIL,
+  { fr: 'Yahya Ould Brahim', ar: 'يحيى ولد إبراهيم' },
+  { fr: 'Khadijetou Mint Oumar', ar: 'خديجتو بنت عمر' },
+  { fr: 'Moussa Ba', ar: 'موسى با' },
+  { fr: 'Zeinabou Mint Sidi', ar: 'زينبو بنت سيدي' },
+  { fr: 'Ahmedou Ould Salem', ar: 'أحمدو ولد سالم' },
+  { fr: 'Fatimetou Mint Isselmou', ar: 'فاطمتو بنت اسلمو' },
+  { fr: 'Oumar Sy', ar: 'عمر سي' },
+];
+export const CLASS_SIZE = 28;
+
+/** The maths lesson of World Teachers' Day, Monday 5 October 2026. */
+export const LESSON = {
+  date: new Date(2026, 9, 5),
+  subject: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi,
+  start: '08:00',
+  end: '10:00',
+};
+
+/**
+ * A maths test for 5e A: one score per roster row (null = absent), out of 20.
+ * Decimals on purpose: the backend writes a grade as a float, so a whole 16
+ * would read "16.0/20" in the parent's notification.
+ */
+export const TEST = {
+  title: { fr: 'Devoir 1', ar: 'الفرض 1' } as Bi,
+  period: { fr: '1er trimestre', ar: 'الفصل الأول' } as Bi,
+  scores: [16.5, 14, null, 12.5, 17, 11.5, 15, 13.5, 18, 9.5] as (number | null)[],
+};
+
+/**
+ * The Ould Mocktar family, for the « Qui ne dit pas la vérité ? » series:
+ * Zahra, her little brother Sidi, and their father Mocktar.
+ *
+ * Episode 1: the father has paid the term, Zahra has her 20, Sidi's maths test says 7.5.
+ * Episode 2 (Wednesday 14 October): Sidi has a 16 in French, the school has
+ * reminded the parents of Zahra's instalment due on 5 November, and Zahra was
+ * marked absent that morning.
+ */
+export const FAMILY = {
+  son: { fr: 'Sidi Ould Mocktar', ar: 'سيدي ولد المختار' } as Bi,
+  daughter: { fr: 'Zahra Mint Mocktar', ar: 'زهرة بنت المختار' } as Bi,
+  /** Short names for the placards. */
+  short: {
+    son: { fr: 'Sidi', ar: 'سيدي' } as Bi,
+    daughter: { fr: 'Zahra', ar: 'زهرة' } as Bi,
+    father: { fr: 'Papa', ar: 'بابا' } as Bi,
+  },
+  /**
+   * Grades as the parent's inbox prints them: the app formats the number the
+   * API sends, so 20.0 reads "20" and 7.5 reads "7.5".
+   */
+  sonGrade: { value: '7.5', subject: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi },
+  daughterGrade: { value: '20', subject: { fr: 'Arabe', ar: 'اللغة العربية' } as Bi },
+  period: { fr: '1er trimestre', ar: 'الفصل الأول' } as Bi,
+  /** formatAmount groups with a narrow no-break space, as fr-FR does; receipts are RCP-<year>-<6 digits>. */
+  payment: { amount: '2 500', receipt: 'RCP-2026-000312' },
+  /** Zahra's class, as the register names it. */
+  daughterClass: { fr: '3e A', ar: 'الثالثة أ' } as Bi,
+  /** 16.0 from the API prints "16". */
+  sonFrenchGrade: { value: '16', subject: { fr: 'Français', ar: 'اللغة الفرنسية' } as Bi },
+  /** formatDate prints the ISO date the backend sends as dd/mm/yyyy, in Arabic too. */
+  daughterAbsence: '14/10/2026',
+  /** A reminder the finance office sends for an open invoice; invoices are INV-<year>-<6 digits>. */
+  reminder: { due: '05/11/2026', amount: '2 500', invoice: 'INV-2026-000231' },
+  /**
+   * The first-term report cards: the backend sends overall_average rounded to
+   * two decimals as a string ("12.00"), and the inbox prints it as sent.
+   */
+  averages: { son: '12.00', daughter: '17.50' },
+  /**
+   * The first term as the child's grades screen shows it: subject averages and
+   * coefficients that make the overall average (weighted by coefficient), the
+   * class, the attendance rate. Zahra: 280 / 16 = 17.5; Sidi: 192 / 16 = 12.
+   */
+  terms: {
+    son: {
+      className: { fr: '1re B', ar: 'الأولى ب' } as Bi,
+      attendance: 94,
+      average: 12,
+      published: 18,
+      subjects: [
+        { name: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi, coefficient: 4, average: 11 },
+        { name: { fr: 'Langue arabe', ar: 'اللغة العربية' } as Bi, coefficient: 3, average: 13 },
+        { name: { fr: 'Français', ar: 'اللغة الفرنسية' } as Bi, coefficient: 3, average: 12 },
+        { name: { fr: 'Sciences naturelles', ar: 'العلوم الطبيعية' } as Bi, coefficient: 2, average: 12.5 },
+        { name: { fr: 'Éducation islamique', ar: 'التربية الإسلامية' } as Bi, coefficient: 2, average: 13.5 },
+        { name: { fr: 'Histoire-géographie', ar: 'التاريخ والجغرافيا' } as Bi, coefficient: 2, average: 10.5 },
+      ],
+    },
+    daughter: {
+      className: { fr: '3e A', ar: 'الثالثة أ' } as Bi,
+      attendance: 97,
+      average: 17.5,
+      published: 18,
+      subjects: [
+        { name: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi, coefficient: 4, average: 18 },
+        { name: { fr: 'Langue arabe', ar: 'اللغة العربية' } as Bi, coefficient: 3, average: 17.5 },
+        { name: { fr: 'Français', ar: 'اللغة الفرنسية' } as Bi, coefficient: 3, average: 17 },
+        { name: { fr: 'Sciences naturelles', ar: 'العلوم الطبيعية' } as Bi, coefficient: 2, average: 17 },
+        { name: { fr: 'Éducation islamique', ar: 'التربية الإسلامية' } as Bi, coefficient: 2, average: 18 },
+        { name: { fr: 'Histoire-géographie', ar: 'التاريخ والجغرافيا' } as Bi, coefficient: 2, average: 17.25 },
+      ],
+    },
+  },
+  /** The second term, paid at the desk in December. */
+  termPayment: { amount: '7 500', receipt: 'RCP-2026-000418' },
+};

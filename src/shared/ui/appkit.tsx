@@ -392,18 +392,41 @@ const TAB_ICONS: Record<Exclude<TabKey, 'home'>, [IconName, IconName]> = {
   more: ['ellipsis-horizontal', 'ellipsis-horizontal'],
 };
 
-/**
- * FloatingTabBar: the dark glass pill, 60 pt tall, 20 pt from each side,
- * active tab lifted by a white wash. Mirrors in Arabic.
- */
+/** The admin's tab bar. */
 export const TabBar: React.FC<{ active: TabKey; labels: Record<TabKey, string>; bottom?: number }> = ({
   active,
   labels,
+  bottom,
+}) => {
+  const keys: TabKey[] = ['home', 'people', 'academics', 'finance', 'more'];
+  return (
+    <FloatingTabBar
+      bottom={bottom}
+      wash={keys.indexOf(active)}
+      items={keys.map((k) => ({
+        label: labels[k],
+        focused: k === active,
+        icon: k === 'home' ? 'logo' : TAB_ICONS[k][k === active ? 0 : 1],
+      }))}
+    />
+  );
+};
+
+export type TabItem = { label: string; icon: IconName | 'logo'; focused: boolean };
+
+/**
+ * FloatingTabBar: the dark glass pill, 60 pt tall, 20 pt from each side, the
+ * wash under one tab. Mirrors in Arabic. The wash and the focus can differ:
+ * a screen with no tab of its own (a class, a register) leaves the wash on the
+ * first tab and every label unfocused, as the app's bar does.
+ */
+export const FloatingTabBar: React.FC<{ items: TabItem[]; wash: number; bottom?: number }> = ({
+  items,
+  wash,
   bottom = 10 + 24,
 }) => {
   const { dir } = useLang();
   const w = useWeights();
-  const keys: TabKey[] = ['home', 'people', 'academics', 'finance', 'more'];
   return (
     <div
       dir={dir}
@@ -423,17 +446,17 @@ export const TabBar: React.FC<{ active: TabKey; labels: Record<TabKey, string>; 
         zIndex: 5,
       }}
     >
-      {keys.map((k) => {
-        const on = k === active;
-        const color = on ? APP.glass.content : APP.glass.contentMuted;
+      {items.map((item, i) => {
+        const color = item.focused ? APP.glass.content : APP.glass.contentMuted;
         return (
           <div
-            key={k}
+            key={i}
             style={{
               flex: 1,
+              minWidth: 0,
               margin: `${pt(8)}px ${pt(2)}px`,
               borderRadius: 999,
-              background: on ? `${APP.glass.content}24` : 'transparent',
+              background: i === wash ? `${APP.glass.content}24` : 'transparent',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -441,21 +464,27 @@ export const TabBar: React.FC<{ active: TabKey; labels: Record<TabKey, string>; 
               gap: pt(2),
             }}
           >
-            {k === 'home' ? (
+            {item.icon === 'logo' ? (
               <LogoMark width={pt(20)} violet={color} ink={color} />
             ) : (
-              <Ionicon name={TAB_ICONS[k][on ? 0 : 1]} size={pt(22)} color={color} />
+              <Ionicon name={item.icon} size={pt(22)} color={color} />
             )}
+            {/* numberOfLines={1}: a long label ends in an ellipsis */}
             <div
               style={{
+                maxWidth: '100%',
                 fontSize: pt(11),
                 lineHeight: `${pt(13)}px`,
                 color,
-                fontWeight: on ? w.semiBold : w.regular,
+                fontWeight: item.focused ? w.semiBold : w.regular,
                 whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                padding: `0 ${pt(2)}px`,
+                boxSizing: 'border-box',
               }}
             >
-              {labels[k]}
+              {item.label}
             </div>
           </div>
         );

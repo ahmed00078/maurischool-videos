@@ -72,6 +72,7 @@ const GLYPHS = {
   'megaphone-outline': 62543,
   moon: 62560,
   'notifications-outline': 62591,
+  'paper-plane-outline': 62606,
   people: 62623,
   'people-outline': 62627,
   'person-add-outline': 62631,
@@ -91,6 +92,15 @@ const GLYPHS = {
   wallet: 63013,
   'wallet-outline': 63014,
   warning: 63016,
+  'arrow-down-circle-outline': 61743,
+  'chatbubble-ellipses-outline': 61971,
+  'information-circle': 62360,
+  'information-circle-outline': 62361,
+  'person-remove': 62637,
+  'person-remove-outline': 62638,
+  card: 61927,
+  'card-outline': 61928,
+  eye: 62182,
 } as const;
 
 export type IconName = keyof typeof GLYPHS;

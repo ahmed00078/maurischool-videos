@@ -2,6 +2,8 @@ import React from 'react';
 import { Composition, Folder } from 'remotion';
 import { PORTRAIT } from './formats';
 import { Kit, KitProps } from './Kit';
+import { KitCast } from './KitCast';
+import { KitInbox } from './KitInbox';
 import { FPS } from './tokens';
 
 /**
@@ -21,5 +23,8 @@ export const KitCompositions: React.FC = () => (
     {KITS.map((k) => (
       <Composition key={k.id} id={k.id} component={Kit} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={k.props} />
     ))}
+    <Composition id="Kit-Cast" component={KitCast} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Inbox-FR" component={KitInbox} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'fr' as const }} />
+    <Composition id="Kit-Inbox-AR" component={KitInbox} {...PORTRAIT} fps={FPS} durationInFrames={90} defaultProps={{ lang: 'ar' as const }} />
   </Folder>
 );

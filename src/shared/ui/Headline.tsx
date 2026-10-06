@@ -64,7 +64,8 @@ export const Headline: React.FC<{
         flexWrap: 'wrap',
         justifyContent: align === 'center' ? 'center' : 'flex-start',
         columnGap: size * 0.26,
-        opacity: 1 - leave,
+        // Before its cue nothing shows: a tall glyph's top would peek out of its word's clip.
+        opacity: frame < at ? 0 : 1 - leave,
         translate: `0px ${-leave * 40}px`,
         ...style,
       }}
