@@ -1,3 +1,4 @@
+import { BRAND_LINE } from '../../shared/brand';
 import type { Bi } from '../../shared/lang';
 
 /**
@@ -51,6 +52,7 @@ export const COPY = {
   },
   outro: {
     tag: { fr: 'Tague quelqu’un qui ajoutait un 1 à ses notes.', ar: 'أشِر إلى من كان يضيف 1 إلى درجاته.' } as Bi,
-    brand: { fr: 'Notes, absences, paiements : *les parents savent*.', ar: 'الدرجات، الغياب، المدفوعات: *الأولياء يعلمون*.' } as Bi,
+    /** The series' brand line, shared with every MauriSchool video. */
+    brand: BRAND_LINE,
   },
 };

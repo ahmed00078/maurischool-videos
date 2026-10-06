@@ -1,3 +1,4 @@
+import { BRAND_LINE } from '../../shared/brand';
 import type { Bi } from '../../shared/lang';
 import type { EpisodeCopy } from '../../shared/verite/stage';
 
@@ -52,6 +53,7 @@ export const COPY = {
   outro: {
     /** The question for the comments. */
     tag: { fr: 'Et toi, tu as déjà raté l’école pour un mariage ?', ar: 'وأنت، هل غبت يومًا عن المدرسة من أجل عرس؟' } as Bi,
-    brand: { fr: 'Notes, absences, paiements : *les parents savent*.', ar: 'الدرجات، الغياب، المدفوعات: *الأولياء يعلمون*.' } as Bi,
+    /** The series' brand line, shared with every MauriSchool video. */
+    brand: BRAND_LINE,
   },
 } satisfies EpisodeCopy;
