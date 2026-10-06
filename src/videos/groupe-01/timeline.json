@@ -1,0 +1,16 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s), 59 beats = 29.5 s. Every cut is hard. It opens on a found clip (boxes falling on a man opening a container, public/groupe-01/hook-boxes.mp4) and cuts on the beat to the badge: both hooks are over by 3.5 s. The outro ends on the list, the badge climbing, and runs back into the clip (it loops). The rewind plays Thursday backwards inside its own scene. scripts/groupe-01/make-music.mjs reads this file, so the music follows any retiming.",
+  "scenes": [
+    { "id": "boxes", "beats": 4, "out": { "type": "cut", "frames": 0 } },
+    { "id": "hook", "beats": 3, "out": { "type": "cut", "frames": 0 } },
+    { "id": "flood", "beats": 10, "out": { "type": "cut", "frames": 0 } },
+    { "id": "thursday", "beats": 7, "out": { "type": "cut", "frames": 0 } },
+    { "id": "rewind", "beats": 3, "out": { "type": "cut", "frames": 0 } },
+    { "id": "director", "beats": 7, "out": { "type": "cut", "frames": 0 } },
+    { "id": "sameday", "beats": 7, "out": { "type": "cut", "frames": 0 } },
+    { "id": "evening", "beats": 9, "out": { "type": "cut", "frames": 0 } },
+    { "id": "outro", "beats": 9, "out": { "type": "cut", "frames": 0 } }
+  ]
+}
