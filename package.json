@@ -10,6 +10,8 @@
     "render:promo-2026:ar": "remotion render Promo2026-AR-Fast out/promo-2026/fast-AR.mp4 --frames=0-1532 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
     "cover:promo-2026:fr": "remotion still Promo2026-Cover-FR out/promo-2026/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
     "cover:promo-2026:ar": "remotion still Promo2026-Cover-AR out/promo-2026/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:promo-2026:short:fr": "remotion render Promo2026-FR-Short out/promo-2026/short-FR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "render:promo-2026:short:ar": "remotion render Promo2026-AR-Short out/promo-2026/short-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
     "render:teachers-day-2026:fr": "remotion render TeachersDay2026-FR out/teachers-day-2026/render-FR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
     "render:teachers-day-2026:ar": "remotion render TeachersDay2026-AR out/teachers-day-2026/render-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
     "cover:teachers-day-2026:fr": "remotion still TeachersDay2026-Cover-FR out/teachers-day-2026/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
@@ -29,7 +31,17 @@
     "cover:verite-03:fr": "remotion still Verite03-Cover-FR out/verite-03/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
     "render:verite-03:ar": "remotion render Verite03-AR out/verite-03/render-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
     "render:verite-03:plain:ar": "remotion render Verite03-Plain-AR out/verite-03/render-plain-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
-    "cover:verite-03:ar": "remotion still Verite03-Cover-AR out/verite-03/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92"
+    "cover:verite-03:ar": "remotion still Verite03-Cover-AR out/verite-03/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:chevre-01:fr": "remotion render Chevre01-FR out/chevre-01/render-FR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "cover:chevre-01:fr": "remotion still Chevre01-Cover-FR out/chevre-01/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:chevre-01:ar": "remotion render Chevre01-AR out/chevre-01/render-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "cover:chevre-01:ar": "remotion still Chevre01-Cover-AR out/chevre-01/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:groupe-01:fr": "remotion render Groupe01-FR out/groupe-01/render-FR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "cover:groupe-01:fr": "remotion still Groupe01-Cover-FR out/groupe-01/cover-FR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:groupe-01:ar": "remotion render Groupe01-AR out/groupe-01/render-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "cover:groupe-01:ar": "remotion still Groupe01-Cover-AR out/groupe-01/cover-AR.jpg --frame=0 --image-format=jpeg --jpeg-quality=92",
+    "render:groupe-01:gag:fr": "remotion render Groupe01-Gag-FR out/groupe-01/render-gag-FR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k",
+    "render:groupe-01:gag:ar": "remotion render Groupe01-Gag-AR out/groupe-01/render-gag-AR.mp4 --codec=h264 --crf=18 --jpeg-quality=95 --audio-bitrate=192k"
   },
   "dependencies": {
     "@remotion/cli": "4.0.529",

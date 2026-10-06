@@ -9,11 +9,13 @@ from that kit, not from zero.
 
 | Video | What it is | Published files |
 |---|---|---|
+| [`groupe-01`](src/videos/groupe-01) | « Le groupe des parents » (class announcements, mid-October 2026): opens on a found clip (« Quand tu ouvres le groupe des parents… », boxes falling out of a container), then 312 unread in the parents' group; on Tuesday night the director's « Composition de maths jeudi » flies past in the flood (six frames, sharp on a paused frame); on Thursday Sidi asks « c'est la compo aujourd'hui ?! » and Papa finds it, two days late. VHS rewind: the director sends one MauriSchool announcement to 5e A (78 recipients), Papa's lock screen shows it at 18:04, and on Wednesday night they revise while the phone lies face down. Generic chat app, never WhatsApp's. No voice, loops | FR and AR (29.5 s), cover on frame 0; `Groupe01-Gag-FR/AR` with the optional gag |
+| [`chevre-01`](src/videos/chevre-01) | « La chèvre et le reçu » (fee collection, October 2026): Papa paid, the goat ate the receipt, PREUVE : 0 at the counter; a VHS rewind to payday with MauriSchool: the accountant records it, his phone buzzes, the receipt is in the app; the goat eats the paper again and eyes the phone. Nobody lies. No voice, loops | FR and AR (27 s), cover on frame 0 |
 | [`verite-03`](src/videos/verite-03) | « Qui ne dit pas la vérité ? » ep. 3, « Le bulletin » (December): Papa's payment and Sidi's 12 are true, Zahra's sad « 11 » is FAUX (her grades screen says 17.5) and a gold BRAVO lands over it: she wanted to surprise her parents; the rosette behind her placard and a 4-frame smile are the clues. `Verite03` ends on Papa's « 18 à ton âge », stamped INVÉRIFIABLE | FR and AR: tease cut (30 s) and `Verite03-Plain` (28.5 s), cover on frame 0 |
 | [`verite-02`](src/videos/verite-02) | « Qui ne dit pas la vérité ? » ep. 2, « Le henné »: everyone suspects Sidi again, but his 16 is true; Zahra was not at school all day (an absence in the inbox), and the henna on her hands was there from the first frame | FR and AR (28.5 s), cover on frame 0 |
 | [`verite-01`](src/videos/verite-01) | « Qui ne dit pas la vérité ? » ep. 1: a lineup (Sidi, Zahra, Papa), one claim each, a vote in the comments, the mother's inbox gives the answer (Sidi turned 7.5 into 17.5), no voice | FR and AR (28.5 s), cover on frame 0 |
 | [`teachers-day-2026`](src/videos/teachers-day-2026) | World Teachers' Day (5 Oct 2026): a chalkboard question with an example answer and a school bell, a teacher marking the whole class at night under the lamp, the register in one tap, a thank-you that loops back to the question; part 2 chalks the names from the comments | FR and AR (23 s, loops), cover on frame 0; Names-FR/AR from a `names` prop |
-| [`promo-2026`](src/videos/promo-2026) | Launch promo, Sept 2026: 11 scenes, French and Arabic, voiced (ElevenLabs) | FR ×1.3 (46 s), AR ×1.4 (51 s), cover on frame 0 |
+| [`promo-2026`](src/videos/promo-2026) | Launch promo, Sept 2026: 11 scenes, French and Arabic, voiced (ElevenLabs) | FR ×1.3 (46 s), AR ×1.4 (51 s), cover on frame 0; `Promo2026-FR/AR-Short` (20.5 s, no voice): opens on the father's lock screen (Mariem's absence), rewinds to the teacher's register, then payment, the director's morning, the demo offer |
 | [`promo-v1`](src/videos/promo-v1) | First 30 s WhatsApp promo, kept as shipped (predates the kit) | — |
 
 ## Getting started
@@ -42,7 +44,7 @@ src/
     transitions.ts            transition types → Remotion presentations, mirrored in Arabic
     sound.ts                  silence a subtree (used by the sped-up cuts)
     formats.ts                PORTRAIT 1080×1920, LANDSCAPE 1920×1080
-    Kit.tsx, compositions.tsx the kit on its own, to check screens against the real app (KitCast, KitInbox too)
+    Kit.tsx, compositions.tsx the kit on its own, to check screens against the real app (KitCast, KitInbox, KitChat, KitAnnounce and the rooms too)
     ui/
       appkit.tsx              the app's components: cards, stat tiles, alerts, tab bar, header…
       screens.tsx             director home, finance dashboard
@@ -50,14 +52,23 @@ src/
       teacher.tsx             the teacher's workspace: register (current design), grade entry, confirm dialog, toast, tab bar
       Chalkboard.tsx          a classroom board, chalk that writes itself in the reading direction, the eraser
       desk.tsx                a desk at night: the wooden top, a lamp and its light, a glass of atay, a hand writing with a red pen
-      Device.tsx              the phone (neutral: punch-hole, 08:15 status bar or `time`)
+      Device.tsx              the phone (neutral: punch-hole, 08:15 status bar or `time`), its back, a phone that turns face down
       inbox.tsx               the notification centre, where sensitive values show (the lock screen hides them)
       childGrades.tsx         a parent's child profile on its grades tab (where a report-card notification leads): the term's average, the subjects
       confetti.tsx            a burst of paper squares, the same on every render
       people.tsx              the family, drawn flat: boy, girl in headscarf, father in daraa; faces that act
+      goat.tsx                the goat: chews on the beat, stares at the camera, snatches, steps, ears that droop; paper in her mouth
+      paper.tsx               a carbon-book receipt (whole, or the scrap a goat leaves) and the fees envelope
+      places.tsx              a courtyard at midday; a school cash office, its counter, a register whose pages turn; a family's
+                              salon (floor mattress, bolster cushions, window, doorway) at night, sunset or morning, and the light
+                              over it (RoomShade); a tear-off wall calendar with weekdays whose leaves tear off and come back
+      chat.tsx                a generic chat app (nobody's: own colours, words, Roboto): conversation list with unread badges,
+                              a group thread (text, voice notes, pictures, stickers, forwarded chains) scrolled by the frame, its lock-screen banner
+      announcement.tsx        the director's « Nouvelle annonce » (message, audience, recipients preview), its confirmation, the admin tab bar
+      fees.tsx, receiptDoc.tsx  the parent's « Frais » tab (pending, history, « Télécharger le reçu ») and the receipt PDF as a viewer opens it
       lineup.tsx              the « Qui ne dit pas la vérité ? » set: height-chart wall, placards (plain or henna hands, a rosette behind), stamps (VRAI, FAUX, BRAVO, INVÉRIFIABLE), arms up or clapping, speech bubble, countdown
       LockScreen.tsx          lock screen + MauriSchool push notification
-      Headline.tsx            kinetic headline (*starred* words highlighted), role chip
+      Headline.tsx            kinetic headline (*starred* words highlighted), role chip, place tag (« Mardi soir »)
       Ionicon.tsx, LogoMark.tsx, Illustrations.tsx (notebook, copies, calculator, wall clock…),
       props.tsx (chat bubbles, report card, laptop…)
     verite/                   the « Qui ne dit pas la vérité ? » series engine: every episode is its copy, its
@@ -69,7 +80,7 @@ src/
     voice.<lang>.json         written by scripts/fit-voice.mjs — don't edit by hand
     copy.ts, scenes/…         the video's own words and scenes
 public/
-  shared/                     Ionicons font, sound effects (make-sfx.mjs, make-classroom-sfx.mjs)
+  shared/                     Ionicons font, sound effects (make-sfx.mjs, make-classroom-sfx.mjs, make-lineup-sfx.mjs, make-goat-sfx.mjs, make-chat-sfx.mjs)
   <video>/                    that video's voices, music, mixes
 scripts/                      generic tools (take the video's name)
   <video>/                    tools for one video only (e.g. its temp music)
@@ -114,6 +125,11 @@ node scripts/embed-cover.mjs out/promo-2026/fast-FR.mp4 out/promo-2026/cover-FR.
 
 The fast compositions keep the full length and are rendered with `--frames` (see
 `PromoFast.tsx` for why). The frame range is in `package.json`.
+
+**Re-cut existing scenes into a shorter video:** list the scenes in a second timeline file
+(`promo-2026/short.json`) where `from` starts a scene part-way, at that beat of the full scene, and
+assemble it like `PromoShort.tsx`. Music: `node scripts/promo-2026/make-temp-track.mjs short`, then
+`npm run render:promo-2026:short:fr` (and `:ar`).
 
 **Review without watching:** `node scripts/contact-sheet.mjs <video.mp4> <dir> <frame…>` pulls
 frames to look at; `node scripts/stills.mjs <composition> <frame…>` renders stills directly.
