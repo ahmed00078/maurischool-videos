@@ -1,0 +1,11 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s). Every cut lands on a beat. `out` is the transition into the next scene, centred on the cut; frames must be even. scripts/teachers-day-2026/make-music.mjs reads this file too, so the music follows any retiming.",
+  "scenes": [
+    { "id": "board", "beats": 9, "out": { "type": "fade", "frames": 12 } },
+    { "id": "night", "beats": 11, "out": { "type": "slideUp", "frames": 12 } },
+    { "id": "register", "beats": 9, "out": { "type": "iris", "frames": 16 } },
+    { "id": "thanks", "beats": 17, "out": { "type": "cut", "frames": 0 } }
+  ]
+}
