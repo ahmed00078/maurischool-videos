@@ -1,0 +1,15 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s). The lineup is one continuous set cut into scenes, so every cut is hard; the phone rises inside `check`. scripts/verite-02/make-music.mjs reads this file, so the music follows any retiming.",
+  "scenes": [
+    { "id": "hook", "beats": 6, "out": { "type": "cut", "frames": 0 } },
+    { "id": "son", "beats": 5, "out": { "type": "cut", "frames": 0 } },
+    { "id": "daughter", "beats": 5, "out": { "type": "cut", "frames": 0 } },
+    { "id": "father", "beats": 5, "out": { "type": "cut", "frames": 0 } },
+    { "id": "vote", "beats": 7, "out": { "type": "cut", "frames": 0 } },
+    { "id": "check", "beats": 13, "out": { "type": "cut", "frames": 0 } },
+    { "id": "busted", "beats": 9, "out": { "type": "cut", "frames": 0 } },
+    { "id": "outro", "beats": 7, "out": { "type": "cut", "frames": 0 } }
+  ]
+}
