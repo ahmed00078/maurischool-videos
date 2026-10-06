@@ -1,0 +1,15 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s), 54 beats = 27 s. Every cut is hard: the courtyard and the office are continuous sets, and the goat chews on the video's clock, so the last frame runs into the first (it loops). The rewind plays the counter backwards inside its own scene. scripts/chevre-01/make-music.mjs reads this file, so the music follows any retiming.",
+  "scenes": [
+    { "id": "hook", "beats": 5, "out": { "type": "cut", "frames": 0 } },
+    { "id": "yard", "beats": 5, "out": { "type": "cut", "frames": 0 } },
+    { "id": "counter", "beats": 12, "out": { "type": "cut", "frames": 0 } },
+    { "id": "rewind", "beats": 4, "out": { "type": "cut", "frames": 0 } },
+    { "id": "pay", "beats": 7, "out": { "type": "cut", "frames": 0 } },
+    { "id": "app", "beats": 9, "out": { "type": "cut", "frames": 0 } },
+    { "id": "twist", "beats": 6, "out": { "type": "cut", "frames": 0 } },
+    { "id": "outro", "beats": 6, "out": { "type": "cut", "frames": 0 } }
+  ]
+}
