@@ -9,6 +9,10 @@ from that kit, not from zero.
 
 | Video | What it is | Published files |
 |---|---|---|
+| [`verite-03`](src/videos/verite-03) | « Qui ne dit pas la vérité ? » ep. 3, « Le bulletin » (December): Papa's payment and Sidi's 12 are true, Zahra's sad « 11 » is FAUX (her grades screen says 17.5) and a gold BRAVO lands over it: she wanted to surprise her parents; the rosette behind her placard and a 4-frame smile are the clues. `Verite03` ends on Papa's « 18 à ton âge », stamped INVÉRIFIABLE | FR and AR: tease cut (30 s) and `Verite03-Plain` (28.5 s), cover on frame 0 |
+| [`verite-02`](src/videos/verite-02) | « Qui ne dit pas la vérité ? » ep. 2, « Le henné »: everyone suspects Sidi again, but his 16 is true; Zahra was not at school all day (an absence in the inbox), and the henna on her hands was there from the first frame | FR and AR (28.5 s), cover on frame 0 |
+| [`verite-01`](src/videos/verite-01) | « Qui ne dit pas la vérité ? » ep. 1: a lineup (Sidi, Zahra, Papa), one claim each, a vote in the comments, the mother's inbox gives the answer (Sidi turned 7.5 into 17.5), no voice | FR and AR (28.5 s), cover on frame 0 |
+| [`teachers-day-2026`](src/videos/teachers-day-2026) | World Teachers' Day (5 Oct 2026): a chalkboard question with an example answer and a school bell, a teacher marking the whole class at night under the lamp, the register in one tap, a thank-you that loops back to the question; part 2 chalks the names from the comments | FR and AR (23 s, loops), cover on frame 0; Names-FR/AR from a `names` prop |
 | [`promo-2026`](src/videos/promo-2026) | Launch promo, Sept 2026: 11 scenes, French and Arabic, voiced (ElevenLabs) | FR ×1.3 (46 s), AR ×1.4 (51 s), cover on frame 0 |
 | [`promo-v1`](src/videos/promo-v1) | First 30 s WhatsApp promo, kept as shipped (predates the kit) | — |
 
@@ -34,19 +38,30 @@ src/
     demo.ts                   the invented school and its numbers ("École Nour El Ilm")
     beat.ts                   timeline.json → frames; useBeat(), useMarks(); voice lines
     rig.tsx                   Scene, Top (safe text band), PhoneRig, Tap, Sfx
-    fx.tsx                    Backdrop, Grain, Vignette, Camera (drift / push / shake), SafeZones
+    fx.tsx                    Backdrop, Grain, Vignette, Camera (drift / push / shake), CameraPath (shot to shot), SafeZones
     transitions.ts            transition types → Remotion presentations, mirrored in Arabic
     sound.ts                  silence a subtree (used by the sped-up cuts)
     formats.ts                PORTRAIT 1080×1920, LANDSCAPE 1920×1080
-    Kit.tsx, compositions.tsx the kit on its own, to check screens against the real app
+    Kit.tsx, compositions.tsx the kit on its own, to check screens against the real app (KitCast, KitInbox too)
     ui/
       appkit.tsx              the app's components: cards, stat tiles, alerts, tab bar, header…
       screens.tsx             director home, finance dashboard
-      screens2.tsx            attendance register, payment form, parent grades
-      Device.tsx              the phone (neutral: punch-hole, 08:15 status bar)
+      screens2.tsx            attendance register (pre-redesign, as promo-2026 shows it), payment form, parent grades
+      teacher.tsx             the teacher's workspace: register (current design), grade entry, confirm dialog, toast, tab bar
+      Chalkboard.tsx          a classroom board, chalk that writes itself in the reading direction, the eraser
+      desk.tsx                a desk at night: the wooden top, a lamp and its light, a glass of atay, a hand writing with a red pen
+      Device.tsx              the phone (neutral: punch-hole, 08:15 status bar or `time`)
+      inbox.tsx               the notification centre, where sensitive values show (the lock screen hides them)
+      childGrades.tsx         a parent's child profile on its grades tab (where a report-card notification leads): the term's average, the subjects
+      confetti.tsx            a burst of paper squares, the same on every render
+      people.tsx              the family, drawn flat: boy, girl in headscarf, father in daraa; faces that act
+      lineup.tsx              the « Qui ne dit pas la vérité ? » set: height-chart wall, placards (plain or henna hands, a rosette behind), stamps (VRAI, FAUX, BRAVO, INVÉRIFIABLE), arms up or clapping, speech bubble, countdown
       LockScreen.tsx          lock screen + MauriSchool push notification
       Headline.tsx            kinetic headline (*starred* words highlighted), role chip
-      Ionicon.tsx, LogoMark.tsx, Illustrations.tsx, props.tsx (chat bubbles, report card, laptop…)
+      Ionicon.tsx, LogoMark.tsx, Illustrations.tsx (notebook, copies, calculator, wall clock…),
+      props.tsx (chat bubbles, report card, laptop…)
+    verite/                   the « Qui ne dit pas la vérité ? » series engine: every episode is its copy, its
+                              inbox, its clue and its faces fed to these scenes (stage.tsx, scenes.tsx, episode.tsx)
   videos/<video>/
     compositions.tsx          this video's compositions, in a <Folder> named after it
     timeline.json             scenes, their length in beats, the transition after each
@@ -54,7 +69,7 @@ src/
     voice.<lang>.json         written by scripts/fit-voice.mjs — don't edit by hand
     copy.ts, scenes/…         the video's own words and scenes
 public/
-  shared/                     Ionicons font, sound effects
+  shared/                     Ionicons font, sound effects (make-sfx.mjs, make-classroom-sfx.mjs)
   <video>/                    that video's voices, music, mixes
 scripts/                      generic tools (take the video's name)
   <video>/                    tools for one video only (e.g. its temp music)
