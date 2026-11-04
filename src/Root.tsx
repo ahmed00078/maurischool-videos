@@ -1,5 +1,6 @@
 import React from 'react';
 import { KitCompositions } from './shared/compositions';
+import { MomentsCompositions } from './shared/moments/compositions';
 import { Chevre01Compositions } from './videos/chevre-01/compositions';
 import { Chevre02Compositions } from './videos/chevre-02/compositions';
 import { Groupe01Compositions } from './videos/groupe-01/compositions';
@@ -27,6 +28,7 @@ export const RemotionRoot: React.FC = () => (
     <TeachersDay2026Compositions />
     <Promo2026Compositions />
     <PromoV1Compositions />
+    <MomentsCompositions />
     <KitCompositions />
   </>
 );

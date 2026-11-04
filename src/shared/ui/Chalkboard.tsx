@@ -34,7 +34,7 @@ const BOARD = {
  * The SVG filters the chalk is drawn through: the stroke's edge roughened, and
  * the grain of the board showing through it. Drawn once per board.
  */
-const ChalkDefs: React.FC = () => (
+export const ChalkDefs: React.FC = () => (
   <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden>
     <defs>
       <filter id="chalk" x="-4%" y="-8%" width="108%" height="116%">
