@@ -1,0 +1,23 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s). `out` is the transition into the next scene, centred on the cut; frames must be even. A recorded voice only grows a scene (scripts/fit-voice.mjs). The order is the film's: the opening, three acts (a card, then its chapters), the dashboard, « Et aussi… », the closing.",
+  "scenes": [
+    { "id": "intro", "beats": 13, "out": { "type": "wipe", "frames": 14 } },
+    { "id": "actMoney", "beats": 7, "out": { "type": "fade", "frames": 10 } },
+    { "id": "fees", "beats": 32, "out": { "type": "fade", "frames": 10 } },
+    { "id": "finance", "beats": 31, "out": { "type": "fade", "frames": 10 } },
+    { "id": "payroll", "beats": 24, "out": { "type": "wipe", "frames": 14 } },
+    { "id": "actClasses", "beats": 7, "out": { "type": "fade", "frames": 10 } },
+    { "id": "attendance", "beats": 25, "out": { "type": "fade", "frames": 10 } },
+    { "id": "grades", "beats": 24, "out": { "type": "fade", "frames": 10 } },
+    { "id": "reportcards", "beats": 32, "out": { "type": "fade", "frames": 10 } },
+    { "id": "timetable", "beats": 26, "out": { "type": "wipe", "frames": 14 } },
+    { "id": "actFamilies", "beats": 7, "out": { "type": "fade", "frames": 10 } },
+    { "id": "announcements", "beats": 24, "out": { "type": "fade", "frames": 10 } },
+    { "id": "parent", "beats": 31, "out": { "type": "fade", "frames": 10 } },
+    { "id": "dashboard", "beats": 24, "out": { "type": "fade", "frames": 12 } },
+    { "id": "more", "beats": 15, "out": { "type": "fade", "frames": 14 } },
+    { "id": "close", "beats": 24, "out": { "type": "cut", "frames": 0 } }
+  ]
+}
