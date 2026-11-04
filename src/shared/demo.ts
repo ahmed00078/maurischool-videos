@@ -227,3 +227,116 @@ export const CLASS_ANNOUNCEMENT = {
   ] as const,
   total: 41 + CLASS_SIZE + 9,
 };
+
+/**
+ * The school's identity on its documents (school settings → documents): its
+ * code, its own colour (DocumentTheme.from_color derives the soft and pale
+ * tints), its motto, and the authority lines either side of the logo on
+ * official documents. A school that sets no colour prints in MauriSchool's.
+ */
+export const SCHOOL_IDENTITY = {
+  code: 'NEIS',
+  accent: '#0F766E',
+  motto: { fr: 'Savoir, rigueur, respect', ar: 'علم، انضباط، احترام' } as Bi,
+  headerFr: ['République Islamique de Mauritanie', "Ministère de l'Éducation Nationale", "Direction de l'enseignement privé"],
+  headerAr: ['الجمهورية الإسلامية الموريتانية', 'وزارة التهذيب الوطني', 'إدارة التعليم الخاص'],
+  contact: 'Tevragh-Zeina, Nouakchott · +222 45 00 00 00 · contact@nourelilm.example',
+};
+
+/** The pupil's matricule and her father, who gets the notifications. */
+export const PUPIL_CODE = 'NEIS0142';
+export const PUPIL_FATHER: Bi = { fr: 'Ahmed Ould Mohamed', ar: 'أحمد ولد محمد' };
+export const PUPIL_SHORT: Bi = { fr: 'Mariem', ar: 'مريم' };
+
+/**
+ * Mariem's first-term report card, published when the director closes the
+ * term in December. Averages and coefficients make the overall average
+ * (356.5 / 23 = 15.5); the backend prints every number with two decimals.
+ */
+export const REPORT_CARD = {
+  period: { fr: '1er trimestre', ar: 'الفصل الأول' } as Bi,
+  periodCode: 'T1',
+  subjects: [
+    { name: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi, coefficient: 4, average: 16.5 },
+    { name: { fr: 'Langue arabe', ar: 'اللغة العربية' } as Bi, coefficient: 4, average: 16 },
+    { name: { fr: 'Français', ar: 'اللغة الفرنسية' } as Bi, coefficient: 3, average: 14 },
+    { name: { fr: 'Sciences naturelles', ar: 'العلوم الطبيعية' } as Bi, coefficient: 2, average: 15 },
+    { name: { fr: 'Physique-chimie', ar: 'الفيزياء والكيمياء' } as Bi, coefficient: 2, average: 14.5 },
+    { name: { fr: 'Éducation islamique', ar: 'التربية الإسلامية' } as Bi, coefficient: 2, average: 17 },
+    { name: { fr: 'Histoire-géographie', ar: 'التاريخ والجغرافيا' } as Bi, coefficient: 2, average: 14 },
+    { name: { fr: 'Anglais', ar: 'اللغة الإنجليزية' } as Bi, coefficient: 2, average: 15.5 },
+    { name: { fr: 'Éducation civique', ar: 'التربية المدنية' } as Bi, coefficient: 1, average: 16 },
+    { name: { fr: 'Éducation physique', ar: 'التربية البدنية' } as Bi, coefficient: 1, average: 16.5 },
+  ],
+  average: 15.5,
+  rank: 3,
+  attendance: { period: '01/10/2026 - 19/12/2026', unexcused: 1, excused: 1, late: 0 },
+  /** Free text the class teacher writes, printed as typed. */
+  appreciation: { fr: 'Élève sérieuse et appliquée. Très bon trimestre, continuez ainsi.', ar: 'تلميذة جادة ومجتهدة. فصل ممتاز، واصلي على هذا النهج.' } as Bi,
+  issued: '21/12/2026',
+  /** The term as the closing screen states it. */
+  term: { start: '01/10/2026', end: '19/12/2026', classes: 18, subjects: 142 },
+};
+
+/**
+ * 5e A's Monday as the admin's timetable draws it: the school's bell grid,
+ * each period filled, free or a break. The maths lesson is LESSON's.
+ */
+export type TimetableRow =
+  | { kind: 'lesson'; start: string; end: string; subject: Bi; teacher: Bi; room: Bi }
+  | { kind: 'pause'; start: string }
+  | { kind: 'free'; start: string; end: string };
+
+const ROOM = (n: number): Bi => ({ fr: `Salle ${n}`, ar: `القاعة ${n}` });
+export const TEACHERS = {
+  maths: { fr: 'Mohamed Ould Sidi', ar: 'محمد ولد سيدي' } as Bi,
+  arabic: { fr: 'Aïchetou Mint Brahim', ar: 'عيشة بنت إبراهيم' } as Bi,
+  french: { fr: 'Ibrahima Diallo', ar: 'إبراهيما ديالو' } as Bi,
+  science: { fr: 'Khadija Mint Ely', ar: 'خديجة بنت اعل' } as Bi,
+};
+export const TIMETABLE: TimetableRow[] = [
+  { kind: 'lesson', start: '08:00', end: '10:00', subject: { fr: 'Mathématiques', ar: 'الرياضيات' }, teacher: TEACHERS.maths, room: ROOM(4) },
+  { kind: 'pause', start: '10:00' },
+  { kind: 'lesson', start: '10:15', end: '12:00', subject: { fr: 'Langue arabe', ar: 'اللغة العربية' }, teacher: TEACHERS.arabic, room: ROOM(4) },
+  { kind: 'lesson', start: '12:00', end: '13:00', subject: { fr: 'Français', ar: 'اللغة الفرنسية' }, teacher: TEACHERS.french, room: ROOM(4) },
+  { kind: 'free', start: '15:00', end: '16:00' },
+  { kind: 'lesson', start: '16:00', end: '17:00', subject: { fr: 'Sciences naturelles', ar: 'العلوم الطبيعية' }, teacher: TEACHERS.science, room: ROOM(2) },
+];
+
+/**
+ * September's payroll, as the list shows it in October: PAYROLL_DRAFTS of the
+ * 24 payslips still to validate. Payroll numbers share the expenses' series
+ * (EXP-<year>-<6 digits>); hours are worked / expected.
+ */
+export type Payslip = { name: Bi; number: string; contract: 'salarial' | 'horaire'; worked: number; expected: number; net: number; status: 'draft' | 'validated' | 'paid' };
+export const PAYROLL = {
+  month: 9,
+  year: 2026,
+  totalNet: 412_600,
+  teachers: PEOPLE.teachers,
+  slips: [
+    { name: TEACHERS.maths, number: 'EXP-2026-000131', contract: 'horaire', worked: 62, expected: 64, net: 18_600, status: 'draft' },
+    { name: TEACHERS.arabic, number: 'EXP-2026-000132', contract: 'salarial', worked: 72, expected: 72, net: 21_000, status: 'draft' },
+    { name: TEACHERS.french, number: 'EXP-2026-000133', contract: 'horaire', worked: 48, expected: 48, net: 14_400, status: 'validated' },
+    { name: TEACHERS.science, number: 'EXP-2026-000134', contract: 'salarial', worked: 64, expected: 64, net: 19_500, status: 'paid' },
+  ] as Payslip[],
+};
+
+/**
+ * « La chèvre a encore frappé », ép. 2 « La copie » (chevre-02): on Tuesday
+ * 27 October 2026 Sidi brings home his first maths test, 17/20, and his
+ * teacher publishes the grade in the app at 13:10. The parent's notification
+ * (grade_published_parent) carries the grade as the API sends it: 17.0 in
+ * JSON is the number 17, which the app prints « 17 »; the period is the
+ * backend's period_names("trimester1"). Below it in Papa's inbox, read, ép.
+ * 1's payment of 12 October: older than a week, the app dates it dd/mm/yyyy.
+ */
+export const GRADE_TEST = {
+  grade: '17',
+  subject: { fr: 'Mathématiques', ar: 'الرياضيات' } as Bi,
+  period: { fr: '1er trimestre', ar: 'الفصل الأول' } as Bi,
+  date: { fr: 'mardi 27 octobre', ar: 'الثلاثاء 27 أكتوبر' } as Bi,
+  time: '13:10',
+  /** Ép. 1's payment as it now reads in the inbox. */
+  earlier: '12/10/2026',
+};

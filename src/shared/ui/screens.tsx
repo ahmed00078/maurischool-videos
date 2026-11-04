@@ -63,7 +63,7 @@ export const HomeScreen: React.FC<
      */
     lift?: [number, number];
   }
-> = ({ theme = 'light', enterFrom, scroll = 0, unread = 3, isolate = false, lift = [0, 0] }) => {
+> = ({ theme = 'light', enterFrom, scroll = 0, progress = 1, unread = 3, isolate = false, lift = [0, 0] }) => {
   const bi = useBi();
   const tabs = useTabs();
   const hidden: React.CSSProperties | undefined = isolate ? { visibility: 'hidden' } : undefined;
@@ -99,7 +99,7 @@ export const HomeScreen: React.FC<
           </Pad>
         </Enter>
         {isolate ? null : (
-          <HomeLower />
+          <HomeLower progress={progress} />
         )}
       </Scroll>
       {isolate ? null : <TabBar active="home" labels={tabs} />}
@@ -107,8 +107,10 @@ export const HomeScreen: React.FC<
   );
 };
 
-const HomeLower: React.FC = () => {
+const HomeLower: React.FC<{ progress: number }> = ({ progress }) => {
   const bi = useBi();
+  // One decimal while counting, so the width does not jump.
+  const rate = progress < 1 ? `${(ATTENDANCE_RATE * progress).toFixed(1)}%` : percent(ATTENDANCE_RATE);
   return (
     <>
         <Enter order={3}>
@@ -125,12 +127,12 @@ const HomeLower: React.FC = () => {
           <Pad>
             <SectionHeader title={bi(HOME.overview)} />
             <div style={{ display: 'flex', gap: pt(10), marginBottom: pt(10) }}>
-              <StatCard title={bi(HOME.kpis.students)} value={PEOPLE.students} icon="people" iconColor={APP.brand[500]} />
-              <StatCard title={bi(HOME.kpis.teachers)} value={PEOPLE.teachers} icon="school" iconColor={APP.success} />
+              <StatCard title={bi(HOME.kpis.students)} value={Math.round(PEOPLE.students * progress)} icon="people" iconColor={APP.brand[500]} />
+              <StatCard title={bi(HOME.kpis.teachers)} value={Math.round(PEOPLE.teachers * progress)} icon="school" iconColor={APP.success} />
             </div>
             <div style={{ display: 'flex', gap: pt(10) }}>
-              <StatCard title={bi(HOME.kpis.attendance)} value={percent(ATTENDANCE_RATE)} icon="checkmark-circle" iconColor={APP.info} />
-              <StatCard title={bi(HOME.kpis.pending)} value={money(FINANCE.outstanding)} icon="cash" iconColor={APP.warning} />
+              <StatCard title={bi(HOME.kpis.attendance)} value={rate} icon="checkmark-circle" iconColor={APP.info} />
+              <StatCard title={bi(HOME.kpis.pending)} value={money(FINANCE.outstanding * progress)} icon="cash" iconColor={APP.warning} />
             </div>
           </Pad>
         </Enter>

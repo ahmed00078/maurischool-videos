@@ -10,6 +10,14 @@ import { continueRender, delayRender, staticFile } from 'remotion';
  * when a scene needs a new icon.
  */
 const GLYPHS = {
+  'location-outline': 62405,
+  'options-outline': 62603,
+  'flash-outline': 62234,
+  'lock-closed-outline': 62408,
+  'cloud-offline-outline': 62043,
+  'shield-checkmark-outline': 62841,
+  'cloud-upload-outline': 62048,
+  'stats-chart-outline': 62876,
   add: 61699,
   'arrow-back': 61735,
   'arrow-forward': 61747,

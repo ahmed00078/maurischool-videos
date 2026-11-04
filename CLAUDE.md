@@ -36,6 +36,9 @@ Type-check (`npm run typecheck`), then render what changed and look at it:
 - `<Freeze>` clamps to the composition's length: a 1-frame composition freezes on frame 0.
 - `@remotion/media` audio with `playbackRate` is converted in the browser; to change speed without
   changing pitch, stretch the mix with ffmpeg `atempo` (`scripts/make-fast-mix.mjs`).
+- CSS `filter: blur()` on large areas (the landscape backdrop, `shared/wide.tsx`'s veil) renders at about
+  0.4 frame/s in the default software GL; `--gl=angle` (the GPU) is some twenty times faster. The
+  tour-2026 render scripts pass it.
 - A `*/` inside a `/** … */` comment (e.g. a path glob) ends the comment early.
 - French puts a space before `?` and `:` — use a no-break space (` `) in headlines, or the
   mark wraps onto its own line.

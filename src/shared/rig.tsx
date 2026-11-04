@@ -182,7 +182,10 @@ export type SfxName =
   | 'blip'
   | 'flick'
   | 'tear'
-  | 'freeze';
+  | 'freeze'
+  // scripts/make-chevre-sfx.mjs
+  | 'whistle'
+  | 'dun';
 
 /**
  * A sound effect at a frame of the current scene (nothing when the subtree is

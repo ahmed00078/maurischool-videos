@@ -246,31 +246,6 @@ export const FEES_COPY = {
   noFeesPending: { fr: 'Aucun frais en attente', ar: 'لا توجد رسوم معلقة' },
 } satisfies Record<string, Bi>;
 
-/**
- * The payment receipt PDF (backend/app/services/pdf_service.py: _labels,
- * _status_label; core/payment_methods.py; templates/documents/_footer.html).
- * The template upper-cases the title and the panel headings.
- */
-export const RECEIPT_PDF = {
-  receipt: { fr: 'Reçu de paiement', ar: 'إيصال دفع' },
-  number: { fr: 'Numéro', ar: 'الرقم' },
-  date: { fr: 'Date', ar: 'التاريخ' },
-  student: { fr: 'Élève', ar: 'التلميذ' },
-  code: { fr: 'Matricule', ar: 'الرقم المدرسي' },
-  payer: { fr: 'Payeur', ar: 'الدافع' },
-  invoiceNumber: { fr: 'Facture', ar: 'رقم الفاتورة' },
-  method: { fr: 'Mode de paiement', ar: 'طريقة الدفع' },
-  processedBy: { fr: 'Traité par', ar: 'سجله' },
-  paid: { fr: 'Payé', ar: 'المدفوع' },
-  balanceAfter: { fr: 'Solde restant', ar: 'الرصيد المتبقي' },
-  signature: { fr: 'Signature autorisée', ar: 'التوقيع' },
-  stamp: { fr: "Cachet de l'école", ar: 'الختم' },
-  /** status "completed" */
-  completed: { fr: 'Payé', ar: 'مدفوع' },
-  cash: { fr: 'Espèces', ar: 'نقدًا' },
-  generatedWith: { fr: 'Document généré avec', ar: 'تم إنشاء المستند بواسطة' },
-} satisfies Record<string, Bi>;
-
 /** Fill "{name}" placeholders the way i18next does. */
 export const fill = (template: string, params: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(params[key] ?? `{${key}}`));
@@ -310,3 +285,93 @@ export const ANNOUNCEMENT_COPY = {
 
 /** i18next's plural category for a count (Intl.PluralRules, as i18next uses it). */
 export const pluralKey = (lang: 'fr' | 'ar', count: number) => new Intl.PluralRules(lang).select(count);
+
+/**
+ * The admin's « Emploi du temps » (app/(app)/(admin)/schedule, components/schedule/DaySchedule.tsx),
+ * from mobile_app/src/i18n/{fr,ar}/admin.json → schedule; the short day names are
+ * SHORT_DAY_NAMES in utils/formatters.ts (0 = Monday).
+ */
+export const SCHEDULE_COPY = {
+  title: { fr: 'Emploi du temps', ar: 'جدول الحصص' },
+  createTitle: { fr: 'Ajouter une séance', ar: 'إضافة حصة' },
+  freeSlot: { fr: 'Libre', ar: 'فارغة' },
+  pause: { fr: 'Pause', ar: 'استراحة' },
+  blockingConflictTitle: { fr: 'Conflit bloquant', ar: 'تعارض مانع' },
+  blockingConflictMessage: {
+    fr: 'Cette classe ou cet enseignant est déjà occupé pendant ce créneau.',
+    ar: 'الفصل أو المعلم مشغول بالفعل خلال هذه الفترة.',
+  },
+  roomWarningTitle: { fr: 'Salle déjà utilisée', ar: 'القاعة مستخدمة' },
+  roomWarningMessage: {
+    fr: 'Cette salle est déjà utilisée pendant ce créneau. Vous pouvez néanmoins confirmer.',
+    ar: 'القاعة مستخدمة خلال هذه الفترة، ويمكنك مع ذلك تأكيد الحفظ.',
+  },
+  confirmAnyway: { fr: 'Confirmer quand même', ar: 'تأكيد على أي حال' },
+  /** common.json → confirm: an alert's only button (DialogContext, singleAction). */
+  confirm: { fr: 'Confirmer', ar: 'تأكيد' },
+  days: {
+    fr: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    ar: ['اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+  },
+} satisfies Record<string, unknown>;
+
+/**
+ * The admin's « Paie enseignants » (app/(app)/(admin)/teacher-payroll/index.tsx), from
+ * mobile_app/src/i18n/{fr,ar}/admin.json → payroll and teachers.contractTypes.
+ */
+export const PAYROLL_COPY = {
+  title: { fr: 'Paie enseignants', ar: 'رواتب المعلمين' },
+  totalNet: { fr: 'Total net', ar: 'إجمالي الصافي' },
+  teachers: { fr: 'Enseignants', ar: 'المعلمون' },
+  filters: { fr: 'Filtres', ar: 'الفلاتر' },
+  generate: { fr: 'Générer', ar: 'إنشاء' },
+  validate: { fr: 'Valider', ar: 'اعتماد' },
+  status: {
+    draft: { fr: 'Brouillon', ar: 'مسودة' },
+    validated: { fr: 'Validé', ar: 'معتمد' },
+    paid: { fr: 'Payé', ar: 'مدفوع' },
+  },
+  contract: {
+    salarial: { fr: 'Salarié', ar: 'موظف براتب' },
+    horaire: { fr: 'Horaire', ar: 'بالساعة' },
+  },
+  validateSuccess: { fr: 'Fiche validée', ar: 'تم الاعتماد' },
+} satisfies Record<string, unknown>;
+
+/**
+ * The admin's « Clôture des trimestres » (app/(app)/(admin)/term-closing/index.tsx), from
+ * mobile_app/src/i18n/{fr,ar}/admin.json → termClosing.
+ */
+export const TERM_COPY = {
+  title: { fr: 'Clôture des trimestres', ar: 'إقفال الفصول الدراسية' },
+  subtitle: { fr: 'Compléter, approuver puis publier les bulletins', ar: 'إكمال النتائج واعتمادها ثم نشر كشوف الدرجات' },
+  periods: [
+    { fr: '1er trimestre', ar: 'الفصل الأول' },
+    { fr: '2e trimestre', ar: 'الفصل الثاني' },
+    { fr: '3e trimestre', ar: 'الفصل الثالث' },
+  ],
+  yearHint: { fr: 'Année courante', ar: 'السنة الحالية' },
+  dates: { fr: 'Du {start} au {end}', ar: 'من {start} إلى {end}' },
+  ready: { fr: 'Prêt', ar: 'جاهز' },
+  closed: { fr: 'Clôturé', ar: 'مقفل' },
+  students: { fr: 'Élèves', ar: 'التلاميذ' },
+  subjects: { fr: 'Matières', ar: 'المواد' },
+  approved: { fr: 'Approuvés', ar: 'المعتمدة' },
+  blockers: { fr: 'Blocages', ar: 'العوائق' },
+  stages: [
+    { fr: 'Compléter les notes', ar: 'إكمال النتائج' },
+    { fr: 'Vérifier et approuver', ar: 'المراجعة والاعتماد' },
+    { fr: 'Prévisualiser', ar: 'المعاينة' },
+    { fr: 'Clôturer et publier', ar: 'الإقفال والنشر' },
+  ],
+  close: { fr: 'Clôturer et publier', ar: 'الإقفال ونشر النتائج' },
+  reopen: { fr: 'Rouvrir le trimestre', ar: 'إعادة فتح الفصل' },
+  closeTitle: { fr: 'Publier les bulletins ?', ar: 'نشر كشوف الدرجات؟' },
+  closeMessage: {
+    fr: '{students} bulletin(s) officiel(s) seront créés. Les notes du trimestre seront verrouillées.',
+    ar: 'سيتم إنشاء {students} كشفاً رسمياً وستُقفل نتائج الفصل.',
+  },
+  closeSuccess: { fr: 'Bulletins publiés', ar: 'تم نشر كشوف الدرجات' },
+  classes: { fr: 'Classes', ar: 'الأقسام' },
+  classProgress: { fr: '{approved} sur {total} matières validées', ar: 'تم اعتماد {approved} من أصل {total} مادة' },
+} satisfies Record<string, unknown>;

@@ -2,7 +2,7 @@ import React from 'react';
 import { spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { fill, TEACHER_COPY } from '../appCopy';
 import { CLASS_ROSTER, CLASS_SIZE, LESSON, PUPIL_CLASS, TEST } from '../demo';
-import { Lang, useBi, useLang } from '../lang';
+import { Bi, Lang, useBi, useLang } from '../lang';
 import { APP, pt, Theme } from '../tokens';
 import { AppScreen, Enter, FloatingTabBar, useApp, useWeights } from './appkit';
 import { IconName, Ionicon } from './Ionicon';
@@ -66,7 +66,7 @@ const Avatar: React.FC<{ name: string; size: number }> = ({ name, size }) => {
 };
 
 /** ScreenHeader with a BackButton leading: 20 pt bold title, 13 pt subtitle. */
-const BackHeader: React.FC<{ title: string; subtitle?: string; action?: React.ReactNode }> = ({ title, subtitle, action }) => {
+export const BackHeader: React.FC<{ title: string; subtitle?: string; action?: React.ReactNode }> = ({ title, subtitle, action }) => {
   const { c } = useApp();
   const { rtl } = useLang();
   const w = useWeights();
@@ -187,7 +187,9 @@ export const RegisterScreen: React.FC<{
   savePress?: number;
   /** Saved while offline: the register locks and waits to send. */
   queued?: boolean;
-}> = ({ theme = 'light', enterFrom, filled, absent, allPress = 0, savePress = 0, queued = false }) => {
+  /** The rows on screen, when a video follows another pupil than the shared one. */
+  roster?: Bi[];
+}> = ({ theme = 'light', enterFrom, filled, absent, allPress = 0, savePress = 0, queued = false, roster = CLASS_ROSTER }) => {
   const bi = useBi();
   const { lang } = useLang();
   const { c } = themeOf(theme);
@@ -249,9 +251,9 @@ export const RegisterScreen: React.FC<{
         </div>
       </Enter>
       <div style={{ paddingTop: pt(2) }}>
-        {CLASS_ROSTER.map((name, i) => {
+        {roster.map((name, i) => {
           // "Tous présents" lands on every row at once; the sweep is a few frames long.
-          const present = filled * (CLASS_ROSTER.length + 2) > i + 1;
+          const present = filled * (roster.length + 2) > i + 1;
           const isAbsent = (absent[i] ?? 0) > 0.5;
           return (
             <Enter key={i} order={2 + i * 0.35}>
@@ -361,8 +363,8 @@ export const REGISTER_TARGETS = {
 /**
  * Entering a test's scores (BulkGradeEntry): one card per pupil with the
  * score box and the absent toggle; draft badge in the header; "Enregistrer le
- * brouillon" and "Publier" pinned at the bottom. `typed` (0 to 1) types the
- * first pupil's score.
+ * brouillon" and "Publier" pinned at the bottom. `typed` (0 to 1) types one
+ * pupil's score: the first's, or `typedRow`'s.
  */
 export const EvaluationScreen: React.FC<{
   theme?: Theme;
@@ -372,7 +374,11 @@ export const EvaluationScreen: React.FC<{
   /** 0 to 1: the "Publier l'évaluation ?" dialog. */
   dialog?: number;
   confirmPress?: number;
-}> = ({ theme = 'light', enterFrom, typed, publishPress = 0, dialog = 0, confirmPress = 0 }) => {
+  /** The rows and their scores (null = absent), when a video follows another pupil than the shared one. */
+  roster?: Bi[];
+  scores?: (number | null)[];
+  typedRow?: number;
+}> = ({ theme = 'light', enterFrom, typed, publishPress = 0, dialog = 0, confirmPress = 0, roster = CLASS_ROSTER, scores = TEST.scores, typedRow = 0 }) => {
   const bi = useBi();
   const { lang } = useLang();
   const { c } = themeOf(theme);
@@ -406,13 +412,13 @@ export const EvaluationScreen: React.FC<{
         />
       </Enter>
       <div style={{ paddingTop: pt(8) }}>
-        {CLASS_ROSTER.map((name, i) => {
-          const score = g.scores[i];
+        {roster.map((name, i) => {
+          const score = scores[i] ?? null;
           const full = score === null ? '' : String(score);
-          const shown = i === 0 ? full.slice(0, Math.round(full.length * typed)) : full;
+          const shown = i === typedRow ? full.slice(0, Math.round(full.length * typed)) : full;
           return (
             <Enter key={i} order={1 + i * 0.35}>
-              <GradeRow name={bi(name)} score={shown} absent={score === null} caret={i === 0 && typed > 0 && typed < 1} />
+              <GradeRow name={bi(name)} score={shown} absent={score === null} caret={i === typedRow && typed > 0 && typed < 1} />
             </Enter>
           );
         })}
