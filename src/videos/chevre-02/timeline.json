@@ -1,0 +1,63 @@
+{
+  "bpm": 120,
+  "fps": 30,
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s), 48 beats = 24 s. Ép. 2 of « La chèvre a encore frappé ». Every cut is hard: the courtyard is one continuous set and the goat chews on the video's clock. Each proof holds still long enough to read: the 17/20 in her mouth (the cover), the test in the replay before the bite, the lock screen, the grade in the inbox, the score. The music loops; the picture cuts from her stare under the end card back to her stare on the cover. scripts/chevre-02/make-music.mjs reads this file.",
+  "scenes": [
+    {
+      "id": "hook",
+      "beats": 6,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "replay",
+      "beats": 7,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "drama",
+      "beats": 4,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "buzz",
+      "beats": 7,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "proof",
+      "beats": 8,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "revenge",
+      "beats": 9,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "outro",
+      "beats": 7,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    }
+  ]
+}

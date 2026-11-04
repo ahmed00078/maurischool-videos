@@ -1,8 +1,9 @@
-import { BRAND_LINE } from '../../shared/brand';
 import type { Bi } from '../../shared/lang';
 
 /**
- * Everything « La chèvre et le reçu » says in its own voice. App wording lives
+ * Everything ép. 1 « Le reçu » says in its own voice. The series' words (its
+ * name, the end line, « La chèvre a mangé la preuve. », the hashtag) are in
+ * shared/chevre/series.ts. App wording lives
  * in shared/appCopy.ts (verbatim from the app); this is the video's copy.
  *
  * Nobody lies here: the father really paid, the accountant asks for the
@@ -31,7 +32,6 @@ export const COPY = {
   rewind: { fr: 'Même jour. *Avec MauriSchool.*', ar: 'نفس اليوم. *مع MauriSchool.*' } as Bi,
   auto: { fr: 'Le reçu arrive *tout seul*.', ar: 'الوصل يصلك *وحده*.' } as Bi,
   end: { fr: 'Le reçu *ne se perd plus*.', ar: 'الوصل *لا يضيع* بعد اليوم.' } as Bi,
-  brand: BRAND_LINE,
   /** The question for the comments, on the end card. */
   ask: { fr: 'Et chez vous, la chèvre a mangé quoi ?', ar: 'وعندكم، ماذا أكلت العنز؟' } as Bi,
   /** Optional caption bar, not used in the cut: kept for a variant. */

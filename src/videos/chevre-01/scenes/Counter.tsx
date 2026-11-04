@@ -15,11 +15,14 @@ import { LockScreen, Notification } from '../../../shared/ui/LockScreen';
 import { Envelope, PaperReceipt, ReceiptSheet } from '../../../shared/ui/paper';
 import { PaymentScreen } from '../../../shared/ui/screens2';
 import { COPY } from '../copy';
-import { AccountantState, accountantAt, Desk, goatMouth, GoatClose, PAGE_HAND, PAPA_DESK, papaAt, PapaState, SCRAP } from '../stage';
-import { Chewing, INK, scrap } from './Yard';
+import { TOP_UNDER_BUG } from '../../../shared/chevre/marks';
+import { goatMouth, papaAt, PapaState } from '../../../shared/chevre/stage';
+import { AccountantState, accountantAt, Desk, GoatClose, PAGE_HAND, PAPA_DESK, SCRAP } from '../stage';
+import { TIMELINE } from '../timeline';
+import { Chewing, INK, TopScrim } from './Yard';
 
 /** Where a speech bubble sits: under the tag, clamped in the safe band, its tail on the speaker's head. */
-const BUBBLE = { top: 336, width: 640 };
+const BUBBLE = { top: TOP_UNDER_BUG + 80, width: 640 };
 const bubbleX = (headX: number) => Math.max(SAFE.side + BUBBLE.width / 2 + 10, Math.min(1080 - SAFE.right - BUBBLE.width / 2, headX));
 const ACCOUNTANT_HEAD = accountantAt([200, 268]);
 const PAPA_HEAD = papaAt(PAPA_DESK, [200, 236]);
@@ -56,14 +59,17 @@ const Tag: React.FC<{ text: string; at: number; out?: number }> = ({ text, at, o
 };
 
 /** Counter beats: her question, his answer, the pages, the cut to the goat, the stamp. */
-const C = { ask: [0.6, 2.4], askTalk: [0.7, 1.9], paid: [2.5, 4.3], paidTalk: [2.6, 3.7], flip: [4.5, 6.7], look: 6.8, goat: [7, 9], stamp: 9.15 } as const;
-const PAGES = 4;
+// PREUVE : 0 lands at 5.7 and holds two seconds, to the end of the scene.
+const C = { ask: [0.3, 1.9], askTalk: [0.4, 1.4], paid: [1.9, 3.5], paidTalk: [2.0, 3.0], flip: [3.5, 4.5], look: 4.5, goat: [4.5, 5.5], stamp: 5.7 } as const;
+const PAGES = 3;
+/** The counter scene on the video's clock, for the rewind that plays it backwards. */
+const COUNTER = TIMELINE.find((s) => s.id === 'counter')!;
 
 /**
- * 3 · counter, a month later: the accountant asks for the receipt, politely.
+ * 2 · counter, a month later: the accountant asks for the receipt, politely.
  * Papa: « J'ai déjà payé ! », and it is true. She looks through the register,
- * page after page. Cut to the goat, chewing. Back at the counter, the stamp:
- * PREUVE : 0.
+ * page after page. Cut to the goat: a month on, she is down to the last two
+ * digits. Back at the counter, the stamp: PREUVE : 0.
  */
 export const CounterScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -103,7 +109,8 @@ export const CounterScene: React.FC = () => {
   if (frame >= b(C.goat[0]) && frame < b(C.goat[1])) {
     return (
       <AbsoluteFill>
-        <GoatClose goat={{ paper: scrap() }} />
+        {/* A month on, she is down to the serial's last two digits. */}
+        <GoatClose goat={{ paper: { node: <ReceiptSheet scrap="crumb" bitten />, ...SCRAP } }} />
         <Chewing from={C.goat[0]} to={C.goat[1]} volume={0.6} />
       </AbsoluteFill>
     );
@@ -115,7 +122,7 @@ export const CounterScene: React.FC = () => {
       <AbsoluteFill style={{ translate: `${Math.sin(frame * 3.1) * 14 * hit}px ${Math.cos(frame * 2.7) * 10 * hit}px` }}>
         <Desk accountant={accountant} papa={papa} flip={flip} month="later" />
       </AbsoluteFill>
-      <Top gap={0}>
+      <Top gap={0} style={{ top: TOP_UNDER_BUG }}>
         <Tag text={bi(COPY.later)} at={b(0.1)} out={b(C.stamp) - 8} />
       </Top>
       <SpeechBubble text={bi(COPY.askReceipt)} at={b(C.ask[0])} out={b(C.ask[1])} tailX={ACCOUNTANT_HEAD[0]} x={bubbleX(ACCOUNTANT_HEAD[0])} top={BUBBLE.top} width={BUBBLE.width} />
@@ -137,10 +144,10 @@ export const CounterScene: React.FC = () => {
 };
 
 /** Rewind beats: the counter backwards, then her mouth giving the receipt back, then payday. */
-const R = { counter: [0, 1.5], goat: [1.5, 2.7], play: 2.7, clear: 3.1, words: 2.95 } as const;
+const R = { counter: [0, 1.0], goat: [1.0, 2.0], play: 2.0, clear: 2.35, words: 2.15 } as const;
 
 /**
- * 4 · rewind: the tape runs back. The stamp lifts, the pages turn back, the
+ * 3 · rewind: the tape runs back. The stamp lifts, the pages turn back, the
  * scrap comes out of her mouth and flies up whole, back to Papa's hand; and
  * the counter again, on payday. « Même jour. Avec MauriSchool. »
  */
@@ -153,14 +160,14 @@ export const RewindScene: React.FC = () => {
   const osd = frame < b(R.play) ? 'rew' : frame < b(R.clear) + 6 ? 'play' : null;
   let picture: React.ReactNode;
   if (frame < b(R.counter[1])) {
-    // The counter scene, played backwards from its last frame to its pages, five times as fast.
-    const counterFrom = 12 * BEAT - 1;
+    // The counter scene, played backwards from its last frame to its pages, three times as fast.
+    const counterFrom = COUNTER.beats * BEAT - 1;
     const counterTo = b(C.flip[0]);
     const f = Math.round(interpolate(frame, [0, b(R.counter[1])], [counterFrom, counterTo], clamp));
     picture = (
       <SoundContext.Provider value={{ silent: true }}>
         <LeadContext.Provider value={0}>
-          <StoryClock.Provider value={10 * BEAT}>
+          <StoryClock.Provider value={COUNTER.cutBeat * BEAT}>
             <Freeze frame={f}>
               <CounterScene />
             </Freeze>
@@ -171,7 +178,8 @@ export const RewindScene: React.FC = () => {
   } else if (frame < b(R.goat[1])) {
     // Her mouth, backwards: the scrap slides out whole, then the sheet flies up out of the frame.
     const u = tween(frame, [b(R.goat[0]), b(R.goat[0]) + 12], [0, 1], (x) => x);
-    const whole = u > 0.35;
+    const whole = u > 0.45;
+    const crumb = u < 0.2;
     const fly = tween(frame, [b(R.goat[0]) + 12, b(R.goat[1])], [0, 1], EASE_IN);
     const mouth = goatMouth();
     const w = 160;
@@ -181,7 +189,7 @@ export const RewindScene: React.FC = () => {
           chew: -(frame / 15) * 3,
           open: fly > 0 ? 0.6 * (1 - fly) : 0.2 * u,
           lids: 0.35,
-          paper: fly > 0 ? undefined : { node: <g transform={`translate(${u * 40} 0)`}>{<ReceiptSheet scrap={!whole} bitten />}</g>, angle: SCRAP.angle + u * 8, scale: SCRAP.scale },
+          paper: fly > 0 ? undefined : { node: <g transform={`translate(${u * 40} 0)`}>{<ReceiptSheet scrap={whole ? false : crumb ? 'crumb' : true} bitten />}</g>, angle: SCRAP.angle + u * 8, scale: SCRAP.scale },
         }}
         items={
           fly > 0 ? (
@@ -201,9 +209,12 @@ export const RewindScene: React.FC = () => {
         {picture}
       </Vhs>
       {frame >= b(R.play) ? (
-        <Top>
-          <Headline text={bi(COPY.rewind)} at={b(R.words)} size={rtl ? 78 : 84} {...INK} />
-        </Top>
+        <>
+          <TopScrim opacity={tween(frame, [b(R.play), b(R.words) + 4])} height={720} />
+          <Top style={{ top: TOP_UNDER_BUG }}>
+            <Headline text={bi(COPY.rewind)} at={b(R.words)} size={rtl ? 78 : 84} {...INK} />
+          </Top>
+        </>
       ) : null}
       <Sfx at={0} name="rewind" volume={0.75} length={b(R.play)} />
       <Sfx at={b(R.play)} name="switch" volume={0.7} />
@@ -219,22 +230,23 @@ const Payday: React.FC = () => (
 
 /** Pay beats: the envelope, the phone, the typing, the save, the buzz in his pocket, the lock screen. */
 const P = {
-  words: 0.9,
+  words: 1.5,
   envelope: [0.1, 0.5],
   grab: [0.45, 0.7],
   give: [0.8, 1.3],
   phone: 1.6,
-  type: [2.1, 2.9],
-  save: 3.3,
-  buzz: 3.9,
-  lock: 4.9,
-  notif: 5.3,
-  push: [5.9, 6.7],
+  type: [2.2, 3.0],
+  save: 3.5,
+  buzz: 4.1,
+  lock: 4.8,
+  notif: 5.1,
+  // In on the notification, then it holds still to the end of the scene: two seconds to read it.
+  push: [5.5, 6.1],
 } as const;
 const PHONE = { x: 540, y: 1020, scale: 0.8 } satisfies Pose;
 
 /**
- * 5 · pay: the same counter, the same day. Papa hands over the envelope; the
+ * 4 · pay: the same counter, the same day. Papa hands over the envelope; the
  * accountant records the payment on her phone (« Enregistrer un paiement »,
  * 7 500, the button); Papa's pocket buzzes, and his lock screen shows the
  * notification: the title and the generic message, never the amount.
@@ -287,14 +299,13 @@ export const PayScene: React.FC = () => {
   const typed = tween(frame, [b(P.type[0]), b(P.type[1])], [0, 1], (x) => x);
   const press = tween(frame, [b(P.save) - 3, b(P.save)]) * (1 - tween(frame, [b(P.save) + 3, b(P.save) + 9]));
   const done = frame >= b(P.save) + 4 ? 1 : 0;
-  const [bx, by] = screenToCanvas(PHONE, SCREEN_W / 2, SCREEN_H - pt(60));
+  // The fingertip lands beside the button's label, which stays readable.
+  const [bx, by] = screenToCanvas(PHONE, SCREEN_W * (rtl ? 0.24 : 0.76), SCREEN_H - pt(60));
 
   // ── his pocket, then his lock screen ──
   const buzzing = frame >= b(P.buzz) + 2 && frame < b(P.buzz) + 14;
   const lockIn = spring({ frame: frame - b(P.lock), fps, config: { damping: 16, stiffness: 120 } });
-  const lockPose: Pose = { ...PHONE, y: PHONE.y + (1 - lockIn) * 1100, rz: (1 - lockIn) * (rtl ? -8 : 8) };
   const push = tween(frame, [b(P.push[0]), b(P.push[1])], [0, 1], EASE_IN_OUT);
-  const n = NOTIFS.payment_received;
 
   let picture: React.ReactNode;
   if (deskShot) {
@@ -306,13 +317,13 @@ export const PayScene: React.FC = () => {
         <AbsoluteFill style={{ filter: 'blur(14px) brightness(0.92)', scale: '1.08' }}>
           <Desk accountant={{ face: { mouth: 'smile', look: [0, 0.9] } }} papa={{ face: { mouth: 'smile', look: [-0.6, 0.3] } }} month="payday" items={envelope} />
         </AbsoluteFill>
-        {/* In on Sidi's invoice and the amount while she types, back out for the button. */}
+        {/* In on Sidi's invoice and the amount while she types, then down to the button, the amount still in the frame. */}
         <CameraPath
-          move={10}
+          move={12}
           shots={[
-            { at: 0, zoom: 1, focus: [540, 1020] },
-            { at: b(P.type[0]), zoom: 1.4, focus: [...screenToCanvas(PHONE, SCREEN_W / 2, pt(290))], to: [540, 1000] },
-            { at: b(P.save) - 3, zoom: 1.05, focus: [540, 1060], to: [540, 1040] },
+            { at: 0, zoom: 1.3, focus: [540, 1020], to: [500, 1040] },
+            { at: b(P.type[0]), zoom: 1.75, focus: [...screenToCanvas(PHONE, SCREEN_W / 2, pt(250))], to: [500, 880] },
+            { at: b(P.save) - 5, zoom: 1.5, focus: [540, by], to: [500, 1380] },
           ]}
         >
           <AbsoluteFill style={{ perspective: 2600 }}>
@@ -324,8 +335,8 @@ export const PayScene: React.FC = () => {
             <Tap x={bx} y={by} at={b(P.save)} />
           </AbsoluteFill>
         </CameraPath>
-        <Top>
-          <RoleChip label={bi(ROLES.accountant)} icon="cash-outline" at={b(P.phone) + 4} tone="light" />
+        <Top style={{ top: TOP_UNDER_BUG }}>
+          <RoleChip label={bi(ROLES.accountant)} icon="cash-outline" at={b(P.phone) + 4} out={b(P.save) - 16} tone="light" />
         </Top>
       </AbsoluteFill>
     );
@@ -354,40 +365,19 @@ export const PayScene: React.FC = () => {
       />
     );
   } else {
-    // His lock screen: MauriSchool's notification drops in, the title and « Ouvrez MauriSchool… ».
-    const [nx, ny] = screenToCanvas(PHONE, SCREEN_W / 2, pt(300));
-    picture = (
-      <AbsoluteFill>
-        <AbsoluteFill style={{ filter: 'blur(16px) brightness(0.9)', scale: '1.1' }}>
-          <Desk accountant={{ face: { mouth: 'smile', look: [0.8, 0] } }} papa={{ face: { mouth: 'smile', look: [0.4, 1] } }} month="payday" shots={[{ at: 0, zoom: 1.5, focus: [840, 1100], to: [540, 1000] }]} />
-        </AbsoluteFill>
-        <AbsoluteFill style={{ perspective: 2600, transformOrigin: `${nx}px ${ny}px`, scale: String(1 + 0.45 * push) }}>
-          <PhoneRig pose={lockPose}>
-            <Device statusTone="light" statusBar glare={0.4} time="10:24">
-              <LockScreen time="10:24">
-                <Notification
-                  at={b(P.notif)}
-                  title={fill(n.title[lang], { student_name: FAMILY.son[lang] })}
-                  message={bi(SENSITIVE_PUSH_BODY)}
-                />
-              </LockScreen>
-            </Device>
-          </PhoneRig>
-        </AbsoluteFill>
-        <Top>
-          <RoleChip label={bi(ROLES.parent)} icon="person" at={b(P.lock) + 3} tone="light" />
-        </Top>
-      </AbsoluteFill>
-    );
+    picture = <PayLock push={push} lockIn={lockIn} notifAt={b(P.notif)} roleAt={b(P.lock) + 3} />;
   }
   const clicks = [0, 1, 2, 3].map((i) => b(P.type[0]) + ((b(P.type[1]) - b(P.type[0])) * (i + 0.5)) / 4);
   return (
     <AbsoluteFill>
       {picture}
       {frame < b(P.words) + 12 ? (
-        <Top>
-          <Headline text={bi(COPY.rewind)} at={-100} out={b(P.words)} size={rtl ? 78 : 84} {...INK} />
-        </Top>
+        <>
+          <TopScrim opacity={1 - tween(frame, [b(P.words), b(P.words) + 10])} height={720} />
+          <Top style={{ top: TOP_UNDER_BUG }}>
+            <Headline text={bi(COPY.rewind)} at={-100} out={b(P.words)} size={rtl ? 78 : 84} {...INK} />
+          </Top>
+        </>
       ) : null}
       <Sfx at={b(P.envelope[0])} name="paper" volume={0.4} rate={1.4} />
       <Sfx at={b(P.give[0])} name="soft-whoosh" volume={0.35} />
@@ -404,3 +394,39 @@ export const PayScene: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+/**
+ * His lock screen, MauriSchool's notification on it: the title and « Ouvrez
+ * MauriSchool… », never the amount. `push` (0 → 1) goes in on the
+ * notification; the app scene opens on its last frame and taps it.
+ */
+export const PayLock: React.FC<{ push: number; lockIn: number; notifAt: number; roleAt: number; children?: React.ReactNode }> = ({ push, lockIn, notifAt, roleAt, children }) => {
+  const bi = useBi();
+  const { lang, rtl } = useLang();
+  const n = NOTIFS.payment_received;
+  const lockPose: Pose = { ...PHONE, y: PHONE.y + (1 - lockIn) * 1100, rz: (1 - lockIn) * (rtl ? -8 : 8) };
+  const [nx, ny] = PAY_NOTIF;
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{ filter: 'blur(16px) brightness(0.9)', scale: '1.1' }}>
+        <Desk accountant={{ face: { mouth: 'smile', look: [0.8, 0] } }} papa={{ face: { mouth: 'smile', look: [0.4, 1] } }} month="payday" shots={[{ at: 0, zoom: 1.5, focus: [840, 1100], to: [540, 1000] }]} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ perspective: 2600, transformOrigin: `${nx}px ${ny}px`, scale: String(1 + 0.85 * push) }}>
+        <PhoneRig pose={lockPose}>
+          <Device statusTone="light" statusBar glare={0.4} time="10:24">
+            <LockScreen time="10:24">
+              <Notification at={notifAt} title={fill(n.title[lang], { student_name: FAMILY.son[lang] })} message={bi(SENSITIVE_PUSH_BODY)} />
+            </LockScreen>
+          </Device>
+        </PhoneRig>
+      </AbsoluteFill>
+      <Top style={{ top: TOP_UNDER_BUG }}>
+        <RoleChip label={bi(ROLES.parent)} icon="person" at={roleAt} tone="light" />
+      </Top>
+      {children}
+    </AbsoluteFill>
+  );
+};
+
+/** The notification on his lock screen, on the canvas: where the push goes in, and where the app scene taps. */
+export const PAY_NOTIF = screenToCanvas(PHONE, SCREEN_W / 2, pt(300));

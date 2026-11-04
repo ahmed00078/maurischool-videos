@@ -1,15 +1,63 @@
 {
   "bpm": 120,
   "fps": 30,
-  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s), 54 beats = 27 s. Every cut is hard: the courtyard and the office are continuous sets, and the goat chews on the video's clock, so the last frame runs into the first (it loops). The rewind plays the counter backwards inside its own scene. scripts/chevre-01/make-music.mjs reads this file, so the music follows any retiming.",
+  "comment": "Scene lengths in beats (120 BPM: 1 beat = 15 frames = 0.5 s), 60 beats = 30 s. Ép. 1 of « La chèvre a encore frappé ». Every cut is hard: the courtyard and the office are continuous sets, and the goat chews on the video's clock. Each proof holds still long enough to read (the scrap in her mouth, PREUVE : 0, the lock screen, the receipt, the score). The rewind plays the counter backwards inside its own scene. The music loops; the picture cuts from her stare back to the receipt in his hand. scripts/chevre-01/make-music.mjs reads this file, so the music follows any retiming of whole scenes; the cues inside a scene are in the scenes and in that script.",
   "scenes": [
-    { "id": "hook", "beats": 5, "out": { "type": "cut", "frames": 0 } },
-    { "id": "yard", "beats": 5, "out": { "type": "cut", "frames": 0 } },
-    { "id": "counter", "beats": 12, "out": { "type": "cut", "frames": 0 } },
-    { "id": "rewind", "beats": 4, "out": { "type": "cut", "frames": 0 } },
-    { "id": "pay", "beats": 7, "out": { "type": "cut", "frames": 0 } },
-    { "id": "app", "beats": 9, "out": { "type": "cut", "frames": 0 } },
-    { "id": "twist", "beats": 6, "out": { "type": "cut", "frames": 0 } },
-    { "id": "outro", "beats": 6, "out": { "type": "cut", "frames": 0 } }
+    {
+      "id": "hook",
+      "beats": 8,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "counter",
+      "beats": 10,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "rewind",
+      "beats": 3,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "pay",
+      "beats": 10,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "app",
+      "beats": 10,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "twist",
+      "beats": 12,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    },
+    {
+      "id": "outro",
+      "beats": 7,
+      "out": {
+        "type": "cut",
+        "frames": 0
+      }
+    }
   ]
 }
