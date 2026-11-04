@@ -1,10 +1,11 @@
 import React from 'react';
-import { Composition, Folder } from 'remotion';
+import { Composition, Folder, Still } from 'remotion';
 import { LeadContext, MarksContext, totalFrames } from '../../shared/beat';
-import { PORTRAIT } from '../../shared/formats';
+import { PORTRAIT, POST } from '../../shared/formats';
 import { Lang, LangProvider } from '../../shared/lang';
 import { FPS } from '../../shared/tokens';
 import { Names, namesMetadata, PLACEHOLDER_NAMES } from './Names';
+import { NamesCard } from './NamesCard';
 import { Cover, SCENE_COMPONENTS, TeachersDay, TeachersDayProps } from './TeachersDay';
 import { SceneId, TIMELINE, timelineFor } from './timeline';
 
@@ -16,6 +17,7 @@ import { SceneId, TIMELINE, timelineFor } from './timeline';
  *   TeachersDay2026-FR/AR-Check    the same with the Reels/TikTok zones drawn
  *   TeachersDay2026-Cover-FR/AR    the cover as a still
  *   TeachersDay2026-Names-FR/AR    part 2, the day after: the names from the comments
+ *   TeachersDay2026-NamesCard-FR/AR  the same names as one 4:5 image for the feed
  *   TeachersDay2026-<scene>        each scene alone, in French
  */
 
@@ -74,6 +76,15 @@ export const TeachersDay2026Compositions: React.FC = () => (
         fps={FPS}
         durationInFrames={300}
         calculateMetadata={namesMetadata}
+        defaultProps={{ lang, names: PLACEHOLDER_NAMES[lang], safeZones: false }}
+      />
+    ))}
+    {(['fr', 'ar'] as Lang[]).map((lang) => (
+      <Still
+        key={`names-card-${lang}`}
+        id={`TeachersDay2026-NamesCard-${lang.toUpperCase()}`}
+        component={NamesCard}
+        {...POST}
         defaultProps={{ lang, names: PLACEHOLDER_NAMES[lang], safeZones: false }}
       />
     ))}
