@@ -14,7 +14,7 @@ import { makeEpisode } from '../../shared/verite/episode';
 import { BustedScene, CheckScene, ClaimScene, HookScene, LANDED, OutroMoment, OutroScene, Shot, VoteScene } from '../../shared/verite/scenes';
 import { headCenter, lookAt, ribbonAt, SuspectState, Who } from '../../shared/verite/stage';
 import { COPY, TEASE } from './copy';
-import { TEASE_BEATS, timelineFor } from './timeline';
+import { BRAVO_BEAT, CHECK_READ, TEASE_BEATS, timelineFor } from './timeline';
 
 /**
  * « Qui ne dit pas la vérité ? », episode 3, « Le bulletin ». The format
@@ -135,9 +135,6 @@ const FatherScene: React.FC = () => (
   />
 );
 
-/** The beat of the check scene where BRAVO lands over the FAUX. */
-const BRAVO_BEAT = 11.6;
-
 /**
  * check: the father's payment holds, Sidi's 12 holds, Zahra's 11 does not.
  * She keeps her sad face through it all, no sweat: she is acting. FAUX lands
@@ -151,6 +148,7 @@ const Check: React.FC = () => {
     <CheckScene
       items={useFamilyInbox()}
       rows={['father', 'son', 'daughter']}
+      read={CHECK_READ}
       twist={{ kind: 'bravo', beat: BRAVO_BEAT }}
       details={{ 1: grades('son'), 2: grades('daughter') }}
       react={({ rtl, caught, twisted }) => {

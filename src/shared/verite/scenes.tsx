@@ -230,6 +230,11 @@ const PHONE_HOLD: [number, number] = [505, 1060];
  *   b5      row 2                        b6.5 cut: VRAI
  *   b8      row 3, held                  b10.5 cut: FAUX
  *
+ * Those are the default `read` ([1.5, 1.5, 2.5]: the beats each row stays on
+ * screen). An episode that gives the viewer longer to read passes its own, and
+ * everything after a row moves with it; the lineup keeps `CHECK_GAP` beats
+ * between two rows.
+ *
  * By default the one who does not hold sweats a little more each time someone
  * else is cleared, the cleared grin, and at the end everyone turns to look.
  * `react` replaces any of those states.
@@ -239,6 +244,9 @@ const PHONE_HOLD: [number, number] = [505, 1060];
  * shows it instead, framed on `focusY` (app points from the screen's top).
  */
 export type CheckDetail = { screen: (emphasis: number) => React.ReactNode; focusY: number };
+
+/** Beats the lineup is shown between two rows, for the stamp. */
+export const CHECK_GAP = 1.5;
 
 export const CheckScene: React.FC<{
   items: InboxItem[];
@@ -250,7 +258,9 @@ export const CheckScene: React.FC<{
    */
   twist?: { kind: Verdict; beat: number };
   details?: Partial<Record<0 | 1 | 2, CheckDetail>>;
-}> = ({ items, rows: order, react, twist, details = {} }) => {
+  /** Beats each row stays on screen. */
+  read?: [number, number, number];
+}> = ({ items, rows: order, react, twist, details = {}, read = [1.5, 1.5, 2.5] }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const b = useBeat();
@@ -258,11 +268,13 @@ export const CheckScene: React.FC<{
   const { rtl } = useLang();
   const { copy } = useEpisode();
 
-  const rows: { phone: [number, number]; stamp: number; who: Who }[] = [
-    { phone: [b(2), b(3.5)], stamp: b(3.5) + 3, who: order[0] },
-    { phone: [b(5), b(6.5)], stamp: b(6.5) + 3, who: order[1] },
-    { phone: [b(8), b(10.5)], stamp: b(10.5) + 3, who: order[2] },
-  ];
+  let opens = 2;
+  const rows = order.map((who, i): { phone: [number, number]; stamp: number; who: Who; closes: number } => {
+    const closes = opens + read[i];
+    const r = { phone: [b(opens), b(closes)] as [number, number], stamp: b(closes) + 3, who, closes };
+    opens = closes + CHECK_GAP;
+    return r;
+  });
   const phoneWindow = rows.findIndex((r) => frame >= r.phone[0] && frame < r.phone[1]);
   const showPhone = frame < b(2) || phoneWindow >= 0;
 
@@ -282,7 +294,7 @@ export const CheckScene: React.FC<{
     i === phoneWindow ? tween(frame, [rows[i].phone[0] + (i === 0 ? 8 : 2), rows[i].phone[0] + (i === 0 ? 18 : 10)]) : 0,
   );
   // The last row shakes a little before the cut: the drumroll.
-  const nerves = phoneWindow === 2 ? tween(frame, [b(9), b(10.5)]) : 0;
+  const nerves = phoneWindow === 2 ? tween(frame, [b(rows[2].closes - 1.5), rows[2].phone[1]]) : 0;
   const shake: [number, number] = [Math.sin(frame * 2.3) * 5 * nerves, Math.cos(frame * 1.9) * 4 * nerves];
 
   // ── the lineup, between rows ──

@@ -9,7 +9,7 @@ import { makeEpisode } from '../../shared/verite/episode';
 import { BustedScene, CheckScene, ClaimScene, HookScene, LANDED, OutroScene, Shot, VoteScene } from '../../shared/verite/scenes';
 import { lookAt, paperAt } from '../../shared/verite/stage';
 import { COPY } from './copy';
-import { timelineFor } from './timeline';
+import { CHECK_READ, timelineFor } from './timeline';
 
 /**
  * « Qui ne dit pas la vérité ? », episode 1: a lineup of three (the son, the
@@ -101,7 +101,7 @@ const FatherScene: React.FC = () => (
 );
 
 /** check: Zahra's 20 holds, the father's payment holds, Sidi's 7.5 does not. */
-const Check: React.FC = () => <CheckScene items={useFamilyInbox()} rows={['daughter', 'father', 'son']} />;
+const Check: React.FC = () => <CheckScene items={useFamilyInbox()} rows={['daughter', 'father', 'son']} read={CHECK_READ} />;
 
 /** busted: his test rises out of the pocket, and a marker circles the red 7.5. */
 const Busted: React.FC = () => {

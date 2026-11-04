@@ -11,7 +11,7 @@ import { makeEpisode } from '../../shared/verite/episode';
 import { BustedScene, CheckScene, ClaimScene, HookScene, LANDED, OutroScene, Shot, VoteScene } from '../../shared/verite/scenes';
 import { handsAt, lookAt } from '../../shared/verite/stage';
 import { COPY } from './copy';
-import { timelineFor } from './timeline';
+import { CHECK_READ, timelineFor } from './timeline';
 
 /**
  * « Qui ne dit pas la vérité ? », episode 2, « Le henné ». Everyone expects
@@ -129,6 +129,7 @@ const Check: React.FC = () => (
   <CheckScene
     items={useFamilyInbox()}
     rows={['son', 'father', 'daughter']}
+    read={CHECK_READ}
     react={({ rtl, stamped, caught }) =>
       caught
         ? { son: { face: { mouth: 'smirk', brows: 0.9, look: [lookAt('son', 'daughter', rtl), 0] } } }

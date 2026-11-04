@@ -6,4 +6,7 @@ import data from './timeline.json';
 /** No voice-over: both languages share one timing (see teachers-day-2026). */
 export const timelineFor = (lang: Lang | 'base') => buildTimeline(data as TimelineJson<VeriteSceneId>, {}, lang);
 
+/** Beats each notification stays on screen in `check`. */
+export const CHECK_READ = data.checkRead as [number, number, number];
+
 export const TIMELINE = timelineFor('base');

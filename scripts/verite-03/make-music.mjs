@@ -26,8 +26,8 @@ const BEAT = 60 / timeline.bpm;
 const TEASE_BEATS = 3;
 /** Outro beats: the father's line, and his stamp (LINE in Verite.tsx). */
 const LINE = { at: 2, stamp: 3.5 };
-/** Check beat: BRAVO lands (BRAVO_BEAT in Verite.tsx). */
-const BRAVO = 11.6;
+/** Check beat: BRAVO lands (BRAVO_BEAT in timeline.ts). */
+const BRAVO = 2 + timeline.checkRead.reduce((a, r) => a + r, 0) + 2 * 1.5 + timeline.bravoAfter;
 const SR = 44100;
 let at;
 let TOTAL;
@@ -274,16 +274,25 @@ const compose = (tease) => {
   // ── check ──
   {
     const s = at.check;
-    drone(s, s + 10.5, 38, 0.045);
-    for (let b = s; b < s + 8; b++) kick(b, 0.28);
+    // The rows as CheckScene lays them out: the first opens on beat 2, each is read
+    // for its `checkRead` beats, and the lineup takes 1.5 beats between two.
+    const closes = [];
+    for (let open = 2, i = 0; i < 3; i++) {
+      closes.push(open + timeline.checkRead[i]);
+      open = closes[i] + 1.5;
+    }
+    const last = closes[2] - timeline.checkRead[2];
+    const cut = closes[2];
+    drone(s, s + cut, 38, 0.045);
+    for (let b = s; b < s + last; b++) kick(b, 0.28);
     // After each "Vrai": a quick lift in D major.
-    for (const lift of [s + 3.5, s + 6.5]) {
+    for (const lift of [s + closes[0], s + closes[1]]) {
       [62, 66, 69, 74].forEach((m, i) => pluck(lift + 0.1 + i * 0.12, m, 0.3, 0.6, 0.2));
     }
     // The last row: the roll, and nothing under the cut but the sting.
-    roll(s + 8, s + 10.5, 0.6);
-    for (let b = s + 8; b < s + 10.5; b += 0.5) kick(b, 0.3 + 0.3 * ((b - s - 8) / 2.5));
-    drone(s + 8, s + 10.5, 39, 0.035);
+    roll(s + last, s + cut, 0.6);
+    for (let b = s + last; b < s + cut; b += 0.5) kick(b, 0.3 + 0.3 * ((b - s - last) / (cut - last)));
+    drone(s + last, s + cut, 39, 0.035);
   }
   party(tease);
 };
