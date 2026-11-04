@@ -1,2 +1,5 @@
 node_modules
 out
+
+# social/: the moments are rendered from src/shared/moments (social/scripts/render-moments.mjs)
+social/img/moments

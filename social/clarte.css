@@ -1,0 +1,255 @@
+/* MauriSchool Clarté — the social kit.
+   One stylesheet for every post: tokens, surfaces, and the components a post is built from.
+   Canvas units are real pixels on a 1080-wide post. */
+
+@font-face { font-family: "Outfit"; src: url("fonts/Outfit-latin.woff2") format("woff2"); font-weight: 300 800; font-display: block; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Outfit"; src: url("fonts/Outfit-latin-ext.woff2") format("woff2"); font-weight: 300 800; font-display: block; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-400-arabic.woff2") format("woff2"); font-weight: 400; font-display: block; unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EEFF; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-500-arabic.woff2") format("woff2"); font-weight: 500; font-display: block; unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EEFF; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-700-arabic.woff2") format("woff2"); font-weight: 700; font-display: block; unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EEFF; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-800-arabic.woff2") format("woff2"); font-weight: 800; font-display: block; unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EEFF; }
+
+/* Tajawal's own Latin: digits, codes and Latin names inside Arabic text, as the app renders them */
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-400-latin.woff2") format("woff2"); font-weight: 400; font-display: block; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-500-latin.woff2") format("woff2"); font-weight: 500; font-display: block; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-700-latin.woff2") format("woff2"); font-weight: 700; font-display: block; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Tajawal"; src: url("fonts/Tajawal-800-latin.woff2") format("woff2"); font-weight: 800; font-display: block; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+:root {
+  /* Brand core (BRAND.md) */
+  --blue: #465FFF;          /* Mauri Blue */
+  --navy: #2F3B69;          /* Deep Navy: the mark's ink, headlines on paper */
+  --ink: #1F2937;           /* body text */
+  --paper: #FFFFFF;
+  /* Social extensions */
+  --mist: #EEF2FF;          /* brand-50: the socle on paper */
+  --night: #141B4D;         /* the one dark surface (video stage navy) */
+  --night-socle: #1D276D;   /* the socle on night */
+  --blue-socle: #3B4FDB;    /* brand-600: the socle on blue */
+  --periwinkle: #A5B4FC;    /* brand-300: outcome line on night */
+  --lavender: #C7D2FE;      /* brand-200: outcome line on blue (display sizes only) */
+  --sable: #E6BA84;         /* the courtyard wall, from the videos */
+  --sable-ground: #ECD3A2;  /* the courtyard floor */
+  --scene-ink: #2A1D1A;     /* headline ink on sable (video INK) */
+  --scene-blue: #3145B7;    /* brand-700: outcome line on sable */
+  --cachet: #E0242B;        /* the stamp, and nothing else */
+  --muted: #6B7280;
+  --line: #E5E7EB;
+  --success: #16A34A;
+  --success-ink: #16783B;
+  --success-soft: #DCFCE7;
+
+  --font-fr: "Outfit", "Segoe UI", system-ui, sans-serif;
+  --font-ar: "Tajawal", "Geeza Pro", Tahoma, sans-serif;
+
+  --margin: 72px;
+  --radius-dot: 5px;
+  --radius-stamp: 18px;
+  --radius-card: 32px;
+  --radius-socle: 72px;
+
+  --shadow-proof: 0 40px 80px -24px rgba(20, 27, 77, .38), 0 10px 24px -6px rgba(20, 27, 77, .16);
+  --shadow-card: 0 24px 48px -16px rgba(20, 27, 77, .30), 0 4px 12px rgba(20, 27, 77, .08);
+  --shadow-stamp: 0 18px 36px -10px rgba(110, 8, 14, .45), 0 3px 0 rgba(110, 8, 14, .35);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #d9dce6; }
+img { display: block; }
+
+/* ---------- Canvas & surfaces ---------- */
+.cl-canvas {
+  position: relative; overflow: hidden;
+  width: 1080px; height: 1350px;
+  font-family: var(--font-fr); color: var(--ink);
+  -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision;
+  font-feature-settings: "kern" 1;
+}
+.cl-canvas[data-format="story"] { height: 1920px; }
+.cl-canvas[data-format="square"] { height: 1080px; }
+.cl-canvas[dir="rtl"] { font-family: var(--font-ar); }
+
+.is-paper { background: var(--paper); --fact: var(--navy); --outcome: var(--blue); --body: var(--ink); --soft: var(--muted); --socle: var(--blue); --tag-ink: var(--navy); --tag-dot: var(--blue); }
+.is-blue  { background: var(--blue);  --fact: #FFFFFF; --outcome: var(--lavender); --body: #FFFFFF; --soft: #E0E7FF; --socle: var(--blue-socle); --tag-ink: #FFFFFF; --tag-dot: #FFFFFF; }
+.is-night { background: var(--night); --fact: #FFFFFF; --outcome: var(--periwinkle); --body: #E0E7FF; --soft: #C7D2FE; --socle: var(--night-socle); --tag-ink: #FFFFFF; --tag-dot: var(--blue); }
+.is-sable { background: linear-gradient(180deg, #EBC48F 0%, var(--sable) 55%, #DDAE77 100%); --fact: var(--scene-ink); --outcome: var(--scene-blue); --body: var(--scene-ink); --soft: #5A4130; --socle: var(--sable-ground); --tag-ink: var(--scene-ink); --tag-dot: var(--scene-blue); }
+
+/* Film grain on colour surfaces, as in the videos (fx.tsx Grain) */
+.cl-grain { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: .22;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+.abs { position: absolute; }
+/* Numbers, codes and Latin names inside Arabic lines keep their order */
+.ltr { direction: ltr; unicode-bidi: isolate; }
+
+/* ---------- Header: lockup + audience tag ---------- */
+.cl-head { position: absolute; top: var(--margin); inset-inline: var(--margin); height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.cl-lockup { display: flex; align-items: center; gap: 18px; direction: ltr; }
+.cl-lockup__mark { width: 70px; height: auto; }
+.cl-lockup__tile { width: 66px; height: 66px; border-radius: 16px; background: #FFFFFF; display: grid; place-items: center; }
+.cl-lockup__tile img { width: 48px; height: auto; }
+.cl-lockup__word { font-family: var(--font-fr); font-weight: 600; font-size: 44px; letter-spacing: -.012em; line-height: 1; }
+.is-paper .cl-lockup__word .m { color: var(--blue); }
+.is-paper .cl-lockup__word .s { color: var(--navy); }
+.is-sable .cl-lockup__word { color: var(--navy); }
+.is-blue .cl-lockup__word, .is-night .cl-lockup__word { color: #FFFFFF; }
+
+.cl-tag { display: inline-flex; align-items: center; gap: 14px; font-weight: 500; font-size: 30px; line-height: 1; color: var(--tag-ink); white-space: nowrap; }
+.cl-tag::before { content: ""; width: 20px; height: 20px; border-radius: var(--radius-dot); background: var(--tag-dot); flex: none; }
+[dir="rtl"] .cl-tag { font-weight: 700; font-size: 31px; }
+
+/* ---------- Headline: fact, then outcome ---------- */
+.cl-headline { margin: 0; font-weight: 700; font-size: 96px; line-height: 1; letter-spacing: -.03em; text-wrap: balance; }
+.cl-headline > span { display: block; }
+.cl-headline .fact { color: var(--fact); }
+.cl-headline .outcome { color: var(--outcome); }
+[dir="rtl"] .cl-headline { font-weight: 800; letter-spacing: 0; line-height: 1.22; font-size: 88px; }
+.cl-headline.xl { font-size: 124px; }
+.cl-headline.lg { font-size: 104px; }
+.cl-headline.md { font-size: 80px; }
+.cl-headline.sm { font-size: 68px; letter-spacing: -.025em; }
+[dir="rtl"] .cl-headline.xl { font-size: 112px; }
+[dir="rtl"] .cl-headline.lg { font-size: 96px; }
+[dir="rtl"] .cl-headline.md { font-size: 74px; }
+[dir="rtl"] .cl-headline.sm { font-size: 64px; }
+
+.cl-lead { margin: 0; font-size: 38px; line-height: 1.3; font-weight: 400; color: var(--body); letter-spacing: -.008em; text-wrap: pretty; }
+[dir="rtl"] .cl-lead { font-weight: 500; font-size: 37px; line-height: 1.5; letter-spacing: 0; }
+
+/* ---------- Le Socle: the logo's module, under the proof ---------- */
+.cl-socle { position: absolute; background: var(--socle); border-radius: var(--radius-socle); }
+
+/* ---------- La Preuve: a real phone, a real card ---------- */
+.cl-phone { position: absolute; filter: drop-shadow(0 40px 50px rgba(20, 27, 77, .30)) drop-shadow(0 8px 14px rgba(20, 27, 77, .14)); }
+.cl-phone > img { width: 100%; height: auto; }
+.is-night .cl-phone, .is-blue .cl-phone { filter: drop-shadow(0 40px 60px rgba(4, 7, 30, .55)) drop-shadow(0 8px 14px rgba(4, 7, 30, .3)); }
+
+/* Le Repère: the ring on the one line the headline is about. Coordinates in % of the phone image. */
+.cl-repere { position: absolute; border: 6px solid var(--blue); border-radius: 22px; }
+
+
+/* Notification: verbatim app wording, the way a phone shows it */
+.cl-notif { position: absolute; background: #FFFFFF; border-radius: var(--radius-card); padding: 30px 34px 32px; box-shadow: var(--shadow-card); display: grid; grid-template-columns: 72px 1fr; column-gap: 24px; color: var(--ink); }
+.cl-notif__icon { width: 72px; height: 72px; border-radius: 17px; background: #FFFFFF; border: 2px solid var(--line); display: grid; place-items: center; }
+.cl-notif__icon img { width: 50px; }
+.cl-notif__meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 25px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+.cl-notif__app { font-family: var(--font-fr); }
+.cl-notif__title { font-size: 31px; font-weight: 600; line-height: 1.25; letter-spacing: -.01em; margin-bottom: 6px; }
+.cl-notif__msg { font-size: 28px; line-height: 1.38; color: #374151; }
+[dir="rtl"] .cl-notif__title { font-weight: 700; font-size: 31px; letter-spacing: 0; line-height: 1.4; }
+[dir="rtl"] .cl-notif__msg { font-weight: 500; font-size: 28px; line-height: 1.6; }
+
+/* Toast, as the teacher app shows it when there is no network */
+.cl-toast { position: absolute; background: #FFFFFF; border-radius: 28px; padding: 26px 30px; box-shadow: var(--shadow-card); display: grid; grid-template-columns: 56px 1fr; column-gap: 20px; align-items: start; }
+.cl-toast__check { width: 56px; height: 56px; border-radius: 16px; background: var(--success-soft); display: grid; place-items: center; }
+.cl-toast__title { font-size: 31px; font-weight: 600; color: var(--success-ink); line-height: 1.2; margin: 6px 0 6px; }
+.cl-toast__msg { font-size: 26px; line-height: 1.38; color: #374151; }
+[dir="rtl"] .cl-toast__title { font-weight: 700; line-height: 1.4; margin-top: 2px; }
+[dir="rtl"] .cl-toast__msg { font-weight: 500; line-height: 1.6; }
+
+/* ---------- Le Cachet: the one red thing ---------- */
+.cl-cachet { position: absolute; background: var(--cachet); color: #FFFFFF; border-radius: var(--radius-stamp); padding: 28px 36px 28px; box-shadow: var(--shadow-stamp); transform: rotate(-3deg); transform-origin: center; }
+.cl-cachet::after { content: ""; position: absolute; inset: 11px; border: 3px solid rgba(255, 255, 255, .62); border-radius: 10px; pointer-events: none; }
+[dir="rtl"] .cl-cachet { transform: rotate(3deg); }
+/* On night the red shadow fringes maroon: shadow from the ground's own dark instead. On blue, red and blue share a luminance,
+   so the stamp gets a white die-cut edge that survives JPEG chroma subsampling. */
+.is-night .cl-cachet { box-shadow: 0 18px 36px -10px rgba(3, 5, 22, .7), 0 3px 0 rgba(70, 6, 12, .7); }
+.is-blue .cl-cachet { box-shadow: 0 0 0 6px #fff, 0 22px 40px -12px rgba(9, 16, 70, .55); }
+.cl-cachet__label { display: flex; align-items: center; gap: 12px; font-size: 29px; font-weight: 600; line-height: 1.1; }
+.cl-cachet__label svg { width: 30px; height: 30px; flex: none; }
+.cl-cachet__num { font-family: var(--font-fr); font-weight: 800; font-size: 74px; line-height: 1; letter-spacing: -.025em; margin: 8px 0 6px; direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-variant-numeric: tabular-nums; }
+[dir="rtl"] .cl-cachet__num { text-align: end; }
+.cl-cachet__ways { font-size: 26px; font-weight: 500; }
+[dir="rtl"] .cl-cachet__label { font-weight: 700; font-size: 30px; }
+[dir="rtl"] .cl-cachet__ways { font-weight: 500; }
+
+.cl-cachet.xl { padding: 34px 48px 34px; }
+.cl-cachet.xl .cl-cachet__label { font-size: 34px; }
+.cl-cachet.xl .cl-cachet__label svg { width: 36px; height: 36px; }
+.cl-cachet.xl .cl-cachet__num { font-size: 120px; margin: 12px 0 10px; }
+.cl-cachet.xl .cl-cachet__ways { font-size: 31px; }
+.cl-cachet.mini { padding: 20px 30px 20px; border-radius: 14px; }
+.cl-cachet.mini::after { inset: 8px; border-width: 2.5px; border-radius: 8px; }
+.cl-cachet.mini .cl-cachet__label { font-size: 25px; gap: 10px; }
+.cl-cachet.mini .cl-cachet__label svg { width: 26px; height: 26px; }
+.cl-cachet.mini .cl-cachet__num { font-size: 58px; margin: 6px 0 4px; }
+.cl-cachet.mini .cl-cachet__ways { font-size: 22px; }
+
+/* ---------- Steps (carousels only: a real sequence) ---------- */
+.cl-steps { position: absolute; display: flex; gap: 14px; }
+.cl-step { width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; font-family: var(--font-fr); font-weight: 700; font-size: 32px; color: #5B6475; background: #F1F3F8; }
+.cl-step.on { background: var(--blue); color: #FFFFFF; }
+.cl-step.done { background: var(--mist); color: var(--blue); }
+
+/* ---------- Footer ---------- */
+.cl-url { position: absolute; bottom: var(--margin); font-family: var(--font-fr); font-size: 28px; font-weight: 500; color: var(--soft); letter-spacing: -.005em; direction: ltr; }
+/* The carousel advances to the left in both languages: the cue sits at the reading start and always points right, never mirrored */
+.cl-swipe { position: absolute; bottom: var(--margin); direction: ltr; display: flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 600; color: var(--blue); }
+.cl-swipe i { width: 52px; height: 52px; border-radius: 14px; background: var(--blue); display: grid; place-items: center; }
+[dir="rtl"] .cl-swipe span { font-weight: 700; }
+
+/* Store buttons (story card). Replace with the official badge files before publishing. */
+.cl-store { display: inline-flex; align-items: center; gap: 16px; padding: 18px 30px; border-radius: 18px; background: #000; color: #fff; border: 2px solid rgba(255,255,255,.28); direction: ltr; }
+.cl-store small { display: block; font-size: 20px; font-weight: 500; opacity: .85; line-height: 1.1; }
+.cl-store b { display: block; font-size: 32px; font-weight: 600; line-height: 1.1; letter-spacing: -.01em; }
+
+/* ---------- The phone: the video kit's Device.tsx, rebuilt in CSS (613 x 1294 at 1x) ---------- */
+/* Size it with --w on .cl-device-wrap; the device scales itself with zoom so captures stay sharp. */
+.cl-device-wrap { position: absolute; width: var(--w, 500px); aspect-ratio: 613 / 1294; }
+.cl-device { position: relative; width: 613px; height: 1294px; border-radius: 80px; padding: 14px; box-sizing: border-box;
+  background: linear-gradient(145deg, #3a3f55 0%, #14172a 45%, #2b3044 100%);
+  box-shadow: 0 0 0 2px #5b6076 inset, 0 0 0 5px #0a0c16 inset, 0 50px 90px -20px rgba(8, 12, 40, .55), 0 24px 40px -18px rgba(8, 12, 40, .45); }
+.cl-device::before { content: ""; position: absolute; right: -5px; top: 250px; width: 5px; height: 110px; border-radius: 3px; background: #2b3044; }
+.cl-device::after { content: ""; position: absolute; left: -5px; top: 210px; width: 5px; height: 160px; border-radius: 3px; background: linear-gradient(#2b3044 0 70px, transparent 70px 90px, #2b3044 90px); }
+.cl-device__screen { position: relative; width: 585px; height: 1266px; border-radius: 66px; overflow: hidden; background: #fff; isolation: isolate; }
+.cl-device__shot { position: absolute; top: 66px; left: 0; width: 585px; height: auto; }
+.cl-device__bar { position: absolute; top: 0; left: 0; right: 0; height: 66px; padding: 0 44px; display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-fr); font-weight: 600; font-size: 24px; color: #111827; z-index: 10; direction: ltr; background: #fff; }
+[dir="rtl"] .cl-device__bar { flex-direction: row-reverse; } /* iOS mirrors the status bar in Arabic */
+.cl-device__cam { position: absolute; top: 20px; left: 50%; width: 30px; height: 30px; margin-left: -15px; border-radius: 15px; z-index: 20;
+  background: radial-gradient(circle at 35% 35%, #2a3050 0%, #05060c 60%); }
+.cl-device__glare { position: absolute; inset: 0; pointer-events: none; z-index: 30; opacity: .25;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.10) 42%, rgba(255,255,255,0) 55%); }
+.cl-device .cl-repere { z-index: 15; border-width: 5px; border-radius: 26px; }
+
+/* ---------- The in-app notification row (mobile NotificationsScreen, 1.0.8) ---------- */
+/* Payment and grade pushes are sensitive: a locked phone shows only the title and
+   "Ouvrez MauriSchool pour consulter le détail." The full text lives here, in the app. */
+.cl-inrow { position: absolute; background: #fff; border-radius: 30px; border: 2px solid var(--row-border, #D6E2FB); padding: 28px 30px 26px;
+  display: grid; grid-template-columns: 76px 1fr; column-gap: 24px; box-shadow: var(--shadow-card); color: var(--ink);
+  border-inline-start: var(--bar, 6px) solid var(--row-accent, #2563EB); }
+.cl-inrow.is-grade { --row-accent: #2563EB; --row-border: #D6E2FB; --tile: #2563EB; --tile-ink: #fff; }
+.cl-inrow.is-finance { --row-accent: #7C3AED; --row-border: #E6DAFC; --tile: #F5F0FE; --tile-ink: #7C3AED; }
+.cl-inrow__tile { width: 76px; height: 76px; border-radius: 20px; background: var(--tile); color: var(--tile-ink); display: grid; place-items: center; }
+.cl-inrow__tile svg { width: 40px; height: 40px; }
+.cl-inrow__title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-size: 31px; font-weight: 600; line-height: 1.25; letter-spacing: -.01em; }
+.cl-inrow__title i { flex: none; width: 15px; height: 15px; border-radius: 50%; background: var(--row-accent); transform: translateY(-4px); }
+.cl-inrow__msg { margin-top: 8px; font-size: 27px; line-height: 1.4; color: #4B5563; }
+.cl-inrow__time { margin-top: 10px; font-size: 23px; color: #6B7280; font-variant-numeric: tabular-nums; }
+[dir="rtl"] .cl-inrow__title { font-weight: 700; line-height: 1.4; letter-spacing: 0; }
+[dir="rtl"] .cl-inrow__msg { font-weight: 500; line-height: 1.6; }
+
+/* ---------- Paper: the school's real documents, as the backend renders them ---------- */
+.cl-doc { position: absolute; background: #fff; box-shadow: 0 2px 4px rgba(10, 14, 40, .18), 0 30px 60px -18px rgba(10, 14, 40, .55); border-radius: 4px; }
+.cl-doc img { display: block; width: 100%; height: auto; border-radius: 4px; }
+
+/* ---------- The sentence slot (Taste: "the sentence is the layout") ---------- */
+/* A real piece of the subject stands in for a word, set at cap height inside the headline. */
+.cl-slot { display: inline-block; height: .74em; aspect-ratio: 1.68; vertical-align: -0.02em; margin: 0 .06em; border-radius: .16em; background: #fff;
+  box-shadow: 0 .04em .12em rgba(0, 0, 0, .25); overflow: hidden; position: relative; }
+.cl-slot img { position: absolute; left: 50%; top: 50%; width: 112%; transform: translate(-50%, -50%) rotate(-4deg); }
+[dir="rtl"] .cl-slot { vertical-align: -0.12em; }
+
+/* ---------- La Loupe: the ringed line lifted out of the real capture at reading size ---------- */
+/* Real pixels (3x captures, real PDFs), cropped and set so app text lands near 30 px on the canvas. */
+.cl-loupe { position: absolute; border-radius: 28px; background: #fff; overflow: hidden;
+  box-shadow: 0 0 0 6px var(--blue), 0 26px 50px -18px rgba(20, 27, 77, .38); }
+.cl-loupe > img { position: absolute; max-width: none; }
+.is-blue .cl-loupe, .is-night .cl-loupe { box-shadow: 0 0 0 6px #FFFFFF, 0 26px 50px -18px rgba(3, 5, 22, .6); }
+.nw { white-space: nowrap; }
+/* A round stamp in the sentence: a disc one cap-height and a half tall, the whole stamp visible. */
+.cl-slot.round { height: .92em; aspect-ratio: 1; border-radius: 50%; vertical-align: -0.16em; }
+.cl-slot.round img { width: 94%; transform: translate(-50%, -50%) rotate(-8deg); }
+
+/* T8 · Le Moment: the kit's drawn scene fills the canvas (1080 × 1350, rendered by social/scripts/render-moments.mjs). */
+.cl-moment { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
