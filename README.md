@@ -20,6 +20,12 @@ from that kit, not from zero.
 | [`promo-2026`](src/videos/promo-2026) | Launch promo, Sept 2026: 11 scenes, French and Arabic, voiced (ElevenLabs) | FR ×1.3 (46 s), AR ×1.4 (51 s), cover on frame 0; `Promo2026-FR/AR-Short` (20.5 s, no voice): opens on the father's lock screen (Mariem's absence), rewinds to the teacher's register, then payment, the director's morning, the demo offer |
 | [`promo-v1`](src/videos/promo-v1) | First 30 s WhatsApp promo, kept as shipped (predates the kit) | — |
 
+## Posts
+
+The feed posts (Facebook, Instagram) live in [`social/`](social): HTML templates rendered to PNG, the
+app's real captures and documents, and the drawn moments from `src/shared/moments`. Every post carries
+the red stamp with the number. See [`social/README.md`](social/README.md).
+
 ## Getting started
 
 ```bash
@@ -63,7 +69,8 @@ src/
       inbox.tsx               the notification centre, where sensitive values show (the lock screen hides them)
       childGrades.tsx         a parent's child profile on its grades tab (where a report-card notification leads): the term's average, the subjects
       confetti.tsx            a burst of paper squares, the same on every render
-      people.tsx              the family, drawn flat: boy, girl in headscarf, father in daraa; faces that act
+      people.tsx              the cast, drawn flat: boy, girl in headscarf, father in daraa, the accountant and the teacher (one melhfa
+                              drawing in two cloths), the director in his white daraa, pupils seen from behind; faces that act
       goat.tsx                the goat: chews on the beat, stares at the camera, snatches, steps, ears that droop; paper in her mouth
       paper.tsx               a carbon-book receipt (whole, or the scrap a goat leaves), the fees envelope, a marked test on a school copie (whole, or the scrap with its red mark)
       places.tsx              a courtyard at midday; a school cash office, its counter, a register whose pages turn; a family's
@@ -84,6 +91,8 @@ src/
                               courtyard, the goat, Papa and Sidi (stage.tsx), the marks every episode carries (marks.tsx:
                               the tag with the episode's number and title, the football score and its goal, the slow-motion
                               replay, the drama zoom, the loupe, the end card), and the assembler (episode.tsx)
+    moments/                  the cast at work, for the feed and for Reels: the director's office at 10:24 and the teacher's
+                              register (before/after), as 4:5 stills and 9:16 loops (`Moments-*`); social/ renders the stills
   videos/<video>/
     compositions.tsx          this video's compositions, in a <Folder> named after it
     timeline.json             scenes, their length in beats, the transition after each
@@ -93,6 +102,7 @@ src/
 public/
   shared/                     Ionicons font, sound effects (make-sfx.mjs, make-classroom-sfx.mjs, make-lineup-sfx.mjs, make-goat-sfx.mjs, make-chat-sfx.mjs, make-chevre-sfx.mjs)
   <video>/                    that video's voices, music, mixes
+social/                       the feed posts (HTML → PNG), on the same cast and the app's real captures: see social/README.md
 scripts/                      generic tools (take the video's name)
   <video>/                    tools for one video only (e.g. its temp music)
 ```

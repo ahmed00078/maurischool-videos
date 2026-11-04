@@ -382,22 +382,24 @@ export const FATHER_SHOULDERS: [Pt, Pt] = [
 ];
 export const FATHER_COLORS = { sleeve: '#6aa6dd', skin: '#8f5b3b' } as const;
 
-const MELHFA = { base: '#e39b2d', light: '#f2bd5c', motif: '#b35f16', edge: '#c9761c' };
+type Melhfa = { base: string; light: string; motif: string; edge: string; dot: string };
+
+const MELHFA: Melhfa = { base: '#e39b2d', light: '#f2bd5c', motif: '#b35f16', edge: '#c9761c', dot: '#fff4dc' };
+/** The teacher's melhfa: indigo with pale motifs, the dyed cloth of the Nouakchott markets. */
+const INDIGO: Melhfa = { base: '#34508f', light: '#5b78b8', motif: '#c9d6f2', edge: '#24396b', dot: '#e6ecfa' };
 
 /**
- * A school accountant: a grown woman in a saffron melhfa draped over her head
- * and shoulders, small round glasses. Neutral and friendly: she asks for the
- * receipt because that is her job. A stranger to the family, so she is nobody
- * from the « Vérité » series.
+ * A grown woman in a melhfa draped over her head and shoulders: the accountant
+ * (saffron, round glasses) and the teacher (indigo) are the same drawing in
+ * two cloths, so the cast stays one family of shapes.
  */
-export const Accountant: React.FC<BustProps & { glasses?: boolean }> = ({ face, tilt = 0, width = 340, style, glasses = true }) => {
-  const head: Head = { cx: 200, cy: 268, r: 100, skin: '#a86b45', shade: '#8a5535' };
+const MelhfaBust: React.FC<BustProps & { cloth: Melhfa; head: Head; glasses?: boolean }> = ({ face, tilt = 0, width = 340, style, cloth: c, head, glasses = false }) => {
   const id = `melhfa${React.useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const ex = head.r * 0.36;
   const ey = head.cy - head.r * 0.02;
   const cloth = (d: string, light = false) => (
     <>
-      <path d={d} fill={light ? MELHFA.light : MELHFA.base} />
+      <path d={d} fill={light ? c.light : c.base} />
       <path d={d} fill={`url(#${id})`} opacity={light ? 0.7 : 1} />
     </>
   );
@@ -405,21 +407,21 @@ export const Accountant: React.FC<BustProps & { glasses?: boolean }> = ({ face, 
     <Svg width={width} style={style}>
       <defs>
         <pattern id={id} width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
-          <path d="M 12 10 q 6 -9 12 0 q -6 9 -12 0 Z" fill={MELHFA.motif} opacity="0.55" />
-          <circle cx="35" cy="33" r="3.2" fill={MELHFA.motif} opacity="0.5" />
-          <circle cx="8" cy="36" r="2" fill="#fff4dc" opacity="0.6" />
+          <path d="M 12 10 q 6 -9 12 0 q -6 9 -12 0 Z" fill={c.motif} opacity="0.55" />
+          <circle cx="35" cy="33" r="3.2" fill={c.motif} opacity="0.5" />
+          <circle cx="8" cy="36" r="2" fill={c.dot} opacity="0.6" />
         </pattern>
       </defs>
       {/* The melhfa over the body, and its drape across the chest */}
       {cloth('M 26 1700 L 26 610 Q 36 474 200 456 Q 364 474 374 610 L 374 1700 Z')}
       {cloth('M 40 560 Q 190 600 374 860 L 374 990 Q 200 720 30 680 Z', true)}
-      <path d="M 44 600 Q 190 640 374 900" stroke={MELHFA.edge} strokeWidth="5" fill="none" opacity="0.6" />
+      <path d="M 44 600 Q 190 640 374 900" stroke={c.edge} strokeWidth="5" fill="none" opacity="0.6" />
       <g transform={`rotate(${tilt} 200 390)`}>
         {cloth('M 200 104 Q 348 104 350 272 Q 354 430 304 490 L 96 490 Q 46 430 50 272 Q 52 104 200 104 Z')}
         <ellipse cx={head.cx} cy={head.cy + 6} rx="90" ry="110" fill={head.skin} />
         {/* A line of hair under the fabric's edge */}
         <path d="M 116 214 Q 124 176 200 172 Q 276 176 284 214 Q 262 194 200 192 Q 138 194 116 214 Z" fill="#231a18" />
-        <path d="M 104 250 Q 104 148 200 142 Q 296 148 296 250 Q 288 176 200 170 Q 112 176 104 250 Z" fill={MELHFA.light} />
+        <path d="M 104 250 Q 104 148 200 142 Q 296 148 296 250 Q 288 176 200 170 Q 112 176 104 250 Z" fill={c.light} />
         <FaceFeatures head={head} face={face} />
         {glasses ? (
           <g stroke="#3b2a22" strokeWidth="5" fill="rgba(255,255,255,0.08)">
@@ -431,10 +433,96 @@ export const Accountant: React.FC<BustProps & { glasses?: boolean }> = ({ face, 
       </g>
       {/* The melhfa wrapped under the chin and over the shoulders */}
       {cloth('M 66 506 Q 118 444 200 466 Q 282 444 334 506 L 356 616 Q 200 532 44 616 Z')}
-      <path d="M 96 480 Q 200 530 304 480" stroke={MELHFA.light} strokeWidth="10" fill="none" strokeLinecap="round" />
+      <path d="M 96 480 Q 200 530 304 480" stroke={c.light} strokeWidth="10" fill="none" strokeLinecap="round" />
     </Svg>
   );
 };
+
+/**
+ * A school accountant: a grown woman in a saffron melhfa draped over her head
+ * and shoulders, small round glasses. Neutral and friendly: she asks for the
+ * receipt because that is her job. A stranger to the family, so she is nobody
+ * from the « Vérité » series.
+ */
+export const Accountant: React.FC<BustProps & { glasses?: boolean }> = ({ glasses = true, ...props }) => (
+  <MelhfaBust {...props} cloth={MELHFA} glasses={glasses} head={{ cx: 200, cy: 268, r: 100, skin: '#a86b45', shade: '#8a5535' }} />
+);
+
+/**
+ * The teacher (« la maîtresse »): a young woman in an indigo melhfa, no
+ * glasses. She takes the register in class and marks copies at night.
+ */
+export const Teacher: React.FC<BustProps> = (props) => (
+  <MelhfaBust {...props} cloth={INDIGO} head={{ cx: 200, cy: 268, r: 100, skin: '#9a6040', shade: '#7c4a30' }} />
+);
+
+/** The teacher's shoulders and colours, for her arms (the same drawing as the accountant's). */
+export const TEACHER_COLORS = { sleeve: INDIGO.base, skin: '#9a6040' } as const;
+
+/**
+ * The director (« le directeur »): a man in his fifties in a white daraa with
+ * navy embroidery, a grey-flecked beard, greying temples and reading glasses.
+ * The school is his; at 10:24 he wants to know how it is going without
+ * phoning every class.
+ */
+export const Director: React.FC<BustProps & { glasses?: boolean }> = ({ face, tilt = 0, width = 340, style, glasses = true }) => {
+  const head: Head = { cx: 200, cy: 236, r: 104, skin: '#7c4c31', shade: '#633b25' };
+  const daraa = '#f4f3ec';
+  const fold = '#dedcd0';
+  const thread = '#2f3b69';
+  const grey = '#8f8c88';
+  const ex = head.r * 0.36;
+  const ey = head.cy - head.r * 0.02;
+  return (
+    <Svg width={width} style={style}>
+      <rect x="170" y="300" width="60" height="110" rx="20" fill={head.shade} />
+      {/* The daraa: wide, white, its folds falling from the shoulders */}
+      <path d="M 6 1700 L 6 580 Q 18 425 158 396 L 242 396 Q 382 425 394 580 L 394 1700 Z" fill={daraa} />
+      <path d="M 60 620 Q 80 900 70 1700 M 340 620 Q 320 900 330 1700 M 128 760 Q 140 1100 132 1700 M 272 760 Q 260 1100 268 1700" stroke={fold} strokeWidth="10" fill="none" strokeLinecap="round" />
+      <path d="M 158 396 L 200 478 L 242 396 Z" fill="#e9eef8" />
+      {/* The embroidery: a navy band round the neck and down the chest, and the pocket's spiral */}
+      <path d="M 148 396 L 200 496 L 252 396" stroke={thread} strokeWidth="10" fill="none" strokeLinejoin="round" />
+      <path d="M 200 496 L 200 640" stroke={thread} strokeWidth="7" />
+      <path d="M 186 560 l 14 18 l 14 -18 M 186 600 l 14 18 l 14 -18" stroke={thread} strokeWidth="4" fill="none" strokeLinejoin="round" />
+      <rect x="222" y="520" width="104" height="110" rx="12" fill={fold} />
+      <path d="M 236 538 q 20 -12 38 0 t 38 0" stroke={thread} strokeWidth="4" fill="none" />
+      <circle cx="274" cy="590" r="16" fill="none" stroke={thread} strokeWidth="4" />
+      <circle cx="274" cy="590" r="6" fill={thread} />
+      {/* A pen clipped in the pocket */}
+      <rect x="300" y="500" width="10" height="44" rx="4" fill="#1f2a4f" />
+      <g transform={`rotate(${tilt} 200 350)`}>
+        <circle cx="96" cy="246" r="23" fill={head.skin} />
+        <circle cx="304" cy="246" r="23" fill={head.skin} />
+        <circle cx="96" cy="246" r="11" fill={head.shade} />
+        <circle cx="304" cy="246" r="11" fill={head.shade} />
+        <circle cx={head.cx} cy={head.cy} r={head.r} fill={head.skin} />
+        {/* Short hair, receding at the front, grey at the temples */}
+        <path d="M 96 230 Q 94 128 200 124 Q 306 128 304 230 Q 298 182 262 162 Q 232 150 200 152 Q 168 150 138 162 Q 102 182 96 230 Z" fill="#2a2321" />
+        <path d="M 96 230 Q 96 196 106 178 L 116 226 Z M 304 230 Q 304 196 294 178 L 284 226 Z" fill={grey} />
+        {/* The beard, salt and pepper: dark at the jaw, greying towards the chin, and the moustache */}
+        <path d="M 98 244 Q 98 352 200 352 Q 302 352 302 244 Q 298 316 254 320 Q 228 300 200 302 Q 172 300 146 320 Q 102 316 98 244 Z" fill="#3a3330" />
+        <path d="M 150 330 Q 200 356 250 330 Q 236 342 200 344 Q 164 342 150 330 Z" fill={grey} opacity="0.9" />
+        <path d="M 160 288 Q 200 270 240 288 Q 222 294 200 290 Q 178 294 160 288 Z" fill="#4a423e" />
+        <FaceFeatures head={head} face={face} mouthY={head.cy + head.r * 0.58} mouthW={head.r * 0.44} />
+        {glasses ? (
+          <g stroke="#1d1d26" strokeWidth="6" fill="rgba(255,255,255,0.1)">
+            <rect x={head.cx - ex - 30} y={ey - 22} width="60" height="42" rx="10" />
+            <rect x={head.cx + ex - 30} y={ey - 22} width="60" height="42" rx="10" />
+            <path d={`M ${head.cx - ex + 30} ${ey - 6} Q ${head.cx} ${ey - 16} ${head.cx + ex - 30} ${ey - 6}`} fill="none" />
+            <path d={`M ${head.cx - ex - 30} ${ey - 8} L ${head.cx - head.r * 0.98} ${ey - 14} M ${head.cx + ex + 30} ${ey - 8} L ${head.cx + head.r * 0.98} ${ey - 14}`} />
+          </g>
+        ) : null}
+      </g>
+    </Svg>
+  );
+};
+
+/** Where the director's shoulders are, for his arms: [screen-left, screen-right]. */
+export const DIRECTOR_SHOULDERS: [Pt, Pt] = [
+  [80, 530],
+  [320, 530],
+];
+export const DIRECTOR_COLORS = { sleeve: '#f4f3ec', skin: '#7c4c31' } as const;
 
 /** The accountant's shoulders and colours, for her arms. */
 export const ACCOUNTANT_SHOULDERS: [Pt, Pt] = [
@@ -442,3 +530,40 @@ export const ACCOUNTANT_SHOULDERS: [Pt, Pt] = [
   [322, 560],
 ];
 export const ACCOUNTANT_COLORS = { sleeve: MELHFA.base, skin: '#a86b45' } as const;
+
+/**
+ * A pupil seen from behind, at a desk in the front rows: the back of the head
+ * (short hair, or a headscarf) over the shoulders of a school shirt. A row of
+ * these in front of a teacher makes a class without drawing thirty faces.
+ * Drawn in a 200 × 260 box, the head's top at the top.
+ */
+export const PupilBack: React.FC<{ scarf?: string; hair?: string; shirt?: string; skin?: string; width?: number; extend?: number; style?: React.CSSProperties }> = ({
+  scarf,
+  hair = '#1d1a1f',
+  shirt = '#eef3fb',
+  skin = '#a8704a',
+  width = 200,
+  extend = 0,
+  style,
+}) => (
+  <svg width={width} height={width * 1.3} viewBox="0 0 200 260" style={{ overflow: 'visible', ...style }}>
+    <path d="M 0 260 L 4 200 Q 14 150 100 144 Q 186 150 196 200 L 200 260 Z" fill={shirt} />
+    {/* `extend` (drawing units) runs the shirt on below the box, to the foot of a taller frame */}
+    {extend > 0 ? <rect x="0" y="258" width="200" height={extend} fill={shirt} /> : null}
+    <path d="M 100 144 L 100 260" stroke="rgba(0,0,0,0.06)" strokeWidth="4" />
+    {scarf ? (
+      <>
+        <path d="M 100 4 Q 172 4 174 82 Q 176 150 150 176 L 50 176 Q 24 150 26 82 Q 28 4 100 4 Z" fill={scarf} />
+        <path d="M 60 40 Q 100 20 140 40" stroke="rgba(255,255,255,0.25)" strokeWidth="8" fill="none" strokeLinecap="round" />
+      </>
+    ) : (
+      <>
+        <rect x="80" y="110" width="40" height="44" rx="12" fill={skin} />
+        <circle cx="26" cy="86" r="14" fill={skin} />
+        <circle cx="174" cy="86" r="14" fill={skin} />
+        <circle cx="100" cy="74" r="72" fill={hair} />
+        <path d="M 52 128 Q 100 150 148 128" stroke={skin} strokeWidth="10" fill="none" opacity="0.5" />
+      </>
+    )}
+  </svg>
+);
